@@ -14,6 +14,7 @@ namespace Agents
         Idle,
         Wander,
         Seek,
-        Eat
+        Eat,
+        Pursue,
     }
 }

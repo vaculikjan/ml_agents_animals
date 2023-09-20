@@ -28,7 +28,6 @@ namespace Agents.AnimalStates
 
         public void Exit()
         {
-            // Maybe stop the idle animation or sound
         }
 
         public bool CanExit()

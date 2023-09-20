@@ -1,6 +1,8 @@
 // Author: Jan Vaculik
 
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Agents.AnimalStates
 {
@@ -8,44 +10,89 @@ namespace Agents.AnimalStates
     {
         public AnimalStateEnum StateID => AnimalStateEnum.Wander;
 
+        private enum InternalState
+        {
+            Wandering,
+            ReturningToBoundary
+        }
+
+
         private readonly AAnimal _animal;
         private readonly Transform _animalTransform;
         private readonly float _moveSpeed;
         private readonly float _rotationSpeed;
+        private readonly Vector3 _boundaryMin;
+        private readonly Vector3 _boundaryMax;
         
+        private InternalState _currentInternalState = InternalState.Wandering;
         private float _changeDirectionCooldown;
-        public Vector3 _targetDirection = Vector3.forward;
-        
-        public WanderState(AAnimal animal, float moveSpeed, float rotationSpeed)
+        private Vector3 _targetDirection = Vector3.forward;
+        private bool _isWithinBoundary = true;
+
+        public WanderState(AAnimal animal, float moveSpeed, float rotationSpeed, Vector3 boundaryMin, Vector3 boundaryMax)
         {
             _animal = animal;
             _animalTransform = animal.transform;
             _moveSpeed = moveSpeed;
             _rotationSpeed = rotationSpeed;
+
+            _boundaryMin = boundaryMin;
+            _boundaryMax = boundaryMax;
         }
 
         public void Enter()
         {
-            // Maybe play the wandering animation or sound
         }
 
         public void Execute()
         {
-            HandleRandomDirectionChange();
-            RotateTowardsTarget();
-            SetVelocity();
+            switch (_currentInternalState)
+            {
+                case InternalState.Wandering:
+                    HandleBoundary();
+                    if (_isWithinBoundary) HandleRandomDirectionChange();
+                    RotateTowardsTarget();
+                    SetVelocity();
+                    break;
+
+                case InternalState.ReturningToBoundary:
+                    HandleBoundary();
+                    RotateTowardsTarget();
+                    SetVelocity();
+                    break;
+                default: throw new ArgumentOutOfRangeException();
+            }
         }
-        
+
         public void Exit()
         {
-            // Maybe stop the wandering animation or sound
         }
 
         public bool CanExit()
         {
             return true;
         }
-        
+
+        private void HandleBoundary()
+        {
+            var nextPosition = _animalTransform.position + _targetDirection * (_moveSpeed * Time.deltaTime);
+
+            if (nextPosition.x < _boundaryMin.x || nextPosition.x > _boundaryMax.x ||
+                nextPosition.z < _boundaryMin.z || nextPosition.z > _boundaryMax.z)
+            {
+                _isWithinBoundary = false;
+                _currentInternalState = InternalState.ReturningToBoundary;
+
+                var center = (_boundaryMin + _boundaryMax) / 2;
+                _targetDirection = (center - _animalTransform.position).normalized;
+            }
+            else
+            {
+                _isWithinBoundary = true;
+                _currentInternalState = InternalState.Wandering;
+            }
+        }
+
         private void HandleRandomDirectionChange()
         {
             _changeDirectionCooldown -= Time.deltaTime;
@@ -63,7 +110,7 @@ namespace Agents.AnimalStates
         private void RotateTowardsTarget()
         {
             var flatTargetDirection = new Vector3(_targetDirection.x, 0, _targetDirection.z);
-    
+
             var targetRotation = Quaternion.LookRotation(flatTargetDirection, Vector3.up);
             var rotation = Quaternion.RotateTowards(_animalTransform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
 

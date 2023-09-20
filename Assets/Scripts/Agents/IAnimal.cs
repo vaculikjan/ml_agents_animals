@@ -1,8 +1,5 @@
 // Author: Jan Vaculik
 
-using StateMachine;
-using UnityEngine;
-
 namespace Agents
 {
     public interface IAnimal
