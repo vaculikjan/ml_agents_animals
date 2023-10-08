@@ -12,8 +12,16 @@ GameObject:
   - component: {fileID: 197278023688713983}
   - component: {fileID: 197278023688713982}
   - component: {fileID: 197278023688713981}
-  - component: {fileID: 197278023688713977}
   - component: {fileID: 197278023688713978}
+  - component: {fileID: 197278023688713977}
+  - component: {fileID: 197278023128597999}
+  - component: {fileID: 197278023128598000}
+  - component: {fileID: 508428444223721796}
+  - component: {fileID: 202483650801094853}
+  - component: {fileID: 6057354817646501694}
+  - component: {fileID: 9120537642660672379}
+  - component: {fileID: 370095042487275443}
+  - component: {fileID: 5032727753318348499}
   m_Layer: 0
   m_Name: Deer
   m_TagString: Untagged
@@ -99,23 +107,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &197278023688713977
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 197278023688713980}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe3ec7df9477df94a8e540a45f319304, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _AnimalRigidbody: {fileID: 197278023688713978}
-  _MinBounds: {x: -50, y: 0, z: -50}
-  _MaxBounds: {x: 50, y: 0, z: 50}
-  _MovementSpeed: 5
-  _RotationSpeed: 90
 --- !u!54 &197278023688713978
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -132,3 +123,259 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
+--- !u!114 &197278023688713977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197278023688713980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe3ec7df9477df94a8e540a45f319304, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _AnimalRigidbody: {fileID: 197278023688713978}
+  _MinBounds: {x: -200, y: 0, z: -200}
+  _MaxBounds: {x: 200, y: 0, z: 200}
+  _MovementSpeed: 5
+  _RotationSpeed: 180
+  _FoodConsumeRadius: 0
+  _FoodDetectionRadius: 0
+--- !u!114 &197278023128597999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197278023688713980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12c26c9d4ba2485986ccee5fc83c1566, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
+  _Animal: {fileID: 197278023688713977}
+  _AnimalAttributes: []
+  _AnimalObservations: []
+  _AnimalActions: []
+--- !u!114 &197278023128598000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197278023688713980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d1c4e0b1822b495aa52bc52839ecb30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BrainParameters:
+    VectorObservationSize: 1
+    NumStackedVectorObservations: 1
+    m_ActionSpec:
+      m_NumContinuousActions: 0
+      BranchSizes: 
+    VectorActionSize: 
+    VectorActionDescriptions: []
+    VectorActionSpaceType: 0
+    hasUpgradedBrainParametersWithActionSpec: 1
+  m_Model: {fileID: 0}
+  m_InferenceDevice: 0
+  m_BehaviorType: 0
+  m_BehaviorName: My Behavior
+  TeamId: 0
+  m_UseChildSensors: 1
+  m_UseChildActuators: 1
+  m_ObservableAttributeHandling: 0
+--- !u!114 &508428444223721796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197278023688713980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c567ed2d748473598b8c83017a3cd64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Name: Curiosity
+  _ImpactCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _ImpactMultiplier: 1
+--- !u!114 &202483650801094853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197278023688713980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c567ed2d748473598b8c83017a3cd64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Name: Hunger
+  _ImpactCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -1
+      outSlope: -1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -1
+      outSlope: -1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _ImpactMultiplier: 1
+--- !u!114 &6057354817646501694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197278023688713980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c567ed2d748473598b8c83017a3cd64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Name: Energy
+  _ImpactCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _ImpactMultiplier: 1
+--- !u!114 &9120537642660672379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197278023688713980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31fefd21f22b4eeaa03a1b2d897d3980, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Name: Position
+  _ObservationVectorLength: 1
+  _UpdateObservationCallback:
+    _target: {fileID: 197278023688713977}
+    _methodName: GetPosition
+    _args: []
+    _dynamic: 0
+    _typeName: SerializableCallback`1[[UnityEngine.Vector3[], UnityEngine.CoreModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], RedStudio.SerializableCallback,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    dirty: 0
+--- !u!114 &370095042487275443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197278023688713980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31fefd21f22b4eeaa03a1b2d897d3980, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Name: Food Positions
+  _ObservationVectorLength: 3
+  _UpdateObservationCallback:
+    _target: {fileID: 197278023688713977}
+    _methodName: GetPosition
+    _args: []
+    _dynamic: 0
+    _typeName: SerializableCallback`1[[UnityEngine.Vector3[], UnityEngine.CoreModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], RedStudio.SerializableCallback,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    dirty: 0
+--- !u!114 &5032727753318348499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197278023688713980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11303d81ccbc494f9fa28c81a7e76d5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Delegate:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
