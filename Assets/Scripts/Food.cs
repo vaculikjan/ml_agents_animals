@@ -1,5 +1,6 @@
 // Author: Jan Vaculik
 
+using Environment;
 using UnityEngine;
 
 public class Food : MonoBehaviour
@@ -15,13 +16,13 @@ public class Food : MonoBehaviour
     public float TimeToEat => _TimeToEat;
     
     
-    public void Eat(out float foodValue) { 
-        foodValue = _FoodValue;
-        
+    public float Eat() { 
         _FoodCount--;
         if (_FoodCount <= 0)
         {
-            Destroy(gameObject);
+            EnvironmentController.Instance.RemoveFood(this);
+            EnvironmentController.Instance.SpawnFoodItem();
         }
+        return _FoodValue;
     }
 }

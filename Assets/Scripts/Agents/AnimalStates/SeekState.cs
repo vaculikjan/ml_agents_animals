@@ -56,7 +56,7 @@ namespace Agents.AnimalStates
 
         public void Exit() { }
 
-        public bool CanExit() { return _hasReachedTarget; }
+        public bool CanExit() { return true;}
 
         private void RotateTowardsTarget()
         {

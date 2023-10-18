@@ -11,10 +11,10 @@ namespace Agents
 
     public enum AnimalStateEnum
     {
-        Idle,
-        Wander,
-        Seek,
-        Eat,
-        Pursue,
+        Idle = 0,
+        Wander = 1,
+        Seek = 2,
+        Eat = 3,
+        Pursue = 4,
     }
 }

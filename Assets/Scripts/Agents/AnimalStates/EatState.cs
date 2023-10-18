@@ -26,23 +26,24 @@ namespace Agents.AnimalStates
 
         public void Execute()
         {
-            if (_animal.IsFoodAvailable(out _nearestFood) && !_isEating)
+            if (_animal.IsFoodAvailable(out _nearestFood))
             {
-                _isEating = true;
+                if (!_isEating)
+                    _isEating = true;
             }
             else
             {
                 _animal.SetState(new IdleState(_animal));
+                return;
             }
-
-            if (!_isEating) return;
             
             _eatingTime += Time.deltaTime;
-                
-            if (_eatingTime >= _nearestFood.TimeToEat)
-            {
-                _animal.SetState(new IdleState(_animal));
-            }
+
+            if (_eatingTime <= _nearestFood.TimeToEat) return;
+            
+            _animal.Eat(_nearestFood);
+            _isEating = false;
+            _eatingTime = 0.0f;
         }
         
         public void Exit()
