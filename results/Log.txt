@@ -1,0 +1,4 @@
+discrete_mask_test1 - added discrete masking on actions, which forbids certain actions from being performed (perfect for this use case)
+discrete_mask_test5 - locked action taking while eating, because the animal was changing actions too frequently and never finished eating (would require to consecutively do nothing for 300 steps [3s to eat]- very unlikely)
+discrete_mask_test14 - increased energy consumption and doubled positive rewards
+discrete_mask_test16 - increased food value 5x

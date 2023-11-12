@@ -1,6 +1,7 @@
 // Author: Jan Vaculik
 
 using System;
+using Unity.MLAgents.Actuators;
 using UnityEngine;
 
 namespace Agents.AnimalStates
@@ -28,6 +29,15 @@ namespace Agents.AnimalStates
         }
 
         public AnimalStateEnum StateID => AnimalStateEnum.Seek;
+
+        public void SetStateMask(ref IDiscreteActionMask actionMask)
+        {
+            actionMask.SetActionEnabled(0, (int) AnimalStateEnum.Wander, false);
+            for (var i = 3; i < 13; i++)
+            {
+                actionMask.SetActionEnabled(0, i, false);
+            }
+        }
 
         public void Enter() { _hasReachedTarget = false; }
 

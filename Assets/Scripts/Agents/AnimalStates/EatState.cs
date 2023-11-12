@@ -1,5 +1,6 @@
 // Author: Jan Vaculik
 
+using Unity.MLAgents.Actuators;
 using UnityEngine;
 
 namespace Agents.AnimalStates
@@ -8,12 +9,29 @@ namespace Agents.AnimalStates
     {
         public AnimalStateEnum StateID => AnimalStateEnum.Eat;
 
+        public void SetStateMask(ref IDiscreteActionMask actionMask)
+        {
+            if (IsEating)
+            {
+                for (var i = 1; i < 14; i++)
+                {
+                    actionMask.SetActionEnabled(0, i, false);
+                }
+                return;
+            }
+            
+            for (var i = 3; i < 13; i++)
+            {
+                actionMask.SetActionEnabled(0, i, false);
+            }
+        }
+
         private readonly AAnimal _animal;
-        
         private float _eatingTime;
         private Food _nearestFood;
-        private bool _isEating;
-        
+
+        private bool IsEating { get; set; }
+
         public EatState(AAnimal animal)
         {
             _animal = animal;
@@ -22,14 +40,15 @@ namespace Agents.AnimalStates
         public void Enter()
         {
             _eatingTime = 0.0f;
+            Debug.Log("Entered EatState");
         }
 
         public void Execute()
         {
             if (_animal.IsFoodAvailable(out _nearestFood))
             {
-                if (!_isEating)
-                    _isEating = true;
+                if (!IsEating)
+                    IsEating = true;
             }
             else
             {
@@ -42,8 +61,9 @@ namespace Agents.AnimalStates
             if (_eatingTime <= _nearestFood.TimeToEat) return;
             
             _animal.Eat(_nearestFood);
-            _isEating = false;
+            IsEating = false;
             _eatingTime = 0.0f;
+            _animal.SetState(new IdleState(_animal));
         }
         
         public void Exit()

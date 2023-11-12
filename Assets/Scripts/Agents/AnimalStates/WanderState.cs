@@ -1,6 +1,7 @@
 // Author: Jan Vaculik
 
 using System;
+using Unity.MLAgents.Actuators;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -10,13 +11,22 @@ namespace Agents.AnimalStates
     {
         public AnimalStateEnum StateID => AnimalStateEnum.Wander;
 
+        public void SetStateMask(ref IDiscreteActionMask actionMask)
+        {
+            actionMask.SetActionEnabled(0, (int) AnimalStateEnum.Wander, false);
+            for (var i = 3; i < 13; i++)
+            {
+                actionMask.SetActionEnabled(0, i, false);
+            }
+            actionMask.SetActionEnabled(0, (int) AnimalStateEnum.Eat, false);
+        }
+
         private enum InternalState
         {
             Wandering,
             ReturningToBoundary
         }
-
-
+        
         private readonly AAnimal _animal;
         private readonly Transform _animalTransform;
         private readonly float _moveSpeed;

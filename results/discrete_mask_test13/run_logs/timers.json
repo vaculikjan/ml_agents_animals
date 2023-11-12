@@ -1,0 +1,42 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1699801429",
+        "python_version": "3.9.13 (tags/v3.9.13:6de2ca5, May 17 2022, 16:36:42) [MSC v.1929 64 bit (AMD64)]",
+        "command_line_arguments": "D:\\Unity\\DiplomaThesis\\venv\\Scripts\\mlagents-learn .\\config\\simple_deer_config.yaml --run-id=discrete_mask_test13",
+        "mlagents_version": "0.30.0",
+        "mlagents_envs_version": "0.30.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "2.1.0+cpu",
+        "numpy_version": "1.21.2",
+        "end_time_seconds": "1699801491"
+    },
+    "total": 61.6152509,
+    "count": 1,
+    "self": 0.003650300000003881,
+    "children": {
+        "run_training.setup": {
+            "total": 0.08012229999999998,
+            "count": 1,
+            "self": 0.08012229999999998
+        },
+        "TrainerController.start_learning": {
+            "total": 61.531478299999996,
+            "count": 1,
+            "self": 0.00011479999999863821,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 61.5313463,
+                    "count": 1,
+                    "self": 61.5313463
+                },
+                "TrainerController._save_models": {
+                    "total": 1.7199999994943482e-05,
+                    "count": 1,
+                    "self": 1.7199999994943482e-05
+                }
+            }
+        }
+    }
+}

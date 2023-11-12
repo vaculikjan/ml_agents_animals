@@ -11,7 +11,7 @@ namespace Agents
         [SerializeField]
         private Rigidbody _AnimalRigidbody;
 
-        protected abstract Dictionary<AnimalStateEnum, List<AnimalStateEnum>> _validTransitions { get; }
+        protected abstract Dictionary<AnimalStateEnum, List<AnimalStateEnum>> ValidTransitions { get; }
         public abstract void Eat(Food food);
         
         protected IAnimalState CurrentState;
@@ -22,14 +22,10 @@ namespace Agents
         {
             if (!IsTransitionValid(state))
             {
-                Debug.LogWarning($"Transition from {CurrentState?.StateID} to {state.StateID} is not valid!");
                 return false;
             }
             
-            Debug.Log($"Transition from {CurrentState?.StateID} to {state.StateID} is valid!");
-
             CurrentState?.Exit();
-
             CurrentState = state;
             CurrentState.Enter();
 
@@ -41,7 +37,7 @@ namespace Agents
         {
             if (CurrentState == null) return true;
 
-            return _validTransitions.TryGetValue(CurrentState.StateID, out var transition) && transition.Contains(newState.StateID) && CurrentState.CanExit();
+            return ValidTransitions.TryGetValue(CurrentState.StateID, out var transition) && transition.Contains(newState.StateID) && CurrentState.CanExit();
         }
         
         public abstract bool IsFoodAvailable(out Food food);

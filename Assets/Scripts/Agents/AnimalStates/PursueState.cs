@@ -1,6 +1,7 @@
 // Author: Jan Vaculik
 
 using System;
+using Unity.MLAgents.Actuators;
 using UnityEngine;
 
 namespace Agents.AnimalStates
@@ -8,6 +9,7 @@ namespace Agents.AnimalStates
     public class PursueState : IAnimalState
     {
         public AnimalStateEnum StateID => AnimalStateEnum.Pursue;
+        public void SetStateMask(ref IDiscreteActionMask actionMask) { throw new NotImplementedException(); }
 
         private enum InternalState
         {

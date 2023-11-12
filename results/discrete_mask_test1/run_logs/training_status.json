@@ -1,0 +1,29 @@
+{
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 2768,
+                "file_path": "results\\discrete_mask_test1\\My Behavior\\My Behavior-2768.onnx",
+                "reward": -10.950000357581303,
+                "creation_time": 1699795805.5545807,
+                "auxillary_file_paths": [
+                    "results\\discrete_mask_test1\\My Behavior\\My Behavior-2768.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 2768,
+            "file_path": "results\\discrete_mask_test1\\My Behavior.onnx",
+            "reward": -10.950000357581303,
+            "creation_time": 1699795805.5545807,
+            "auxillary_file_paths": [
+                "results\\discrete_mask_test1\\My Behavior\\My Behavior-2768.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.1.0+cpu"
+    }
+}

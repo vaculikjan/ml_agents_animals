@@ -45,26 +45,27 @@ namespace Agents
         public AnimalAttribute Curiosity => _Curiosity;
         public AnimalAttribute Energy => _Energy;
         
-        private Collider[] _foodHitColliders;
-        private Collider[] _foodDetectionColliders;
-        private List<Food> _availableFood = new List<Food>();
-        public List<Food> AvailableFood => _availableFood;
+        private Collider[] _foodHitColliders = new Collider[10];
+        public List<Food> AvailableFood { get; private set; } = new();
+        
+        private int _fixedUpdateCounter = 0;
         
         private void Start()
         {
             //SetState(new AnimalStates.WanderState(this, _MovementSpeed,_RotationSpeed, _MinBounds, _MaxBounds));
             //SetState(new AnimalStates.SeekState(this, _MovementSpeed, _RotationSpeed, _FoodPrefab.transform.position));
+            SetState(new AnimalStates.IdleState(this));
         }
         
         private void FixedUpdate()
         {
-            if (_availableFood.Contains(null))
+            if (AvailableFood.Contains(null))
             {
-                _availableFood = _availableFood.Where(food => food != null).ToList();
+                AvailableFood = AvailableFood.Where(food => food != null).ToList();
             }
             DetectAllFood();
             CurrentState?.Execute();
-            _Hunger.Value += 0.0001f;
+            _Hunger.Value += 0.00001f;
             
             if (_Hunger.Value >= 1f)
             {
@@ -80,11 +81,18 @@ namespace Agents
 
             if (CurrentState is {StateID: AnimalStateEnum.Seek} or {StateID: AnimalStateEnum.Wander})
             {
-                _Energy.Value -= 0.0001f;
+                _Energy.Value -= 0.002f;
             }
             if (CurrentState is {StateID: AnimalStateEnum.Idle} or {StateID: AnimalStateEnum.Eat})
             {
                 _Energy.Value += 0.01f;
+            }
+            
+            _fixedUpdateCounter++;
+            
+            if (_fixedUpdateCounter % 600 == 0)
+            {
+                Debug.LogWarning($"Hunger: {_Hunger.Value}, Energy: {_Energy.Value}");
             }
         }
         
@@ -109,16 +117,17 @@ namespace Agents
             Gizmos.DrawWireSphere(transform.position, _FoodDetectionRadius);
         }
 
-        protected override Dictionary<AnimalStateEnum, List<AnimalStateEnum>> _validTransitions => new Dictionary<AnimalStateEnum, List<AnimalStateEnum>>
+        protected override Dictionary<AnimalStateEnum, List<AnimalStateEnum>> ValidTransitions => new Dictionary<AnimalStateEnum, List<AnimalStateEnum>>
         {
             {AnimalStateEnum.Wander, new List<AnimalStateEnum> {AnimalStateEnum.Idle, AnimalStateEnum.Seek}},
             {AnimalStateEnum.Idle, new List<AnimalStateEnum> {AnimalStateEnum.Wander, AnimalStateEnum.Seek, AnimalStateEnum.Eat, AnimalStateEnum.Idle}},
             {AnimalStateEnum.Seek, new List<AnimalStateEnum> {AnimalStateEnum.Idle, AnimalStateEnum.Eat}},
-            {AnimalStateEnum.Eat, new List<AnimalStateEnum> {AnimalStateEnum.Idle, AnimalStateEnum.Wander, AnimalStateEnum.Seek, AnimalStateEnum.Eat}}
+            {AnimalStateEnum.Eat, new List<AnimalStateEnum> {AnimalStateEnum.Idle, AnimalStateEnum.Wander, AnimalStateEnum.Eat}}
         };
 
         public override void Eat(Food food)
         {
+            Debug.Log("Eating");
             _Hunger.Value -= food.Eat();
         }
 
@@ -134,9 +143,9 @@ namespace Agents
             {
                 var foodComponent = food.GetComponent<Food>();
                 if (foodComponent == null) continue;
-                if (_availableFood.Contains(foodComponent)) continue;
+                if (AvailableFood.Contains(foodComponent)) continue;
                 _Curiosity.Value += 0.1f;
-                _availableFood.Add(foodComponent);
+                AvailableFood.Add(foodComponent);
             }
         }
         
@@ -207,25 +216,21 @@ namespace Agents
 
         public override void OnActionReceived(ActionBuffers actions)
         {
+            Debug.Log(actions.DiscreteActions[0]);
             switch(actions.DiscreteActions[0])
             {
-                case 0:
+                case (int) AnimalStateEnum.None:
                     return;
-                case 1:
+                case (int) AnimalStateEnum.Idle:
                     SetState(new AnimalStates.IdleState(this));
                     break;
-                case 2:
+                case (int) AnimalStateEnum.Wander:
                     SetState(new AnimalStates.WanderState(this, _MovementSpeed, _RotationSpeed, _MinBounds, _MaxBounds));
                     break;
-                case 3:
-                    if (_availableFood.Count < actions.DiscreteActions[3] + 1)
-                    {
-                        AddReward(-0.1f);
-                        break;
-                    }
-                    SetState(new AnimalStates.SeekState(this, _MovementSpeed, _RotationSpeed, _availableFood[actions.DiscreteActions[3]].transform.position));
+                case >= 3 and <= 12:
+                    SetState(new AnimalStates.SeekState(this, _MovementSpeed, _RotationSpeed, AvailableFood[actions.DiscreteActions[0] - 3].transform.position));
                     break;
-                case 4:
+                case (int) AnimalStateEnum.Eat:
                     SetState(new AnimalStates.EatState(this));
                     break;
             }
@@ -234,8 +239,7 @@ namespace Agents
         public override void OnEpisodeBegin()
         {
             _foodHitColliders = new Collider[10];
-            _foodDetectionColliders = new Collider[10];
-            _availableFood = new List<Food>();
+            AvailableFood = new List<Food>();
             _Hunger.Reset();
             _Curiosity.Reset();
             _Energy.Reset();
@@ -244,7 +248,26 @@ namespace Agents
             SetState(new AnimalStates.IdleState(this));
             EnvironmentController.Instance.ResetEnvironment();
         }
-        
+
+        public override void WriteDiscreteActionMask(IDiscreteActionMask actionMask)
+        {
+            if (CurrentState == null)
+            {
+                return;
+            }
+            CurrentState.SetStateMask(ref actionMask);
+
+            if (CurrentState.StateID is AnimalStateEnum.Seek or AnimalStateEnum.Eat)
+            {
+                return;
+            }
+            
+            for (var i = 3; i < AvailableFood.Count + 3; i++)
+            {
+                actionMask.SetActionEnabled(0, i, true);
+            }
+        }
+
         private void MoveObjectWithinBounds()
         {
             var randomPosition = new Vector3(
@@ -281,7 +304,12 @@ namespace Agents
             {
                 var lastValue = _value;
                 _value = Mathf.Clamp(value, _MinValue, _MaxValue);
-                _Agent.AddReward((_RewardCurve.Evaluate(value) - _RewardCurve.Evaluate(lastValue)) * _RewardModifier);
+                var reward = (_RewardCurve.Evaluate(value) - _RewardCurve.Evaluate(lastValue)) * _RewardModifier;
+                
+                if (reward > 0) reward *= 2;
+                
+                _Agent.AddReward(reward);
+                Debug.LogWarning((reward));
             }
         }
         

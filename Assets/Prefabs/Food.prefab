@@ -97,9 +97,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2ed2348fc824d3db523285b724049b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _FoodValue: 0.1
+  _FoodValue: 0.5
   _FoodCount: 1
-  _TimeToEat: 3
+  _TimeToEat: 0.5
 --- !u!135 &2445308631701540532
 SphereCollider:
   m_ObjectHideFlags: 0

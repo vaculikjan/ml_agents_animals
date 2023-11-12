@@ -1,5 +1,6 @@
 // Author: Jan Vaculik
 
+using Unity.MLAgents.Actuators;
 using UnityEngine;
 
 namespace Agents.AnimalStates
@@ -7,6 +8,14 @@ namespace Agents.AnimalStates
     public class IdleState : IAnimalState
     {
         public AnimalStateEnum StateID => AnimalStateEnum.Idle;
+
+        public void SetStateMask(ref IDiscreteActionMask actionMask)
+        {
+            for (var i = 3; i < 13; i++)
+            {
+                actionMask.SetActionEnabled(0, i, false);
+            }
+        }
 
         private readonly AAnimal _animal;
         private float _timeSpentIdle;
