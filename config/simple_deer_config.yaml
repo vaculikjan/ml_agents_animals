@@ -23,3 +23,5 @@ behaviors:
     max_steps: 5000000
     time_horizon: 64
     summary_freq: 10000
+    keep_checkpoints: 10
+    checkpoint_interval: 50000

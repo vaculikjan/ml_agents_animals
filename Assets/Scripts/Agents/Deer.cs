@@ -4,15 +4,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using AgentWrapper.Observations;
 using Environment;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Agents
@@ -52,8 +48,6 @@ namespace Agents
         
         private void Start()
         {
-            //SetState(new AnimalStates.WanderState(this, _MovementSpeed,_RotationSpeed, _MinBounds, _MaxBounds));
-            //SetState(new AnimalStates.SeekState(this, _MovementSpeed, _RotationSpeed, _FoodPrefab.transform.position));
             SetState(new AnimalStates.IdleState(this));
         }
         
@@ -73,26 +67,11 @@ namespace Agents
                 EndEpisode();
             }
             
-            if (_Energy.Value <= 0f)
-            {
-                AddReward(-10f);
-                EndEpisode();
-            }
-
-            if (CurrentState is {StateID: AnimalStateEnum.Seek} or {StateID: AnimalStateEnum.Wander})
-            {
-                _Energy.Value -= 0.002f;
-            }
-            if (CurrentState is {StateID: AnimalStateEnum.Idle} or {StateID: AnimalStateEnum.Eat})
-            {
-                _Energy.Value += 0.01f;
-            }
-            
             _fixedUpdateCounter++;
             
             if (_fixedUpdateCounter % 600 == 0)
             {
-                Debug.LogWarning($"Hunger: {_Hunger.Value}, Energy: {_Energy.Value}");
+                Debug.LogWarning($"Hunger: {_Hunger.Value}");
             }
         }
         
@@ -197,18 +176,17 @@ namespace Agents
         {
             sensor.AddObservation(transform.localPosition);
             sensor.AddObservation(_Hunger.Value);
-            sensor.AddObservation(_Energy.Value);
             sensor.AddObservation((int) CurrentState.StateID);
 
             foreach (var food in _foodHitColliders)
             {
                 if (food == null) continue;
-                var foodPosition = food.transform.position;
+                var foodPosition = food.transform.localPosition;
                 var foodObservation = new float[]
                 {
-                    (foodPosition.x - transform.position.x),
-                    (foodPosition.y - transform.position.y),
-                    (foodPosition.z - transform.position.z)
+                    (foodPosition.x - transform.localPosition.x),
+                    (foodPosition.y - transform.localPosition.y),
+                    (foodPosition.z - transform.localPosition.z)
                 };
                 _FoodSensor.AppendObservation(foodObservation);
             }
