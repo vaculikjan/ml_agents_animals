@@ -515,6 +515,10 @@ PrefabInstance:
       value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _FoodDetectionRadius
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
       propertyPath: _Hunger._RewardCurve.m_Curve.Array.size
       value: 3
       objectReference: {fileID: 0}

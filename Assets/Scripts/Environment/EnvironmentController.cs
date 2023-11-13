@@ -46,7 +46,14 @@ namespace Environment
         public void RemoveFood(Food food)
         {
             _foodList.Remove(food);
-            _Deer.AvailableFood.Remove(food);
+            for (var i = 0; i < _Deer.AvailableFood.Length; i++)
+            {
+                if (_Deer.AvailableFood[i] == food)
+                {
+                    _Deer.AvailableFood[i] = null;
+                }
+            }
+            
             Destroy(food.gameObject);
         }
 

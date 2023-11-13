@@ -13,14 +13,14 @@ namespace Agents.AnimalStates
         {
             if (IsEating)
             {
-                for (var i = 1; i < 14; i++)
+                for (var i = 1; i < 9; i++)
                 {
                     actionMask.SetActionEnabled(0, i, false);
                 }
                 return;
             }
             
-            for (var i = 3; i < 13; i++)
+            for (var i = 3; i < 9; i++)
             {
                 actionMask.SetActionEnabled(0, i, false);
             }
@@ -32,9 +32,10 @@ namespace Agents.AnimalStates
 
         private bool IsEating { get; set; }
 
-        public EatState(AAnimal animal)
+        public EatState(AAnimal animal, Food food)
         {
             _animal = animal;
+            _nearestFood = food;
         }
 
         public void Enter()
@@ -45,16 +46,7 @@ namespace Agents.AnimalStates
 
         public void Execute()
         {
-            if (_animal.IsFoodAvailable(out _nearestFood))
-            {
-                if (!IsEating)
-                    IsEating = true;
-            }
-            else
-            {
-                _animal.SetState(new IdleState(_animal));
-                return;
-            }
+            if (!IsEating) IsEating = true;
             
             _eatingTime += Time.deltaTime;
 

@@ -4,3 +4,4 @@ discrete_mask_test14 - increased energy consumption and doubled positive rewards
 discrete_mask_test16 - increased food value 5x and decreased hunger generation 10x
 no_energy_test1 - removed energy, changed food positons to localPosition
 no_energy_test2 - lowered checkpoint_interval
+explicit_food1 - set food to eat explicitly like seek

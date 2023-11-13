@@ -14,11 +14,10 @@ namespace Agents.AnimalStates
         public void SetStateMask(ref IDiscreteActionMask actionMask)
         {
             actionMask.SetActionEnabled(0, (int) AnimalStateEnum.Wander, false);
-            for (var i = 3; i < 13; i++)
+            for (var i = 3; i < 9; i++)
             {
                 actionMask.SetActionEnabled(0, i, false);
             }
-            actionMask.SetActionEnabled(0, (int) AnimalStateEnum.Eat, false);
         }
 
         private enum InternalState

@@ -41,8 +41,8 @@ namespace Agents
         public AnimalAttribute Curiosity => _Curiosity;
         public AnimalAttribute Energy => _Energy;
         
-        private Collider[] _foodHitColliders = new Collider[10];
-        public List<Food> AvailableFood { get; private set; } = new();
+        private Collider[] _foodHitColliders = new Collider[3];
+        public Food[] AvailableFood { get; private set; } = new Food [3];
         
         private int _fixedUpdateCounter = 0;
         
@@ -53,13 +53,8 @@ namespace Agents
         
         private void FixedUpdate()
         {
-            if (AvailableFood.Contains(null))
-            {
-                AvailableFood = AvailableFood.Where(food => food != null).ToList();
-            }
             DetectAllFood();
             CurrentState?.Execute();
-            _Hunger.Value += 0.00001f;
             
             if (_Hunger.Value >= 1f)
             {
@@ -71,6 +66,7 @@ namespace Agents
             
             if (_fixedUpdateCounter % 600 == 0)
             {
+                _Hunger.Value += 0.0001f * 600;
                 Debug.LogWarning($"Hunger: {_Hunger.Value}");
             }
         }
@@ -124,7 +120,13 @@ namespace Agents
                 if (foodComponent == null) continue;
                 if (AvailableFood.Contains(foodComponent)) continue;
                 _Curiosity.Value += 0.1f;
-                AvailableFood.Add(foodComponent);
+                
+                for (var i = 0; i < AvailableFood.Length; i++)
+                {
+                    if (AvailableFood[i] != null) continue;
+                    AvailableFood[i] = foodComponent;
+                    break;
+                }
             }
         }
         
@@ -205,22 +207,20 @@ namespace Agents
                 case (int) AnimalStateEnum.Wander:
                     SetState(new AnimalStates.WanderState(this, _MovementSpeed, _RotationSpeed, _MinBounds, _MaxBounds));
                     break;
-                case >= 3 and <= 12:
+                case >= 3 and <= 5:
                     SetState(new AnimalStates.SeekState(this, _MovementSpeed, _RotationSpeed, AvailableFood[actions.DiscreteActions[0] - 3].transform.position));
                     break;
-                case (int) AnimalStateEnum.Eat:
-                    SetState(new AnimalStates.EatState(this));
+                case <= 8:
+                    SetState(new AnimalStates.EatState(this, AvailableFood[actions.DiscreteActions[0] - 6]));
                     break;
             }
         }
 
         public override void OnEpisodeBegin()
         {
-            _foodHitColliders = new Collider[10];
-            AvailableFood = new List<Food>();
+            _foodHitColliders = new Collider[3];
+            AvailableFood = new Food[3];
             _Hunger.Reset();
-            _Curiosity.Reset();
-            _Energy.Reset();
             
             MoveObjectWithinBounds();
             SetState(new AnimalStates.IdleState(this));
@@ -240,9 +240,11 @@ namespace Agents
                 return;
             }
             
-            for (var i = 3; i < AvailableFood.Count + 3; i++)
+            for (var i = 3; i < AvailableFood.Length + 3; i++)
             {
+                if (AvailableFood[i - 3] == null) continue;
                 actionMask.SetActionEnabled(0, i, true);
+                actionMask.SetActionEnabled(0, i + 3, true);
             }
         }
 
