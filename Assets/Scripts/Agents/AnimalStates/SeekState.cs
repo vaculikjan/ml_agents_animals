@@ -64,7 +64,10 @@ namespace Agents.AnimalStates
             }
         }
 
-        public void Exit() { }
+        public void Exit()
+        {
+            _animal.AnimalRigidbody.velocity = Vector3.zero;
+        }
 
         public bool CanExit() { return true;}
 
@@ -93,7 +96,7 @@ namespace Agents.AnimalStates
         private void CheckIfReachedTarget()
         {
             var distanceToTarget = Vector3.Distance(_animalTransform.position, _targetPosition);
-            if (!(distanceToTarget <= 0.1f)) return;
+            if (!(distanceToTarget <= 0.5f)) return;
             _hasReachedTarget = true;
             _animal.AnimalRigidbody.velocity = Vector3.zero;
         }

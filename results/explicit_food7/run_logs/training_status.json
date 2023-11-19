@@ -1,0 +1,56 @@
+{
+    "simple_deer": {
+        "checkpoints": [
+            {
+                "steps": 49992,
+                "file_path": "results\\explicit_food7\\simple_deer\\simple_deer-49992.onnx",
+                "reward": null,
+                "creation_time": 1699887244.6336648,
+                "auxillary_file_paths": [
+                    "results\\explicit_food7\\simple_deer\\simple_deer-49992.pt"
+                ]
+            },
+            {
+                "steps": 99952,
+                "file_path": "results\\explicit_food7\\simple_deer\\simple_deer-99952.onnx",
+                "reward": null,
+                "creation_time": 1699887957.0594053,
+                "auxillary_file_paths": [
+                    "results\\explicit_food7\\simple_deer\\simple_deer-99952.pt"
+                ]
+            },
+            {
+                "steps": 149952,
+                "file_path": "results\\explicit_food7\\simple_deer\\simple_deer-149952.onnx",
+                "reward": null,
+                "creation_time": 1699888788.4086945,
+                "auxillary_file_paths": [
+                    "results\\explicit_food7\\simple_deer\\simple_deer-149952.pt"
+                ]
+            },
+            {
+                "steps": 171096,
+                "file_path": "results\\explicit_food7\\simple_deer\\simple_deer-171096.onnx",
+                "reward": null,
+                "creation_time": 1699889210.1074216,
+                "auxillary_file_paths": [
+                    "results\\explicit_food7\\simple_deer\\simple_deer-171096.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 171096,
+            "file_path": "results\\explicit_food7\\simple_deer.onnx",
+            "reward": null,
+            "creation_time": 1699889210.1074216,
+            "auxillary_file_paths": [
+                "results\\explicit_food7\\simple_deer\\simple_deer-171096.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.1.0+cpu"
+    }
+}

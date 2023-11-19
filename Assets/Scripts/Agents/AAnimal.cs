@@ -15,7 +15,6 @@ namespace Agents
         public abstract void Eat(Food food);
         
         protected IAnimalState CurrentState;
-
         public Rigidbody AnimalRigidbody => _AnimalRigidbody;
 
         public bool SetState(IAnimalState state)

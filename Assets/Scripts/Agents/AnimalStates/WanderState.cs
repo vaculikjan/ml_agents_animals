@@ -75,6 +75,7 @@ namespace Agents.AnimalStates
 
         public void Exit()
         {
+            _animal.AnimalRigidbody.velocity = Vector3.zero;
         }
 
         public bool CanExit()

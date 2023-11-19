@@ -5,3 +5,5 @@ discrete_mask_test16 - increased food value 5x and decreased hunger generation 1
 no_energy_test1 - removed energy, changed food positons to localPosition
 no_energy_test2 - lowered checkpoint_interval
 explicit_food1 - set food to eat explicitly like seek
+explicit_food8 - set spawn area to half of the allowed area
+explicit_food9 - add random rotation at the beginning of episode

@@ -1,0 +1,110 @@
+{
+    "simple_deer": {
+        "checkpoints": [
+            {
+                "steps": 1149952,
+                "file_path": "results\\explicit_food11\\simple_deer\\simple_deer-1149952.onnx",
+                "reward": null,
+                "creation_time": 1700337587.7883825,
+                "auxillary_file_paths": [
+                    "results\\explicit_food11\\simple_deer\\simple_deer-1149952.pt"
+                ]
+            },
+            {
+                "steps": 1199952,
+                "file_path": "results\\explicit_food11\\simple_deer\\simple_deer-1199952.onnx",
+                "reward": null,
+                "creation_time": 1700338011.7738347,
+                "auxillary_file_paths": [
+                    "results\\explicit_food11\\simple_deer\\simple_deer-1199952.pt"
+                ]
+            },
+            {
+                "steps": 1249952,
+                "file_path": "results\\explicit_food11\\simple_deer\\simple_deer-1249952.onnx",
+                "reward": null,
+                "creation_time": 1700338441.9178824,
+                "auxillary_file_paths": [
+                    "results\\explicit_food11\\simple_deer\\simple_deer-1249952.pt"
+                ]
+            },
+            {
+                "steps": 1299936,
+                "file_path": "results\\explicit_food11\\simple_deer\\simple_deer-1299936.onnx",
+                "reward": null,
+                "creation_time": 1700338864.992788,
+                "auxillary_file_paths": [
+                    "results\\explicit_food11\\simple_deer\\simple_deer-1299936.pt"
+                ]
+            },
+            {
+                "steps": 1349936,
+                "file_path": "results\\explicit_food11\\simple_deer\\simple_deer-1349936.onnx",
+                "reward": null,
+                "creation_time": 1700339287.5579953,
+                "auxillary_file_paths": [
+                    "results\\explicit_food11\\simple_deer\\simple_deer-1349936.pt"
+                ]
+            },
+            {
+                "steps": 1399936,
+                "file_path": "results\\explicit_food11\\simple_deer\\simple_deer-1399936.onnx",
+                "reward": null,
+                "creation_time": 1700339710.6865385,
+                "auxillary_file_paths": [
+                    "results\\explicit_food11\\simple_deer\\simple_deer-1399936.pt"
+                ]
+            },
+            {
+                "steps": 1449936,
+                "file_path": "results\\explicit_food11\\simple_deer\\simple_deer-1449936.onnx",
+                "reward": null,
+                "creation_time": 1700340135.057247,
+                "auxillary_file_paths": [
+                    "results\\explicit_food11\\simple_deer\\simple_deer-1449936.pt"
+                ]
+            },
+            {
+                "steps": 1499984,
+                "file_path": "results\\explicit_food11\\simple_deer\\simple_deer-1499984.onnx",
+                "reward": null,
+                "creation_time": 1700340558.2215183,
+                "auxillary_file_paths": [
+                    "results\\explicit_food11\\simple_deer\\simple_deer-1499984.pt"
+                ]
+            },
+            {
+                "steps": 1549984,
+                "file_path": "results\\explicit_food11\\simple_deer\\simple_deer-1549984.onnx",
+                "reward": null,
+                "creation_time": 1700340983.1432385,
+                "auxillary_file_paths": [
+                    "results\\explicit_food11\\simple_deer\\simple_deer-1549984.pt"
+                ]
+            },
+            {
+                "steps": 1567472,
+                "file_path": "results\\explicit_food11\\simple_deer\\simple_deer-1567472.onnx",
+                "reward": null,
+                "creation_time": 1700341138.6699893,
+                "auxillary_file_paths": [
+                    "results\\explicit_food11\\simple_deer\\simple_deer-1567472.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1567472,
+            "file_path": "results\\explicit_food11\\simple_deer.onnx",
+            "reward": null,
+            "creation_time": 1700341138.6699893,
+            "auxillary_file_paths": [
+                "results\\explicit_food11\\simple_deer\\simple_deer-1567472.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.1.0+cpu"
+    }
+}

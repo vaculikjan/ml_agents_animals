@@ -40,6 +40,8 @@ namespace Agents
         public AnimalAttribute Hunger => _Hunger;
         public AnimalAttribute Curiosity => _Curiosity;
         public AnimalAttribute Energy => _Energy;
+        public float FoodConsumeRadius => _FoodConsumeRadius;
+        public int CurrentStateInt => (int) CurrentState.StateID;
         
         private Collider[] _foodHitColliders = new Collider[3];
         public Food[] AvailableFood { get; private set; } = new Food [3];
@@ -58,7 +60,7 @@ namespace Agents
             
             if (_Hunger.Value >= 1f)
             {
-                AddReward(-10f);
+                AddReward(-3f);
                 EndEpisode();
             }
             
@@ -66,8 +68,7 @@ namespace Agents
             
             if (_fixedUpdateCounter % 600 == 0)
             {
-                _Hunger.Value += 0.0001f * 600;
-                Debug.LogWarning($"Hunger: {_Hunger.Value}");
+                _Hunger.Value += 0.00005f * 600;
             }
         }
         
@@ -102,7 +103,6 @@ namespace Agents
 
         public override void Eat(Food food)
         {
-            Debug.Log("Eating");
             _Hunger.Value -= food.Eat();
         }
 
@@ -130,6 +130,21 @@ namespace Agents
             }
         }
         
+        private bool CanEatAvailableFood(out Food food)
+        {
+            food = null;
+            
+            foreach (var x in AvailableFood)
+            {
+                if (x == null) continue;
+                if (!(Vector3.Distance(transform.position, x.transform.position) <= _FoodConsumeRadius)) continue;
+                food = x;
+                return true;
+            }
+
+            return false;
+        }
+        
         public override bool IsFoodAvailable(out Food nearestFood)
         {
             nearestFood = null;
@@ -154,24 +169,10 @@ namespace Agents
 
         public override void Heuristic(in ActionBuffers actionsOut)
         {
-            if (Input.GetKeyDown(KeyCode.Q)) actionsOut.DiscreteActions.Array[0] = 1;
-            else if (Input.GetKeyDown(KeyCode.W)) actionsOut.DiscreteActions.Array[0] = 2;
-            else if (Input.GetKeyDown(KeyCode.E)) actionsOut.DiscreteActions.Array[0] = 4;
-            else if (Input.GetKeyDown(KeyCode.A))
-            {
-                actionsOut.DiscreteActions.Array[0] = 3;
-                actionsOut.DiscreteActions.Array[3] = 0;
-            }
-            else if (Input.GetKey(KeyCode.S))
-            {
-                actionsOut.DiscreteActions.Array[0] = 3;
-                actionsOut.DiscreteActions.Array[3] = 1;
-            }
-            else if (Input.GetKey(KeyCode.D))
-            {
-                actionsOut.DiscreteActions.Array[0] = 3;
-                actionsOut.DiscreteActions.Array[3] = 2;
-            }
+            if (Input.GetKey(KeyCode.Q)) actionsOut.DiscreteActions.Array[0] = (int) AnimalStateEnum.Idle;
+            else if (Input.GetKey(KeyCode.W)) actionsOut.DiscreteActions.Array[0] = (int) AnimalStateEnum.Wander;
+            else if (Input.GetKey(KeyCode.E)) actionsOut.DiscreteActions.Array[0] = 3;
+            else if (Input.GetKey(KeyCode.R)) actionsOut.DiscreteActions.Array[0] = 6;
         }
 
         public override void CollectObservations(VectorSensor sensor)
@@ -196,7 +197,6 @@ namespace Agents
 
         public override void OnActionReceived(ActionBuffers actions)
         {
-            Debug.Log(actions.DiscreteActions[0]);
             switch(actions.DiscreteActions[0])
             {
                 case (int) AnimalStateEnum.None:
@@ -244,19 +244,22 @@ namespace Agents
             {
                 if (AvailableFood[i - 3] == null) continue;
                 actionMask.SetActionEnabled(0, i, true);
-                actionMask.SetActionEnabled(0, i + 3, true);
+               
+                if (Vector3.Distance(transform.position, AvailableFood[i - 3].transform.position) <= _FoodConsumeRadius)
+                    actionMask.SetActionEnabled(0, i + 3, true);
             }
         }
 
         private void MoveObjectWithinBounds()
         {
             var randomPosition = new Vector3(
-                Random.Range(_MinBounds.x, _MaxBounds.x),
-                Random.Range(_MinBounds.y, _MaxBounds.y),
-                Random.Range(_MinBounds.z, _MaxBounds.z)
+                Random.Range(_MinBounds.x/2, _MaxBounds.x/2),
+                Random.Range(_MinBounds.y/2, _MaxBounds.y/2),
+                Random.Range(_MinBounds.z/2, _MaxBounds.z/2)
             );
 
             transform.position = randomPosition;
+            transform.rotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
         }
     }
     
@@ -286,10 +289,9 @@ namespace Agents
                 _value = Mathf.Clamp(value, _MinValue, _MaxValue);
                 var reward = (_RewardCurve.Evaluate(value) - _RewardCurve.Evaluate(lastValue)) * _RewardModifier;
                 
-                if (reward > 0) reward *= 2;
+                if (reward > 0) reward *= 5;
                 
                 _Agent.AddReward(reward);
-                Debug.LogWarning((reward));
             }
         }
         

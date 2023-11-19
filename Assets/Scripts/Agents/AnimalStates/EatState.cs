@@ -41,7 +41,6 @@ namespace Agents.AnimalStates
         public void Enter()
         {
             _eatingTime = 0.0f;
-            Debug.Log("Entered EatState");
         }
 
         public void Execute()
