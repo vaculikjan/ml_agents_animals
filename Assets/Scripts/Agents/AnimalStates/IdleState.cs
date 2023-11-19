@@ -9,9 +9,9 @@ namespace Agents.AnimalStates
     {
         public AnimalStateEnum StateID => AnimalStateEnum.Idle;
 
-        public void SetStateMask(ref IDiscreteActionMask actionMask)
+        public void SetStateMask(ref IDiscreteActionMask actionMask, int actionSize)
         {
-            for (var i = 3; i < 9; i++)
+            for (var i = 3; i < actionSize; i++)
             {
                 actionMask.SetActionEnabled(0, i, false);
             }

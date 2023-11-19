@@ -9,7 +9,7 @@ namespace Agents.AnimalStates
     public class PursueState : IAnimalState
     {
         public AnimalStateEnum StateID => AnimalStateEnum.Pursue;
-        public void SetStateMask(ref IDiscreteActionMask actionMask) { throw new NotImplementedException(); }
+        public void SetStateMask(ref IDiscreteActionMask actionMask, int actionSize) { throw new NotImplementedException(); }
 
         private enum InternalState
         {

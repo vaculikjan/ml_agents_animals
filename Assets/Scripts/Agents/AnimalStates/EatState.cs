@@ -9,18 +9,18 @@ namespace Agents.AnimalStates
     {
         public AnimalStateEnum StateID => AnimalStateEnum.Eat;
 
-        public void SetStateMask(ref IDiscreteActionMask actionMask)
+        public void SetStateMask(ref IDiscreteActionMask actionMask, int actionSize)
         {
             if (IsEating)
             {
-                for (var i = 1; i < 9; i++)
+                for (var i = 1; i < actionSize; i++)
                 {
                     actionMask.SetActionEnabled(0, i, false);
                 }
                 return;
             }
             
-            for (var i = 3; i < 9; i++)
+            for (var i = 3; i < actionSize; i++)
             {
                 actionMask.SetActionEnabled(0, i, false);
             }

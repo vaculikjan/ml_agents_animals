@@ -9,6 +9,7 @@ using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Agents
@@ -45,8 +46,10 @@ namespace Agents
         
         private Collider[] _foodHitColliders = new Collider[3];
         public Food[] AvailableFood { get; private set; } = new Food [3];
-        
-        private int _fixedUpdateCounter = 0;
+
+        private int _fixedUpdateCounter;
+        private Food _foodToEat;
+        public int _MaxDiscreteStates = 7;
         
         private void Start()
         {
@@ -60,15 +63,15 @@ namespace Agents
             
             if (_Hunger.Value >= 1f)
             {
-                AddReward(-3f);
+                AddReward(-10f);
                 EndEpisode();
             }
             
             _fixedUpdateCounter++;
             
-            if (_fixedUpdateCounter % 600 == 0)
+            if (_fixedUpdateCounter % 50 == 0)
             {
-                _Hunger.Value += 0.00005f * 600;
+                _Hunger.Value += 0.00005f * 50;
             }
         }
         
@@ -103,6 +106,7 @@ namespace Agents
 
         public override void Eat(Food food)
         {
+            Debug.Log("Eating");
             _Hunger.Value -= food.Eat();
         }
 
@@ -119,7 +123,6 @@ namespace Agents
                 var foodComponent = food.GetComponent<Food>();
                 if (foodComponent == null) continue;
                 if (AvailableFood.Contains(foodComponent)) continue;
-                _Curiosity.Value += 0.1f;
                 
                 for (var i = 0; i < AvailableFood.Length; i++)
                 {
@@ -210,8 +213,8 @@ namespace Agents
                 case >= 3 and <= 5:
                     SetState(new AnimalStates.SeekState(this, _MovementSpeed, _RotationSpeed, AvailableFood[actions.DiscreteActions[0] - 3].transform.position));
                     break;
-                case <= 8:
-                    SetState(new AnimalStates.EatState(this, AvailableFood[actions.DiscreteActions[0] - 6]));
+                case 6:
+                    SetState(new AnimalStates.EatState(this, _foodToEat));
                     break;
             }
         }
@@ -233,7 +236,7 @@ namespace Agents
             {
                 return;
             }
-            CurrentState.SetStateMask(ref actionMask);
+            CurrentState.SetStateMask(ref actionMask, _MaxDiscreteStates);
 
             if (CurrentState.StateID is AnimalStateEnum.Seek or AnimalStateEnum.Eat)
             {
@@ -244,9 +247,11 @@ namespace Agents
             {
                 if (AvailableFood[i - 3] == null) continue;
                 actionMask.SetActionEnabled(0, i, true);
-               
-                if (Vector3.Distance(transform.position, AvailableFood[i - 3].transform.position) <= _FoodConsumeRadius)
-                    actionMask.SetActionEnabled(0, i + 3, true);
+            }
+            
+            if (CanEatAvailableFood(out _foodToEat))
+            {
+                actionMask.SetActionEnabled(0, 6, true);
             }
         }
 
@@ -287,9 +292,12 @@ namespace Agents
             {
                 var lastValue = _value;
                 _value = Mathf.Clamp(value, _MinValue, _MaxValue);
-                var reward = (_RewardCurve.Evaluate(value) - _RewardCurve.Evaluate(lastValue)) * _RewardModifier;
-                
-                if (reward > 0) reward *= 5;
+                var reward = (_RewardCurve.Evaluate(_value) - _RewardCurve.Evaluate(lastValue)) * _RewardModifier;
+
+                if (reward > 0)
+                {
+                    reward *= 50;
+                }
                 
                 _Agent.AddReward(reward);
             }

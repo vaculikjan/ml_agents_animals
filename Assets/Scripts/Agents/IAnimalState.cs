@@ -8,7 +8,7 @@ namespace Agents
     public interface IAnimalState : IState
     {
         AnimalStateEnum StateID { get; }
-        public void SetStateMask(ref IDiscreteActionMask actionMask);
+        public void SetStateMask(ref IDiscreteActionMask actionMask, int actionSize);
     }
 
     public enum AnimalStateEnum

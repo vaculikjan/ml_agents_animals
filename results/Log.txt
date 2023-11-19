@@ -7,3 +7,5 @@ no_energy_test2 - lowered checkpoint_interval
 explicit_food1 - set food to eat explicitly like seek
 explicit_food8 - set spawn area to half of the allowed area
 explicit_food9 - add random rotation at the beginning of episode
+no_food_selection1 - lowered time to eat, food not selected explicitly, IMPORTANT: FIXED REWARD GAINS
+no_food_selection5 - uninterruptible seek
