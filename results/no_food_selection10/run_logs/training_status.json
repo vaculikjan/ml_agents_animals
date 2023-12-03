@@ -1,0 +1,29 @@
+{
+    "simple_deer": {
+        "checkpoints": [
+            {
+                "steps": 1792,
+                "file_path": "results\\no_food_selection10\\simple_deer\\simple_deer-1792.onnx",
+                "reward": null,
+                "creation_time": 1700498199.3206835,
+                "auxillary_file_paths": [
+                    "results\\no_food_selection10\\simple_deer\\simple_deer-1792.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1792,
+            "file_path": "results\\no_food_selection10\\simple_deer.onnx",
+            "reward": null,
+            "creation_time": 1700498199.3206835,
+            "auxillary_file_paths": [
+                "results\\no_food_selection10\\simple_deer\\simple_deer-1792.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.1.1+cpu"
+    }
+}

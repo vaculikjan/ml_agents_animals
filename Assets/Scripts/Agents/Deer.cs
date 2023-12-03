@@ -45,6 +45,8 @@ namespace Agents
         public int CurrentStateInt => (int) CurrentState.StateID;
         
         private Collider[] _foodHitColliders = new Collider[3];
+        private List<Food> _foodList = new List<Food>();
+        public List <Food> FoodList => _foodList;
         public Food[] AvailableFood { get; private set; } = new Food [3];
 
         private int _fixedUpdateCounter;
@@ -58,10 +60,16 @@ namespace Agents
         
         private void FixedUpdate()
         {
-            DetectAllFood();
+            if (CurrentState?.StateID == AnimalStateEnum.Wander)
+            {
+                DetectAllFood();
+
+            }
+            
+            CalculateClosestFood();
             CurrentState?.Execute();
             
-            if (_Hunger.Value >= 1f)
+            if (_Hunger.Value >= _Hunger.MaxValue)
             {
                 AddReward(-10f);
                 EndEpisode();
@@ -122,17 +130,27 @@ namespace Agents
             {
                 var foodComponent = food.GetComponent<Food>();
                 if (foodComponent == null) continue;
-                if (AvailableFood.Contains(foodComponent)) continue;
-                
-                for (var i = 0; i < AvailableFood.Length; i++)
-                {
-                    if (AvailableFood[i] != null) continue;
-                    AvailableFood[i] = foodComponent;
-                    break;
-                }
+                if (_foodList.Contains(foodComponent)) continue;
+                AddReward(5f);
+                _foodList.Add(foodComponent);
             }
         }
-        
+
+        private void CalculateClosestFood()
+        {
+            _foodList.Sort((x, y) => Vector3.Distance(transform.position, x.transform.position).CompareTo(Vector3.Distance(transform.position, y.transform.position)));
+            
+            for (var i = 0; i < AvailableFood.Length; i++)
+            {
+                if (i >= _foodList.Count)
+                {
+                    AvailableFood[i] = null;
+                    continue;
+                }
+                AvailableFood[i] = _foodList[i];
+            }
+        }
+
         private bool CanEatAvailableFood(out Food food)
         {
             food = null;
@@ -221,6 +239,7 @@ namespace Agents
 
         public override void OnEpisodeBegin()
         {
+            _foodList = new List<Food>();
             _foodHitColliders = new Collider[3];
             AvailableFood = new Food[3];
             _Hunger.Reset();
@@ -283,6 +302,8 @@ namespace Agents
         private float _RewardModifier;
         [SerializeField]
         private AnimationCurve _RewardCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
+
+        public float MaxValue => _MaxValue;
 
         private float _value;
         public float Value

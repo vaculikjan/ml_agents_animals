@@ -463,6 +463,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1122459864}
     m_Modifications:
     - target: {fileID: 197278023128598000, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: 66e25a6e6d0818e42bacac6b73bcc49b, type: 3}
+    - target: {fileID: 197278023128598000, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
       propertyPath: m_InferenceDevice
       value: 0
       objectReference: {fileID: 0}
@@ -528,7 +532,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
       propertyPath: _FoodDetectionRadius
-      value: 500
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
       propertyPath: _Hunger._RewardCurve.m_Curve.Array.size

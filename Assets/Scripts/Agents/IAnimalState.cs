@@ -20,5 +20,4 @@ namespace Agents
         Eat = 13,
         Pursue = 5,
     }
-    
 }

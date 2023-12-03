@@ -9,3 +9,9 @@ explicit_food8 - set spawn area to half of the allowed area
 explicit_food9 - add random rotation at the beginning of episode
 no_food_selection1 - lowered time to eat, food not selected explicitly, IMPORTANT: FIXED REWARD GAINS
 no_food_selection5 - uninterruptible seek
+no_food_selection9 - first usable brain - "Add first working version" commit
+----------------------------------------------------------------------------------
+no_food_selection11 - reduce food detection radius - seems to be learning fine
+no_food_selection12 - return seek interruption (by wander and idle)
+no_food_selection13 - redo logic on food detection, add 5f reward for detecting new food - learned, but doesn't use wander 
+no_food_selection14 - only update food list when in wander state - learned well

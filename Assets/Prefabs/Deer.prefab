@@ -139,7 +139,7 @@ MonoBehaviour:
   _MovementSpeed: 5
   _RotationSpeed: 180
   _FoodConsumeRadius: 3
-  _FoodDetectionRadius: 500
+  _FoodDetectionRadius: 200
   _FoodSensor: {fileID: 8747480117225782196}
   _Hunger:
     _Agent: {fileID: 197278023688713977}

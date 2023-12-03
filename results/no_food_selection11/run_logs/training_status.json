@@ -1,0 +1,38 @@
+{
+    "simple_deer": {
+        "checkpoints": [
+            {
+                "steps": 49952,
+                "file_path": "results\\no_food_selection11\\simple_deer\\simple_deer-49952.onnx",
+                "reward": null,
+                "creation_time": 1701016127.7149737,
+                "auxillary_file_paths": [
+                    "results\\no_food_selection11\\simple_deer\\simple_deer-49952.pt"
+                ]
+            },
+            {
+                "steps": 69344,
+                "file_path": "results\\no_food_selection11\\simple_deer\\simple_deer-69344.onnx",
+                "reward": null,
+                "creation_time": 1701016394.6091352,
+                "auxillary_file_paths": [
+                    "results\\no_food_selection11\\simple_deer\\simple_deer-69344.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 69344,
+            "file_path": "results\\no_food_selection11\\simple_deer.onnx",
+            "reward": null,
+            "creation_time": 1701016394.6091352,
+            "auxillary_file_paths": [
+                "results\\no_food_selection11\\simple_deer\\simple_deer-69344.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.1.1+cpu"
+    }
+}
