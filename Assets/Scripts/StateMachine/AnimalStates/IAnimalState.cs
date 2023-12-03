@@ -1,9 +1,8 @@
 // Author: Jan Vaculik
 
-using StateMachine;
 using Unity.MLAgents.Actuators;
 
-namespace Agents
+namespace StateMachine.AnimalStates
 {
     public interface IAnimalState : IState
     {

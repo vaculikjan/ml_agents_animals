@@ -1,11 +1,12 @@
 // Author: Jan Vaculik
 
 using System;
+using Agents;
 using Unity.MLAgents.Actuators;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Agents.AnimalStates
+namespace StateMachine.AnimalStates
 {
     public class WanderState : IAnimalState
     {

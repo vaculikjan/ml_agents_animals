@@ -1,9 +1,11 @@
 // Author: Jan Vaculik
 
+using Agents;
+using Environment;
 using Unity.MLAgents.Actuators;
 using UnityEngine;
 
-namespace Agents.AnimalStates
+namespace StateMachine.AnimalStates
 {
     public class EatState : IAnimalState
     {

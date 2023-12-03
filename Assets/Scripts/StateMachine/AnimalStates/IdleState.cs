@@ -1,9 +1,10 @@
 // Author: Jan Vaculik
 
+using Agents;
 using Unity.MLAgents.Actuators;
 using UnityEngine;
 
-namespace Agents.AnimalStates
+namespace StateMachine.AnimalStates
 {
     public class IdleState : IAnimalState
     {

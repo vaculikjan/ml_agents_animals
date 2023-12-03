@@ -1,15 +1,12 @@
 // Author: Jan Vaculik
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using AgentProperties.Attributes;
 using Environment;
-using Unity.MLAgents;
+using StateMachine.AnimalStates;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Agents
@@ -55,7 +52,7 @@ namespace Agents
         
         private void Start()
         {
-            SetState(new AnimalStates.IdleState(this));
+            SetState(new IdleState(this));
         }
         
         private void FixedUpdate()
@@ -223,16 +220,16 @@ namespace Agents
                 case (int) AnimalStateEnum.None:
                     return;
                 case (int) AnimalStateEnum.Idle:
-                    SetState(new AnimalStates.IdleState(this));
+                    SetState(new IdleState(this));
                     break;
                 case (int) AnimalStateEnum.Wander:
-                    SetState(new AnimalStates.WanderState(this, _MovementSpeed, _RotationSpeed, _MinBounds, _MaxBounds));
+                    SetState(new WanderState(this, _MovementSpeed, _RotationSpeed, _MinBounds, _MaxBounds));
                     break;
                 case >= 3 and <= 5:
-                    SetState(new AnimalStates.SeekState(this, _MovementSpeed, _RotationSpeed, AvailableFood[actions.DiscreteActions[0] - 3].transform.position));
+                    SetState(new SeekState(this, _MovementSpeed, _RotationSpeed, AvailableFood[actions.DiscreteActions[0] - 3].transform.position));
                     break;
                 case 6:
-                    SetState(new AnimalStates.EatState(this, _foodToEat));
+                    SetState(new EatState(this, _foodToEat));
                     break;
             }
         }
@@ -245,7 +242,7 @@ namespace Agents
             _Hunger.Reset();
             
             MoveObjectWithinBounds();
-            SetState(new AnimalStates.IdleState(this));
+            SetState(new IdleState(this));
             EnvironmentController.Instance.ResetEnvironment();
         }
 
@@ -284,49 +281,6 @@ namespace Agents
 
             transform.position = randomPosition;
             transform.rotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
-        }
-    }
-    
-    [Serializable]
-    public class AnimalAttribute
-    {
-        [SerializeField]
-        private Agent _Agent;
-        [SerializeField]
-        private float _MinValue;
-        [SerializeField]
-        private float _MaxValue;
-        [SerializeField]
-        private float _DefaultValue;
-        [SerializeField]
-        private float _RewardModifier;
-        [SerializeField]
-        private AnimationCurve _RewardCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
-
-        public float MaxValue => _MaxValue;
-
-        private float _value;
-        public float Value
-        {
-            get => _value;
-            set
-            {
-                var lastValue = _value;
-                _value = Mathf.Clamp(value, _MinValue, _MaxValue);
-                var reward = (_RewardCurve.Evaluate(_value) - _RewardCurve.Evaluate(lastValue)) * _RewardModifier;
-
-                if (reward > 0)
-                {
-                    reward *= 50;
-                }
-                
-                _Agent.AddReward(reward);
-            }
-        }
-        
-        public void Reset()
-        {
-            _value = _DefaultValue;
         }
     }
 }

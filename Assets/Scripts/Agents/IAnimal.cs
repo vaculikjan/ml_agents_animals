@@ -1,5 +1,7 @@
 // Author: Jan Vaculik
 
+using StateMachine.AnimalStates;
+
 namespace Agents
 {
     public interface IAnimal

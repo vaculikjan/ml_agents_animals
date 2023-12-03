@@ -1,10 +1,11 @@
 // Author: Jan Vaculik
 
 using System;
+using Agents;
 using Unity.MLAgents.Actuators;
 using UnityEngine;
 
-namespace Agents.AnimalStates
+namespace StateMachine.AnimalStates
 {
     public class SeekState : IAnimalState
     {

@@ -1,6 +1,8 @@
 // Author: Jan Vaculik
 
 using System.Collections.Generic;
+using Environment;
+using StateMachine.AnimalStates;
 using Unity.MLAgents;
 using UnityEngine;
 

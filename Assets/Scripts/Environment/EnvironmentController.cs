@@ -1,11 +1,8 @@
 // Author: Jan Vaculik
 
-using System;
 using System.Collections.Generic;
 using Agents;
-using Unity.MLAgents;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Environment
