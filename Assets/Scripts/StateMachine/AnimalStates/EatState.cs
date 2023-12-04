@@ -19,12 +19,6 @@ namespace StateMachine.AnimalStates
                 {
                     actionMask.SetActionEnabled(0, i, false);
                 }
-                return;
-            }
-            
-            for (var i = 3; i < actionSize; i++)
-            {
-                actionMask.SetActionEnabled(0, i, false);
             }
         }
 
@@ -47,13 +41,15 @@ namespace StateMachine.AnimalStates
 
         public void Execute()
         {
+            Debug.Log("Eating");
             if (!IsEating) IsEating = true;
             
             _eatingTime += Time.deltaTime;
 
             if (_eatingTime <= _nearestFood.TimeToEat) return;
             
-            _animal.Eat(_nearestFood);
+            _animal.Hunger.Value -= _nearestFood.Eat();
+            
             IsEating = false;
             _eatingTime = 0.0f;
             _animal.SetState(new IdleState(_animal));

@@ -19,6 +19,8 @@ namespace StateMachine.AnimalStates
             {
                 actionMask.SetActionEnabled(0, i, false);
             }
+            
+            SleepState.MaskState(ref actionMask, true);
         }
 
         private enum InternalState

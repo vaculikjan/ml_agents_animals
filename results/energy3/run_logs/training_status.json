@@ -1,0 +1,47 @@
+{
+    "simple_deer": {
+        "checkpoints": [
+            {
+                "steps": 49973,
+                "file_path": "results\\energy3\\simple_deer\\simple_deer-49973.onnx",
+                "reward": null,
+                "creation_time": 1701621976.2751372,
+                "auxillary_file_paths": [
+                    "results\\energy3\\simple_deer\\simple_deer-49973.pt"
+                ]
+            },
+            {
+                "steps": 99988,
+                "file_path": "results\\energy3\\simple_deer\\simple_deer-99988.onnx",
+                "reward": 452.9245901107788,
+                "creation_time": 1701622671.628833,
+                "auxillary_file_paths": [
+                    "results\\energy3\\simple_deer\\simple_deer-99988.pt"
+                ]
+            },
+            {
+                "steps": 114837,
+                "file_path": "results\\energy3\\simple_deer\\simple_deer-114837.onnx",
+                "reward": null,
+                "creation_time": 1701622883.172904,
+                "auxillary_file_paths": [
+                    "results\\energy3\\simple_deer\\simple_deer-114837.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 114837,
+            "file_path": "results\\energy3\\simple_deer.onnx",
+            "reward": null,
+            "creation_time": 1701622883.172904,
+            "auxillary_file_paths": [
+                "results\\energy3\\simple_deer\\simple_deer-114837.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.1.1+cpu"
+    }
+}

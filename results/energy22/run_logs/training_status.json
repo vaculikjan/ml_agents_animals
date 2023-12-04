@@ -1,0 +1,110 @@
+{
+    "simple_deer": {
+        "checkpoints": [
+            {
+                "steps": 2349986,
+                "file_path": "results\\energy22\\simple_deer\\simple_deer-2349986.onnx",
+                "reward": null,
+                "creation_time": 1701668020.359309,
+                "auxillary_file_paths": [
+                    "results\\energy22\\simple_deer\\simple_deer-2349986.pt"
+                ]
+            },
+            {
+                "steps": 2399966,
+                "file_path": "results\\energy22\\simple_deer\\simple_deer-2399966.onnx",
+                "reward": null,
+                "creation_time": 1701668651.7221653,
+                "auxillary_file_paths": [
+                    "results\\energy22\\simple_deer\\simple_deer-2399966.pt"
+                ]
+            },
+            {
+                "steps": 2449985,
+                "file_path": "results\\energy22\\simple_deer\\simple_deer-2449985.onnx",
+                "reward": null,
+                "creation_time": 1701669285.2414868,
+                "auxillary_file_paths": [
+                    "results\\energy22\\simple_deer\\simple_deer-2449985.pt"
+                ]
+            },
+            {
+                "steps": 2499986,
+                "file_path": "results\\energy22\\simple_deer\\simple_deer-2499986.onnx",
+                "reward": null,
+                "creation_time": 1701669922.3909051,
+                "auxillary_file_paths": [
+                    "results\\energy22\\simple_deer\\simple_deer-2499986.pt"
+                ]
+            },
+            {
+                "steps": 2549988,
+                "file_path": "results\\energy22\\simple_deer\\simple_deer-2549988.onnx",
+                "reward": null,
+                "creation_time": 1701670563.4817398,
+                "auxillary_file_paths": [
+                    "results\\energy22\\simple_deer\\simple_deer-2549988.pt"
+                ]
+            },
+            {
+                "steps": 2599948,
+                "file_path": "results\\energy22\\simple_deer\\simple_deer-2599948.onnx",
+                "reward": null,
+                "creation_time": 1701671206.5808513,
+                "auxillary_file_paths": [
+                    "results\\energy22\\simple_deer\\simple_deer-2599948.pt"
+                ]
+            },
+            {
+                "steps": 2649945,
+                "file_path": "results\\energy22\\simple_deer\\simple_deer-2649945.onnx",
+                "reward": null,
+                "creation_time": 1701671852.619411,
+                "auxillary_file_paths": [
+                    "results\\energy22\\simple_deer\\simple_deer-2649945.pt"
+                ]
+            },
+            {
+                "steps": 2699943,
+                "file_path": "results\\energy22\\simple_deer\\simple_deer-2699943.onnx",
+                "reward": null,
+                "creation_time": 1701672513.7923632,
+                "auxillary_file_paths": [
+                    "results\\energy22\\simple_deer\\simple_deer-2699943.pt"
+                ]
+            },
+            {
+                "steps": 2749971,
+                "file_path": "results\\energy22\\simple_deer\\simple_deer-2749971.onnx",
+                "reward": null,
+                "creation_time": 1701673186.5023425,
+                "auxillary_file_paths": [
+                    "results\\energy22\\simple_deer\\simple_deer-2749971.pt"
+                ]
+            },
+            {
+                "steps": 2750845,
+                "file_path": "results\\energy22\\simple_deer\\simple_deer-2750845.onnx",
+                "reward": null,
+                "creation_time": 1701673198.7449648,
+                "auxillary_file_paths": [
+                    "results\\energy22\\simple_deer\\simple_deer-2750845.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 2750845,
+            "file_path": "results\\energy22\\simple_deer.onnx",
+            "reward": null,
+            "creation_time": 1701673198.7449648,
+            "auxillary_file_paths": [
+                "results\\energy22\\simple_deer\\simple_deer-2750845.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.1.1+cpu"
+    }
+}

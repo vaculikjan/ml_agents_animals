@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 197278023688713977}
   - component: {fileID: 197278023128598000}
   - component: {fileID: 8747480117225782196}
+  - component: {fileID: 197278023128598001}
   m_Layer: 0
   m_Name: Deer
   m_TagString: Untagged
@@ -110,7 +111,7 @@ Rigidbody:
   m_GameObject: {fileID: 197278023688713980}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 10
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -134,28 +135,22 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
   _AnimalRigidbody: {fileID: 197278023688713978}
-  _MinBounds: {x: -200, y: 0, z: -200}
-  _MaxBounds: {x: 200, y: 0, z: 200}
-  _MovementSpeed: 5
-  _RotationSpeed: 180
-  _FoodConsumeRadius: 3
-  _FoodDetectionRadius: 200
-  _FoodSensor: {fileID: 8747480117225782196}
   _Hunger:
     _Agent: {fileID: 197278023688713977}
     _MinValue: 0
     _MaxValue: 1
     _DefaultValue: 0
-    _RewardModifier: -1
+    _PositiveRewardModifier: 10
+    _NegativeRewardModifier: 1
     _RewardCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
         value: 0
-        inSlope: 0
+        inSlope: 1
         outSlope: 1
-        tangentMode: 0
+        tangentMode: 34
         weightedMode: 0
         inWeight: 0
         outWeight: 0
@@ -163,6 +158,54 @@ MonoBehaviour:
         time: 1
         value: 1
         inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    _PositiveMultiplierCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    _NegativeMultiplierCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
@@ -176,7 +219,8 @@ MonoBehaviour:
     _MinValue: 0
     _MaxValue: 1
     _DefaultValue: 0
-    _RewardModifier: 1
+    _PositiveRewardModifier: 1
+    _NegativeRewardModifier: 1
     _RewardCurve:
       serializedVersion: 2
       m_Curve:
@@ -193,6 +237,54 @@ MonoBehaviour:
         time: 1
         value: 1
         inSlope: 1
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    _PositiveMultiplierCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    _NegativeMultiplierCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
@@ -206,7 +298,8 @@ MonoBehaviour:
     _MinValue: 0
     _MaxValue: 1
     _DefaultValue: 1
-    _RewardModifier: 1
+    _PositiveRewardModifier: 10
+    _NegativeRewardModifier: 1
     _RewardCurve:
       serializedVersion: 2
       m_Curve:
@@ -231,7 +324,67 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  _MaxDiscreteStates: 7
+    _PositiveMultiplierCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 5
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    _NegativeMultiplierCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 3
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  _EnergyRecoveryRate: 0
+  _MinBounds: {x: -200, y: 0, z: -200}
+  _MaxBounds: {x: 200, y: 0, z: 200}
+  _MovementSpeed: 45
+  _RotationSpeed: 180
+  _FoodConsumeRadius: 3
+  _FoodDetectionRadius: 150
+  _FoodSensor: {fileID: 8747480117225782196}
+  _HungerPerSecond: 0.005
+  _EnergyPerSecond: -0.025
+  _EnergyRegenPerSecond: 0.05
+  _TimeToSleep: 2
+  _MaxDiscreteStates: 8
 --- !u!114 &197278023128598000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -245,17 +398,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 5
+    VectorObservationSize: 6
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
-      BranchSizes: 09000000
-    VectorActionSize: 09000000
+      BranchSizes: 08000000
+    VectorActionSize: 08000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
-  m_InferenceDevice: 1
+  m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: simple_deer
   TeamId: 0
@@ -277,3 +430,17 @@ MonoBehaviour:
   m_SensorName: BufferSensor
   m_ObservableSize: 3
   m_MaxNumObservables: 10
+--- !u!114 &197278023128598001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197278023688713980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DecisionPeriod: 20
+  TakeActionsBetweenDecisions: 0

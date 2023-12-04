@@ -1,6 +1,7 @@
 // Author: Jan Vaculik
 
 using System.Collections.Generic;
+using AgentProperties.Attributes;
 using Environment;
 using StateMachine.AnimalStates;
 using Unity.MLAgents;
@@ -12,9 +13,23 @@ namespace Agents
     {
         [SerializeField]
         private Rigidbody _AnimalRigidbody;
+        
+        [Header("Animal Attributes")]
+        [SerializeField]
+        protected AnimalAttribute _Hunger;
+        [SerializeField]
+        protected AnimalAttribute _Curiosity;
+        [SerializeField]
+        protected AnimalAttribute _Energy;
+        
+        [SerializeField]
+        protected float _EnergyRecoveryRate;
+        
+        public AnimalAttribute Hunger => _Hunger;
+        public AnimalAttribute Curiosity => _Curiosity;
+        public AnimalAttribute Energy => _Energy;
 
         protected abstract Dictionary<AnimalStateEnum, List<AnimalStateEnum>> ValidTransitions { get; }
-        public abstract void Eat(Food food);
         
         protected IAnimalState CurrentState;
         public Rigidbody AnimalRigidbody => _AnimalRigidbody;
@@ -23,6 +38,7 @@ namespace Agents
         {
             if (!IsTransitionValid(state))
             {
+                Debug.LogWarning($"Transition from {CurrentState.StateID} to {state.StateID} is not valid!");
                 return false;
             }
             
@@ -42,5 +58,6 @@ namespace Agents
         }
         
         public abstract bool IsFoodAvailable(out Food food);
+        public abstract void ResolveSleeping(float timeSlept);
     }
 }

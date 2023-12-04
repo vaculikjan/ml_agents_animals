@@ -16,7 +16,8 @@ namespace StateMachine.AnimalStates
         Idle = 1,
         Wander = 2,
         Seek = 3,
-        Eat = 13,
+        Eat = -1,
         Pursue = 5,
+        Sleep = 7,
     }
 }
