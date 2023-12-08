@@ -43,16 +43,10 @@ namespace AgentProperties.Attributes
                 var lastValue = _value;
                 _value = Mathf.Clamp(value, _MinValue, _MaxValue);
                 var reward = (_RewardCurve.Evaluate(_value) - _RewardCurve.Evaluate(lastValue)) * _RewardModifier;
+
+                if (!(reward > 0)) return;
                 
-                if (reward > 0)
-                {
-                    reward *= _PositiveMultiplierCurve.Evaluate(lastValue) * _PositiveMultiplier;
-                }
-                else
-                {
-                    reward *= _NegativeMultiplierCurve.Evaluate(lastValue);
-                }
-                
+                reward *= _PositiveMultiplierCurve.Evaluate(lastValue) * _PositiveMultiplier;
                 _Agent.AddReward(reward);
             }
         }

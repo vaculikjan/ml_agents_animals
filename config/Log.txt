@@ -1,0 +1,30 @@
+discrete_mask_test1 - added discrete masking on actions, which forbids certain actions from being performed (perfect for this use case)
+discrete_mask_test5 - locked action taking while eating, because the animal was changing actions too frequently and never finished eating (would require to consecutively do nothing for 300 steps [3s to eat]- very unlikely)
+discrete_mask_test14 - increased energy consumption and doubled positive rewards
+discrete_mask_test16 - increased food value 5x and decreased hunger generation 10x
+no_energy_test1 - removed energy, changed food positons to localPosition
+no_energy_test2 - lowered checkpoint_interval
+explicit_food1 - set food to eat explicitly like seek
+explicit_food8 - set spawn area to half of the allowed area
+explicit_food9 - add random rotation at the beginning of episode
+no_food_selection1 - lowered time to eat, food not selected explicitly, IMPORTANT: FIXED REWARD GAINS
+no_food_selection5 - uninterruptible seek
+no_food_selection9 - first usable brain - "Add first working version" commit
+----------------------------------------------------------------------------------
+no_food_selection11 - reduce food detection radius - seems to be learning fine
+no_food_selection12 - return seek interruption (by wander and idle)
+no_food_selection13 - redo logic on food detection, add 5f reward for detecting new food - learned, but doesn't use wander 
+no_food_selection14 - only update food list when in wander state - learned well
+--- Clean up code commit ---
+energy1 - added energy, hunger/s -> 0.005, energy/s -> -0.025, energy regen/s -> 0.1 (idle/eat)
+energy2 - added energy as observation ~ 800s - seems to be learning, however deer moves "choppily" - it stands still very often to regen energy -> add sleep state
+energy3 - add sleep state ~ 1200s - stuck in local minima - tries to sleep as much as possible, not desirable behavior
+energy4 - lower energy gained when sleeping - same as above
+energy5 - change reward logic
+energy7 - seek can't be interrupted by another seek
+--- Add non working versions for saving purposes commit --
+no_negative_reward1 - remove periodic negative reward, set -10 when agent dies, still give positive reward when attribute value satiated
+no_negative_reward2 - bug fix
+no_negative_reward3 - value update (hunger/s -> 0.001, energy/s -> -0.001, energy regen/s -> 0.25, food value = 0.5)
+no_negative_reward4 - set stacked vectors to 1
+no_negative_reward5 - tune hyperparams -- seems ok

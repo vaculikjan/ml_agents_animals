@@ -75,27 +75,31 @@ namespace Agents
 
         private void HandleHunger()
         {
+            
             if (_fixedUpdateCounter % 50 == 0)
             {
                 _Hunger.Value += _HungerPerSecond * (_resting ? 0.5f : 1f);
             }
+            
 
             if (!(_Hunger.Value >= _Hunger.MaxValue)) return;
             
-            AddReward(-20f);
+            SetReward(-1f);
             EndEpisode();
         }
 
         private void HandleEnergy()
         {
+            
             if (_fixedUpdateCounter % 50 == 0)
             {
                 _Energy.Value += _EnergyPerSecond;
             }
+            
 
             if (!(_Energy.Value <= _Energy.MinValue)) return;
             
-            AddReward(-20f);
+            SetReward(-1f);
             EndEpisode();
         }
         
@@ -137,7 +141,7 @@ namespace Agents
                 var foodComponent = food.GetComponent<Food>();
                 if (foodComponent == null) continue;
                 if (_foodList.Contains(foodComponent)) continue;
-                AddReward(5f);
+                // AddReward(5f);
                 _foodList.Add(foodComponent);
             }
         }
