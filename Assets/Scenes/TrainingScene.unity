@@ -458,6 +458,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1122459864}
     m_Modifications:
     - target: {fileID: 197278023128598000, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023128598000, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
       propertyPath: m_BrainParameters.NumStackedVectorObservations
       value: 1
       objectReference: {fileID: 0}
@@ -511,18 +515,34 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
       propertyPath: _EnergyPerSecond
-      value: -0.001
+      value: -0.01
       objectReference: {fileID: 0}
     - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
       propertyPath: _HungerPerSecond
-      value: 0.001
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Energy._DefaultValue
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
       propertyPath: _EnergyRegenPerSecond
-      value: 0.25
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._DefaultValue
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._InvertReward
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
       propertyPath: _Hunger._RewardModifier
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardMultiplier
       value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
@@ -540,6 +560,238 @@ PrefabInstance:
     - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
       propertyPath: _Hunger._PositiveRewardModifier
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Energy._RewardCurve.m_Curve.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Energy._RewardCurve.m_Curve.Array.data[1].time
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Energy._RewardCurve.m_Curve.Array.data[2].time
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Energy._RewardCurve.m_Curve.Array.data[3].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[1].time
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[2].time
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[3].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[4].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Energy._RewardCurve.m_Curve.Array.data[1].value
+      value: -0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Energy._RewardCurve.m_Curve.Array.data[2].value
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Energy._RewardCurve.m_Curve.Array.data[3].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[0].value
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[1].value
+      value: -0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[2].value
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[3].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[4].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Energy._RewardCurve.m_Curve.Array.data[0].inSlope
+      value: 0.3695805
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Energy._RewardCurve.m_Curve.Array.data[1].inSlope
+      value: 2.5018668
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Energy._RewardCurve.m_Curve.Array.data[2].inSlope
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Energy._RewardCurve.m_Curve.Array.data[3].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[0].inSlope
+      value: 0.3695805
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[1].inSlope
+      value: 2.5018668
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[2].inSlope
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[3].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[4].inSlope
+      value: 1.9645926
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Energy._RewardCurve.m_Curve.Array.data[0].outSlope
+      value: 0.3695805
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Energy._RewardCurve.m_Curve.Array.data[1].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Energy._RewardCurve.m_Curve.Array.data[1].outSlope
+      value: 2.5018668
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Energy._RewardCurve.m_Curve.Array.data[2].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Energy._RewardCurve.m_Curve.Array.data[2].outSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Energy._RewardCurve.m_Curve.Array.data[3].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Energy._RewardCurve.m_Curve.Array.data[3].outSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[0].outSlope
+      value: 0.3695805
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[1].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[1].outSlope
+      value: 2.5018668
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[2].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[2].outSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[3].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[3].outSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[4].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[4].outSlope
+      value: 1.9645926
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Energy._RewardCurve.m_Curve.Array.data[0].outWeight
+      value: 0.27384526
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Energy._RewardCurve.m_Curve.Array.data[1].outWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Energy._RewardCurve.m_Curve.Array.data[2].outWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[0].outWeight
+      value: 0.27384526
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[1].outWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[2].outWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[3].outWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Energy._RewardCurve.m_Curve.Array.data[0].tangentMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Energy._RewardCurve.m_Curve.Array.data[1].tangentMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Energy._RewardCurve.m_Curve.Array.data[2].tangentMode
+      value: 69
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Energy._RewardCurve.m_Curve.Array.data[3].tangentMode
+      value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[0].tangentMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[1].tangentMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[2].tangentMode
+      value: 69
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[3].tangentMode
+      value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
+      propertyPath: _Hunger._RewardCurve.m_Curve.Array.data[4].tangentMode
+      value: 34
       objectReference: {fileID: 0}
     - target: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
       propertyPath: _Hunger._PositiveMultiplierCurve.m_Curve.Array.data[1].time

@@ -1,6 +1,8 @@
 // Author: Jan Vaculik
 
+using System;
 using System.Collections.Generic;
+using AgentProperties.Attributes;
 using Environment;
 using StateMachine.AnimalStates;
 using Unity.MLAgents.Actuators;
@@ -44,10 +46,12 @@ namespace Agents
         
         private Collider[] _foodHitColliders = new Collider[3];
         private List<Food> _foodList = new();
-        private Food[] _availableFood { get; set; } = new Food [3];
+        private Food[] _availableFood = new Food [3];
         private Food _foodToEat;
         private int _fixedUpdateCounter;
         private bool _resting => CurrentState?.StateID == AnimalStateEnum.Sleep;
+
+        private AttributeAggregate _attributeAggregate;
 
         public List <Food> FoodList => _foodList;
         public int _MaxDiscreteStates = 8;
@@ -55,10 +59,12 @@ namespace Agents
         private void Start()
         {
             SetState(new IdleState(this));
+            _attributeAggregate = new AttributeAggregate(new List<AnimalAttribute> {_Hunger, _Energy});
         }
         
         private void FixedUpdate()
         {
+            // food detection
             if (CurrentState?.StateID == AnimalStateEnum.Wander)
             {
                 DetectAllFood();
@@ -69,8 +75,14 @@ namespace Agents
             
             _fixedUpdateCounter++;
             
+            // attribute handling
             HandleHunger();
             HandleEnergy();
+            
+            // reward dsitribution
+            if (_fixedUpdateCounter % 50 != 0) return;
+            var reward = _attributeAggregate.CalculateReward();
+            AddReward(reward);
         }
 
         private void HandleHunger()
@@ -84,7 +96,7 @@ namespace Agents
 
             if (!(_Hunger.Value >= _Hunger.MaxValue)) return;
             
-            SetReward(-1f);
+            SetReward(-10000f);
             EndEpisode();
         }
 
@@ -99,7 +111,7 @@ namespace Agents
 
             if (!(_Energy.Value <= _Energy.MinValue)) return;
             
-            SetReward(-1f);
+            SetReward(-10000f);
             EndEpisode();
         }
         

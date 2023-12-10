@@ -28,3 +28,7 @@ no_negative_reward2 - bug fix
 no_negative_reward3 - value update (hunger/s -> 0.001, energy/s -> -0.001, energy regen/s -> 0.25, food value = 0.5)
 no_negative_reward4 - set stacked vectors to 1
 no_negative_reward5 - tune hyperparams -- seems ok
+--- ---
+aggregate_reward1 - add different reward functiopn
+aggregate_reward2 - adjust reward values
+aggregate_reward3 - adjust reward values

@@ -11,8 +11,6 @@ namespace AgentProperties.Attributes
     {
         [Header("Attribute")]
         [SerializeField]
-        private Agent _Agent;
-        [SerializeField]
         private float _MinValue = 0f;
         [SerializeField]
         private float _MaxValue = 1f;
@@ -21,15 +19,9 @@ namespace AgentProperties.Attributes
         
         [Header("Reward")]
         [SerializeField]
-        private float _RewardModifier = 1f;
+        private AnimationCurve _RewardCurve = AnimationCurve.Linear(0f, -1f, 1f, 1f);
         [SerializeField]
-        private float _PositiveMultiplier = 1f;
-        [SerializeField]
-        private AnimationCurve _RewardCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
-        [SerializeField]
-        private AnimationCurve _PositiveMultiplierCurve = AnimationCurve.Linear(0f, 1f, 1f, 1f);
-        [SerializeField]
-        private AnimationCurve _NegativeMultiplierCurve = AnimationCurve.Linear(0f, 1f, 1f, 1f);
+        private bool _InvertReward = false;
 
         public float MinValue => _MinValue;
         public float MaxValue => _MaxValue;
@@ -38,17 +30,13 @@ namespace AgentProperties.Attributes
         public float Value
         {
             get => _value;
-            set
-            {
-                var lastValue = _value;
-                _value = Mathf.Clamp(value, _MinValue, _MaxValue);
-                var reward = (_RewardCurve.Evaluate(_value) - _RewardCurve.Evaluate(lastValue)) * _RewardModifier;
-
-                if (!(reward > 0)) return;
-                
-                reward *= _PositiveMultiplierCurve.Evaluate(lastValue) * _PositiveMultiplier;
-                _Agent.AddReward(reward);
-            }
+            set => _value = Mathf.Clamp(value, _MinValue, _MaxValue);
+        }
+        
+        public float EvaluateReward()
+        {
+            var reward = _InvertReward ? _RewardCurve.Evaluate(1-_value) : _RewardCurve.Evaluate(_value);
+            return reward;
         }
         
         public void Reset()
