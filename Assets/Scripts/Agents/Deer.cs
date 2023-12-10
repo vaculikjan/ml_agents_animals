@@ -43,6 +43,19 @@ namespace Agents
         private float _EnergyRegenPerSecond;
         [SerializeField]
         private float _TimeToSleep;
+        [SerializeField]
+        private float _CuriosityPerSecond;
+        [SerializeField]
+        private float _CuriosityDecayPerSecond;
+        
+        [Header("Miscellaneous")]
+        [SerializeField]
+        private float _MaxLifeSpan = 180f;
+        [SerializeField]
+        private float _MinLifeSpan = 120f;
+        
+        private float _currentLifeSpan;
+        private float _timeLiving;
         
         private Collider[] _foodHitColliders = new Collider[3];
         private List<Food> _foodList = new();
@@ -59,7 +72,7 @@ namespace Agents
         private void Start()
         {
             SetState(new IdleState(this));
-            _attributeAggregate = new AttributeAggregate(new List<AnimalAttribute> {_Hunger, _Energy});
+            _attributeAggregate = new AttributeAggregate(new List<AnimalAttribute> {_Hunger, _Energy, _Curiosity});
         }
         
         private void FixedUpdate()
@@ -75,11 +88,15 @@ namespace Agents
             
             _fixedUpdateCounter++;
             
+            // lifespan handling
+            HandleLifeSpan();
+            
             // attribute handling
             HandleHunger();
             HandleEnergy();
+            HandleCuriosity();
             
-            // reward dsitribution
+            // reward distribution
             if (_fixedUpdateCounter % 50 != 0) return;
             var reward = _attributeAggregate.CalculateReward();
             AddReward(reward);
@@ -92,11 +109,10 @@ namespace Agents
             {
                 _Hunger.Value += _HungerPerSecond * (_resting ? 0.5f : 1f);
             }
-            
 
             if (!(_Hunger.Value >= _Hunger.MaxValue)) return;
             
-            SetReward(-10000f);
+            SetReward(-1000f);
             EndEpisode();
         }
 
@@ -111,7 +127,29 @@ namespace Agents
 
             if (!(_Energy.Value <= _Energy.MinValue)) return;
             
-            SetReward(-10000f);
+            SetReward(-1000f);
+            EndEpisode();
+        }
+        
+        private void HandleCuriosity()
+        {
+            if (CurrentState?.StateID == AnimalStateEnum.Wander)
+            {
+                _Curiosity.Value += _CuriosityDecayPerSecond * Time.fixedDeltaTime;
+                return;
+            }
+            
+            if (_fixedUpdateCounter % 50 != 0) return;
+            {
+                _Curiosity.Value += _CuriosityPerSecond;
+            }
+        }
+        
+        private void HandleLifeSpan()
+        {
+            _timeLiving += Time.fixedDeltaTime;
+            if (_timeLiving < _currentLifeSpan) return;
+            
             EndEpisode();
         }
         
@@ -153,7 +191,7 @@ namespace Agents
                 var foodComponent = food.GetComponent<Food>();
                 if (foodComponent == null) continue;
                 if (_foodList.Contains(foodComponent)) continue;
-                // AddReward(5f);
+                    AddReward(5f);
                 _foodList.Add(foodComponent);
             }
         }
@@ -226,20 +264,19 @@ namespace Agents
 
         public override void CollectObservations(VectorSensor sensor)
         {
-            sensor.AddObservation(transform.localPosition);
             sensor.AddObservation(_Hunger.Value);
             sensor.AddObservation(_Energy.Value);
+            sensor.AddObservation(_Curiosity.Value);
             sensor.AddObservation((int) CurrentState.StateID);
 
-            foreach (var food in _foodHitColliders)
+            foreach (var food in _availableFood)
             {
                 if (food == null) continue;
                 var foodPosition = food.transform.localPosition;
+                var distanceToFood = Vector3.Distance(transform.localPosition, foodPosition);
                 var foodObservation = new float[]
                 {
-                    (foodPosition.x - transform.localPosition.x),
-                    (foodPosition.y - transform.localPosition.y),
-                    (foodPosition.z - transform.localPosition.z)
+                    distanceToFood
                 };
                 _FoodSensor.AppendObservation(foodObservation);
             }
@@ -279,9 +316,14 @@ namespace Agents
             // reset attributes
             _Hunger.Reset();
             _Energy.Reset();
+            _Curiosity.Reset();
             
             // reset position
             MoveObjectWithinBounds();
+            
+            // reset lifespan
+            _currentLifeSpan = Random.Range(_MinLifeSpan, _MaxLifeSpan);
+            _timeLiving = 0f;
             
             // reset state
             SetState(new IdleState(this));

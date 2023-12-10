@@ -54,7 +54,7 @@ namespace Environment
 
         public void SpawnFoodItem()
         {
-            var food = Instantiate(_FoodPrefab, GetRandomPosition(), Quaternion.identity);
+            var food = Instantiate(_FoodPrefab, GetRandomPosition(), Quaternion.identity, transform);
             _foodList.Add(food);
         }
         

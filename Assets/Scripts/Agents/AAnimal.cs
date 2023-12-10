@@ -22,8 +22,6 @@ namespace Agents
         [SerializeField]
         protected AnimalAttribute _Energy;
         
-        [SerializeField]
-        protected float _EnergyRecoveryRate;
         
         public AnimalAttribute Hunger => _Hunger;
         public AnimalAttribute Curiosity => _Curiosity;

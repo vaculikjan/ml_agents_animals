@@ -32,3 +32,16 @@ no_negative_reward5 - tune hyperparams -- seems ok
 aggregate_reward1 - add different reward functiopn
 aggregate_reward2 - adjust reward values
 aggregate_reward3 - adjust reward values
+aggregate_reward4 - working version
+
+--- ---
+curiosity1 - add curiosity
+curiosity2 - bug fixes
+curiosity3 - lessen the impact of curiosity
+curiosity4 - bug fix - agent doesn't die, but largely ignores curiosity ->
+curiosity5 - increase impact, also add "aging" to end episode with a positive reward (dying of old age)
+curiosity6 - bug fixes
+curiosity7 - bug fixes
+curiosity8 - increase timespan
+curiosity9 - double attribute gains
+curiosity10 - half attribute gains, increase life span, remove positive reward at life end

@@ -21,7 +21,10 @@ namespace AgentProperties.Attributes
         [SerializeField]
         private AnimationCurve _RewardCurve = AnimationCurve.Linear(0f, -1f, 1f, 1f);
         [SerializeField]
-        private bool _InvertReward = false;
+        private bool _InvertReward;
+        [Range(0f, 10f)]
+        [SerializeField]
+        private float _RewardMultiplier = 1f;
 
         public float MinValue => _MinValue;
         public float MaxValue => _MaxValue;
@@ -36,7 +39,7 @@ namespace AgentProperties.Attributes
         public float EvaluateReward()
         {
             var reward = _InvertReward ? _RewardCurve.Evaluate(1-_value) : _RewardCurve.Evaluate(_value);
-            return reward;
+            return reward * _RewardMultiplier;
         }
         
         public void Reset()
