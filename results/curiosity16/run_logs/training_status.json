@@ -1,0 +1,47 @@
+{
+    "simple_deer": {
+        "checkpoints": [
+            {
+                "steps": 499993,
+                "file_path": "results\\curiosity16\\simple_deer\\simple_deer-499993.onnx",
+                "reward": null,
+                "creation_time": 1702254888.0606458,
+                "auxillary_file_paths": [
+                    "results\\curiosity16\\simple_deer\\simple_deer-499993.pt"
+                ]
+            },
+            {
+                "steps": 999968,
+                "file_path": "results\\curiosity16\\simple_deer\\simple_deer-999968.onnx",
+                "reward": null,
+                "creation_time": 1702261323.8999743,
+                "auxillary_file_paths": [
+                    "results\\curiosity16\\simple_deer\\simple_deer-999968.pt"
+                ]
+            },
+            {
+                "steps": 1000032,
+                "file_path": "results\\curiosity16\\simple_deer\\simple_deer-1000032.onnx",
+                "reward": null,
+                "creation_time": 1702261323.985614,
+                "auxillary_file_paths": [
+                    "results\\curiosity16\\simple_deer\\simple_deer-1000032.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1000032,
+            "file_path": "results\\curiosity16\\simple_deer.onnx",
+            "reward": null,
+            "creation_time": 1702261323.985614,
+            "auxillary_file_paths": [
+                "results\\curiosity16\\simple_deer\\simple_deer-1000032.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.1.1+cpu"
+    }
+}

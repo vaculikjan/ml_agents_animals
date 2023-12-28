@@ -2,8 +2,8 @@ behaviors:
   simple_deer:
     trainer_type: sac
     hyperparameters:
-      learning_rate: 0.0003  # A moderate learning rate for stable learning
-      learning_rate_schedule: linear  # Gradually decrease the learning rate over time
+      learning_rate: 0.0001  # A moderate learning rate for stable learning
+      learning_rate_schedule: constant  # Gradually decrease the learning rate over time
       batch_size: 128  # A larger batch size for more stable gradient estimates
       buffer_size: 500000  # A larger buffer to store more experiences
       buffer_init_steps: 10000  # Populate the buffer with some experiences before learning starts
@@ -14,8 +14,8 @@ behaviors:
       reward_signal_steps_per_update: 10.0
     network_settings:
       normalize: true  # Normalizing input features can help in diverse environments
-      hidden_units: 128  # More hidden units to capture complex behaviors
-      num_layers: 3  # Adding an extra layer can help in learning complex policies
+      hidden_units: 64  # More hidden units to capture complex behaviors
+      num_layers: 2  # Adding an extra layer can help in learning complex policies
       vis_encode_type: simple
     reward_signals:
       extrinsic:
