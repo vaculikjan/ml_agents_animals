@@ -1,83 +1,61 @@
 // Author: Jan Vaculik
 
-using System.Collections.Generic;
 using Agents;
 using Unity.MLAgents;
 using UnityEngine;
-using Random = UnityEngine.Random;
+using UnityEngine.Serialization;
 
 namespace Environment
 {
     public class EnvironmentController : MonoBehaviour
     {
+        [Header("Arena")]
         [SerializeField]
-        private Food _FoodPrefab;
+        private Bounds _ArenaBounds;
+        
+        [Header("Managers")]
+        [SerializeField] 
+        private FoodManager _FoodManager;
+        [FormerlySerializedAs("_DeersManager")]
         [SerializeField]
-        private int _FoodToSpawn;
+        private DeerManager _DeerManager;
+        [FormerlySerializedAs("_WolfsManager")]
         [SerializeField]
-        private Deer _Deer;
-        [SerializeField]
-        private Vector3 _MinBounds;
-        [SerializeField]
-        private Vector3 _MaxBounds;
+        private WolvesManager _WolvesManager;
 
         public static EnvironmentController Instance;
-        private List<Food> _foodList = new List<Food>();
+        public Bounds ArenaBounds => _ArenaBounds;
 
         private void Awake()
         {
             if (Instance == null)
             {
                 Instance = this;
+                Academy.Instance.OnEnvironmentReset += ResetEnvironment;
             }
             else
             {
                 Destroy(this);
             }
         }
-
-        public void ResetEnvironment()
-        {
-            ResetFood();
-        }
         
-        public void RemoveFood(Food food)
+        private void OnDrawGizmos()
         {
-            _foodList.Remove(food);
-            if (_Deer.FoodList.Contains(food))
-            {
-                _Deer.FoodList.Remove(food);
-            }
-            
-            Destroy(food.gameObject);
+            var position = transform.position;
+            _ArenaBounds?.DrawBounds(position);
+            if (_FoodManager)
+                _FoodManager.DrawBounds(position);
+            if (_DeerManager)
+                _DeerManager.DrawBounds(position);
+            if (_WolvesManager)
+                _WolvesManager.DrawBounds(position);
         }
 
-        public void SpawnFoodItem()
+        private void ResetEnvironment()
         {
-            var food = Instantiate(_FoodPrefab, GetRandomPosition(), Quaternion.identity, transform);
-            _foodList.Add(food);
-        }
-        
-        private void ResetFood()
-        {
-            foreach (var food in _foodList)
-            {
-                Destroy(food.gameObject);
-            }
-            
-            _foodList = new List<Food>();
-            for (var i = 0; i < _FoodToSpawn; i++)
-            {
-                SpawnFoodItem();
-            }
-        }
-
-        private Vector3 GetRandomPosition() {
-            return new Vector3(
-                Random.Range(_MinBounds.x, _MaxBounds.x),
-                Random.Range(_MinBounds.y, _MaxBounds.y),
-                Random.Range(_MinBounds.z, _MaxBounds.z)
-            );
+            _FoodManager.ResetFood();
+            _DeerManager.ResetAgents();
+            _WolvesManager.ResetAgents();
         }
     }
 }

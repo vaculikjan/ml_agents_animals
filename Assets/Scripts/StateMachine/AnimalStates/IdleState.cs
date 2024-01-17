@@ -1,6 +1,7 @@
 // Author: Jan Vaculik
 
 using Agents;
+using Environment;
 using Unity.MLAgents.Actuators;
 using UnityEngine;
 
@@ -8,22 +9,12 @@ namespace StateMachine.AnimalStates
 {
     public class IdleState : IAnimalState
     {
-        public AnimalStateEnum StateID => AnimalStateEnum.Idle;
-        
-        public void SetStateMask(ref IDiscreteActionMask actionMask, int actionSize)
-        {
-            for (var i = 3; i < actionSize; i++)
-            {
-                actionMask.SetActionEnabled(0, i, false);
-            }
+        public AnimalState StateID => AnimalState.Idle;
 
-            SleepState.MaskState(ref actionMask, true);
-        }
-
-        private readonly AAnimal _animal;
+        private readonly IAnimal _animal;
         private float _timeSpentIdle;
 
-        public IdleState(AAnimal animal)
+        public IdleState(IAnimal animal)
         {
             _animal = animal;
         }

@@ -1,0 +1,49 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1705421888",
+        "python_version": "3.9.13 (tags/v3.9.13:6de2ca5, May 17 2022, 16:36:42) [MSC v.1929 64 bit (AMD64)]",
+        "command_line_arguments": "D:\\Unity\\DiplomaThesis\\m_env\\Scripts\\mlagents-learn .\\config\\sac_config.yaml --run-id=WolfTest1",
+        "mlagents_version": "0.30.0",
+        "mlagents_envs_version": "0.30.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "2.1.1+cpu",
+        "numpy_version": "1.21.2",
+        "end_time_seconds": "1705421896"
+    },
+    "total": 7.9118443,
+    "count": 1,
+    "self": 0.0032966999999999302,
+    "children": {
+        "run_training.setup": {
+            "total": 0.0637945000000002,
+            "count": 1,
+            "self": 0.0637945000000002
+        },
+        "TrainerController.start_learning": {
+            "total": 7.8447531,
+            "count": 1,
+            "self": 0.0001217000000002244,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 7.622516699999999,
+                    "count": 1,
+                    "self": 7.622516699999999
+                },
+                "TrainerController._save_models": {
+                    "total": 0.22211470000000055,
+                    "count": 1,
+                    "self": 0.005887600000001214,
+                    "children": {
+                        "RLTrainer._checkpoint": {
+                            "total": 0.21622709999999934,
+                            "count": 1,
+                            "self": 0.21622709999999934
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

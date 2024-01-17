@@ -1,120 +1,92 @@
 // Author: Jan Vaculik
 
-using System;
 using Agents;
-using Unity.MLAgents.Actuators;
+using Environment;
 using UnityEngine;
 
 namespace StateMachine.AnimalStates
 {
     public class PursueState : IAnimalState
     {
-        public AnimalStateEnum StateID => AnimalStateEnum.Pursue;
-        public void SetStateMask(ref IDiscreteActionMask actionMask, int actionSize) { throw new NotImplementedException(); }
-
-        private enum InternalState
-        {
-            Turning,
-            Moving
-        }
-
-        private InternalState _currentInternalState = InternalState.Turning;
-
-        private readonly AAnimal _animal;
+        private readonly IAnimal _animal;
         private readonly Transform _animalTransform;
-        private readonly Rigidbody _animalRigidbody;
         private readonly float _moveSpeed;
         private readonly float _rotationSpeed;
-        private readonly float _alignmentThreshold = 5.0f;
+        private readonly IAttackableEdible _target;
+        private readonly Transform _targetTransform;
+        private readonly float _pursuitDuration;
+        private readonly float _attackRange;
+        
+        private float _pursuitTimer;
+        private bool _hasReachedTarget;
 
-        private Transform _targetTransform;
-        private bool _hasReachedTarget = false;
-
-        public PursueState(AAnimal animal, float moveSpeed, float rotationSpeed, Transform targetTransform)
+        public PursueState(IAnimal animal, float moveSpeed, float rotationSpeed, IAttackableEdible target, float pursuitDuration, float attackRange)
         {
             _animal = animal;
-            _animalTransform = animal.transform;
-            _animalRigidbody = animal.AnimalRigidbody;
+            _animalTransform = animal.GetSelf().transform;
             _moveSpeed = moveSpeed;
             _rotationSpeed = rotationSpeed;
-            _targetTransform = targetTransform;
+            _target = target;
+            _targetTransform = target.GetSelf().transform;
+            _pursuitDuration = pursuitDuration;
+            _attackRange = attackRange;
         }
 
+        public AnimalState StateID => AnimalState.Pursue;
+        
         public void Enter()
         {
             _hasReachedTarget = false;
+            _pursuitTimer = 0f;
         }
 
         public void Execute()
         {
-            if (_hasReachedTarget) return;
-
-            var targetPosition = _targetTransform.position;
-
-            switch (_currentInternalState)
+            if (_hasReachedTarget)
             {
-                case InternalState.Turning:
-                    RotateTowardsTarget(targetPosition);
-                    CheckAlignment(targetPosition);
-                    break;
-
-                case InternalState.Moving:
-                    RotateTowardsTarget(targetPosition);
-                    MoveTowardsTarget();
-                    CheckIfReachedTarget(targetPosition);
-                    CheckAlignment(targetPosition);
-                    break;
-                default: throw new ArgumentOutOfRangeException();
+                _animal.SetState(new AttackState(_animal, _target));
+                return;
             }
+
+            if (_pursuitTimer >= _pursuitDuration)
+            {
+                _animal.SetState(new IdleState(_animal));
+                return;
+            }
+
+            RotateTowardsTarget();
+            MoveTowardsTarget();
+            CheckIfReachedTarget();
+
+            _pursuitTimer += Time.deltaTime;
         }
 
         public void Exit()
         {
+            _animal.AnimalRigidbody.velocity = Vector3.zero;
         }
 
-        public bool CanExit()
-        {
-            return _hasReachedTarget;
-        }
+        public bool CanExit() { return true; }
 
-        private void RotateTowardsTarget(Vector3 targetPosition)
+        private void RotateTowardsTarget()
         {
-            var directionToTarget = (targetPosition - _animalTransform.position).normalized;
+            var directionToTarget = (_targetTransform.position - _animalTransform.position).normalized;
             var flatDirectionToTarget = new Vector3(directionToTarget.x, 0, directionToTarget.z);
             var targetRotation = Quaternion.LookRotation(flatDirectionToTarget, Vector3.up);
             var rotation = Quaternion.RotateTowards(_animalTransform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
 
-            _animalRigidbody.MoveRotation(rotation);
+            _animal.AnimalRigidbody.MoveRotation(rotation);
         }
 
-        private void MoveTowardsTarget()
-        {
-            _animalRigidbody.velocity = _animalTransform.forward * _moveSpeed;
-        }
+        private void MoveTowardsTarget() { _animal.AnimalRigidbody.velocity = _animalTransform.forward * _moveSpeed; }
 
-        private void CheckAlignment(Vector3 targetPosition)
+        private void CheckIfReachedTarget()
         {
-            var directionToTarget = (targetPosition - _animalTransform.position).normalized;
-            var angle = Vector3.Angle(_animalTransform.forward, directionToTarget);
-
-            if (_currentInternalState == InternalState.Turning && angle <= _alignmentThreshold)
-            {
-                _currentInternalState = InternalState.Moving;
-            }
-            else if (_currentInternalState == InternalState.Moving && angle > _alignmentThreshold)
-            {
-                _currentInternalState = InternalState.Turning;
-            }
-        }
-
-        private void CheckIfReachedTarget(Vector3 targetPosition)
-        {
-            var distanceToTarget = Vector3.Distance(_animalTransform.position, targetPosition);
+            var distanceToTarget = Vector3.Distance(_animalTransform.position, _targetTransform.position);
+            if (!(distanceToTarget <= _attackRange)) return;
             
-            if (!(distanceToTarget <= 0.1f)) return;
             _hasReachedTarget = true;
-            _animalRigidbody.velocity = Vector3.zero;
+            _animal.AnimalRigidbody.velocity = Vector3.zero;
         }
     }
 }
-

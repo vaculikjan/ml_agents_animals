@@ -2,7 +2,6 @@
 
 using System;
 using Agents;
-using Unity.MLAgents.Actuators;
 using UnityEngine;
 
 namespace StateMachine.AnimalStates
@@ -11,7 +10,7 @@ namespace StateMachine.AnimalStates
     {
         private const float ALIGNMENT_THRESHOLD = 5.0f;
 
-        private readonly AAnimal _animal;
+        private readonly IAnimal _animal;
         private readonly Transform _animalTransform;
         private readonly float _moveSpeed;
         private readonly float _rotationSpeed;
@@ -20,26 +19,17 @@ namespace StateMachine.AnimalStates
         private InternalState _currentInternalState = InternalState.Turning;
         private bool _hasReachedTarget;
 
-        public SeekState(AAnimal animal, float moveSpeed, float rotationSpeed, Vector3 targetPosition)
+        public SeekState(IAnimal animal, float moveSpeed, float rotationSpeed, Vector3 targetPosition)
         {
             _animal = animal;
-            _animalTransform = animal.transform;
+            _animalTransform = animal.GetSelf().transform;
             _moveSpeed = moveSpeed;
             _rotationSpeed = rotationSpeed;
             _targetPosition = targetPosition;
         }
 
-        public AnimalStateEnum StateID => AnimalStateEnum.Seek;
-
-        public void SetStateMask(ref IDiscreteActionMask actionMask, int actionSize)
-        {
-            actionMask.SetActionEnabled(0, (int) AnimalStateEnum.Wander, false);
-            for (var i = 3; i < actionSize; i++)
-            {
-                actionMask.SetActionEnabled(0, i, false);
-            }
-        }
-
+        public AnimalState StateID => AnimalState.Seek;
+        
         public void Enter() { _hasReachedTarget = false; }
 
         public void Execute()
@@ -98,6 +88,7 @@ namespace StateMachine.AnimalStates
         {
             var distanceToTarget = Vector3.Distance(_animalTransform.position, _targetPosition);
             if (!(distanceToTarget <= 0.5f)) return;
+            
             _hasReachedTarget = true;
             _animal.AnimalRigidbody.velocity = Vector3.zero;
         }

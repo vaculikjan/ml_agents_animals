@@ -1,0 +1,51 @@
+{
+    "simple_wolf": {
+        "checkpoints": [
+            {
+                "steps": 715,
+                "file_path": "results\\WolfTest3\\simple_wolf\\simple_wolf-715.onnx",
+                "reward": -1000.0301298174084,
+                "creation_time": 1705423580.6913197,
+                "auxillary_file_paths": [
+                    "results\\WolfTest3\\simple_wolf\\simple_wolf-715.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 715,
+            "file_path": "results\\WolfTest3\\simple_wolf.onnx",
+            "reward": -1000.0301298174084,
+            "creation_time": 1705423580.6913197,
+            "auxillary_file_paths": [
+                "results\\WolfTest3\\simple_wolf\\simple_wolf-715.pt"
+            ]
+        }
+    },
+    "simple_deer": {
+        "checkpoints": [
+            {
+                "steps": 704,
+                "file_path": "results\\WolfTest3\\simple_deer\\simple_deer-704.onnx",
+                "reward": null,
+                "creation_time": 1705423580.7646787,
+                "auxillary_file_paths": [
+                    "results\\WolfTest3\\simple_deer\\simple_deer-704.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 704,
+            "file_path": "results\\WolfTest3\\simple_deer.onnx",
+            "reward": null,
+            "creation_time": 1705423580.7646787,
+            "auxillary_file_paths": [
+                "results\\WolfTest3\\simple_deer\\simple_deer-704.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.1.1+cpu"
+    }
+}

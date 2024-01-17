@@ -134,28 +134,49 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
+  _BehaviorParameters: {fileID: 197278023128598000}
   _AnimalRigidbody: {fileID: 197278023688713978}
+  _MovementSpeed: 45
+  _RotationSpeed: 900
   _Hunger:
     _MinValue: 0
     _MaxValue: 1
-    _DefaultValue: 0.25
+    _DefaultValue: 0.5
     _RewardCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 1
-        inSlope: -2
-        outSlope: -2
-        tangentMode: 34
+        value: -1.5
+        inSlope: 0.3695805
+        outSlope: 2.4
+        tangentMode: 69
         weightedMode: 0
         inWeight: 0
+        outWeight: 0.27384526
+      - serializedVersion: 3
+        time: 0.25
+        value: -0.9
+        inSlope: 2.4
+        outSlope: 3.6
+        tangentMode: 69
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.5
+        value: 0
+        inSlope: 3.6
+        outSlope: 2
+        tangentMode: 69
+        weightedMode: 0
+        inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: -1
-        inSlope: -2
-        outSlope: -2
+        value: 1
+        inSlope: 2
+        outSlope: 2
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
@@ -163,51 +184,41 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+    _InvertReward: 1
     _RewardMultiplier: 1
   _Curiosity:
     _MinValue: 0
     _MaxValue: 1
-    _DefaultValue: 0.25
+    _DefaultValue: 0.5
     _RewardCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
+        time: 0.007282257
+        value: -0.48620605
+        inSlope: 0.3695805
+        outSlope: 2.0053992
+        tangentMode: 69
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.27384526
+      - serializedVersion: 3
+        time: 0.15
+        value: -0.2
+        inSlope: 2.0053992
+        outSlope: 0.5714286
+        tangentMode: 69
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.5
         value: 0
-        inSlope: 0
-        outSlope: 1
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    _RewardMultiplier: 1
-  _Energy:
-    _MinValue: 0
-    _MaxValue: 1
-    _DefaultValue: 0.75
-    _RewardCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: -1
-        inSlope: 2
+        inSlope: 0.5714286
         outSlope: 2
-        tangentMode: 34
+        tangentMode: 69
         weightedMode: 0
-        inWeight: 0
+        inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
@@ -221,20 +232,69 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+    _InvertReward: 1
     _RewardMultiplier: 1
-  _EnergyRecoveryRate: 0
-  _MinBounds: {x: -200, y: 0, z: -200}
-  _MaxBounds: {x: 200, y: 0, z: 200}
-  _MovementSpeed: 45
-  _RotationSpeed: 180
-  _FoodConsumeRadius: 3
-  _FoodDetectionRadius: 150
-  _FoodSensor: {fileID: 8747480117225782196}
-  _HungerPerSecond: 0.005
-  _EnergyPerSecond: -0.025
-  _EnergyRegenPerSecond: 0.05
+  _Energy:
+    _MinValue: 0
+    _MaxValue: 1
+    _DefaultValue: 0.5
+    _RewardCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: -1.5
+        inSlope: 0.3695805
+        outSlope: 2.4
+        tangentMode: 69
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.27384526
+      - serializedVersion: 3
+        time: 0.25
+        value: -0.9
+        inSlope: 2.4
+        outSlope: 3.6
+        tangentMode: 69
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.5
+        value: 0
+        inSlope: 3.6
+        outSlope: 2
+        tangentMode: 69
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    _InvertReward: 0
+    _RewardMultiplier: 1
+  _HungerPerSecond: 0.01
+  _EnergyPerSecond: -0.01
+  _EnergyRegenPerSecond: 0.5
   _TimeToSleep: 2
-  _MaxDiscreteStates: 8
+  _CuriosityPerSecond: 0.005
+  _CuriosityDecayPerSecond: -0.025
+  _FoodDetectionRadius: 150
+  _FoodConsumeRadius: 3
+  _FoodSensor: {fileID: 8747480117225782196}
+  _MaxLifeSpan: 1200
+  _MinLifeSpan: 1200
+  _TimeToEat: 0
+  _FoodValue: 1
 --- !u!114 &197278023128598000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -248,7 +308,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 6
+    VectorObservationSize: 2
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -277,9 +337,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd8012d5925524537b27131fef517017, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SensorName: BufferSensor
-  m_ObservableSize: 3
-  m_MaxNumObservables: 10
+  m_SensorName: FoodBufferSensor
+  m_ObservableSize: 1
+  m_MaxNumObservables: 3
 --- !u!114 &197278023128598001
 MonoBehaviour:
   m_ObjectHideFlags: 0

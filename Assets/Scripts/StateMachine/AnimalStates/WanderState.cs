@@ -2,26 +2,15 @@
 
 using System;
 using Agents;
-using Unity.MLAgents.Actuators;
 using UnityEngine;
+using Bounds = Environment.Bounds;
 using Random = UnityEngine.Random;
 
 namespace StateMachine.AnimalStates
 {
     public class WanderState : IAnimalState
     {
-        public AnimalStateEnum StateID => AnimalStateEnum.Wander;
-
-        public void SetStateMask(ref IDiscreteActionMask actionMask, int actionSize)
-        {
-            actionMask.SetActionEnabled(0, (int) AnimalStateEnum.Wander, false);
-            for (var i = 3; i < actionSize; i++)
-            {
-                actionMask.SetActionEnabled(0, i, false);
-            }
-            
-            SleepState.MaskState(ref actionMask, true);
-        }
+        public AnimalState StateID => AnimalState.Wander;
 
         private enum InternalState
         {
@@ -29,7 +18,7 @@ namespace StateMachine.AnimalStates
             ReturningToBoundary
         }
         
-        private readonly AAnimal _animal;
+        private readonly IAnimal _animal;
         private readonly Transform _animalTransform;
         private readonly float _moveSpeed;
         private readonly float _rotationSpeed;
@@ -40,29 +29,33 @@ namespace StateMachine.AnimalStates
         private float _changeDirectionCooldown;
         private Vector3 _targetDirection = Vector3.forward;
         private bool _isWithinBoundary = true;
+        private Vector3 _randomTargetPosition;
 
-        public WanderState(AAnimal animal, float moveSpeed, float rotationSpeed, Vector3 boundaryMin, Vector3 boundaryMax)
+        public WanderState(IAnimal animal, float moveSpeed, float rotationSpeed, Bounds boundary)
         {
             _animal = animal;
-            _animalTransform = animal.transform;
+            _animalTransform = animal.GetSelf().transform;
             _moveSpeed = moveSpeed;
             _rotationSpeed = rotationSpeed;
 
-            _boundaryMin = boundaryMin;
-            _boundaryMax = boundaryMax;
+            _boundaryMin = boundary.Min;
+            _boundaryMax = boundary.Max;
         }
 
         public void Enter()
         {
+            SetRandomTargetWithinBoundary();
         }
 
         public void Execute()
         {
+            _animal.DetectFood();
+
             switch (_currentInternalState)
             {
                 case InternalState.Wandering:
                     HandleBoundary();
-                    if (_isWithinBoundary) HandleRandomDirectionChange();
+                    if (_isWithinBoundary) HandleRandomTargetPosition();
                     RotateTowardsTarget();
                     SetVelocity();
                     break;
@@ -105,21 +98,6 @@ namespace StateMachine.AnimalStates
                 _currentInternalState = InternalState.Wandering;
             }
         }
-
-        private void HandleRandomDirectionChange()
-        {
-            _changeDirectionCooldown -= Time.deltaTime;
-
-            if (_changeDirectionCooldown > 0) return;
-
-            var angleChange = Random.Range(-90f, 90f);
-            var rotation = Quaternion.AngleAxis(angleChange, Vector3.up);
-            _targetDirection = rotation * _targetDirection;
-
-            _targetDirection.Normalize();
-            _changeDirectionCooldown = Random.Range(1f, 5f);
-        }
-
         private void RotateTowardsTarget()
         {
             var flatTargetDirection = new Vector3(_targetDirection.x, 0, _targetDirection.z);
@@ -133,6 +111,25 @@ namespace StateMachine.AnimalStates
         private void SetVelocity()
         {
             _animal.AnimalRigidbody.velocity = _animalTransform.forward * _moveSpeed;
+        }
+        
+        private void HandleRandomTargetPosition()
+        {
+            if (Vector3.Distance(_animalTransform.position, _randomTargetPosition) < 1f)
+            {
+                SetRandomTargetWithinBoundary();
+            }
+
+            _targetDirection = (_randomTargetPosition - _animalTransform.position).normalized;
+        }
+
+        private void SetRandomTargetWithinBoundary()
+        {
+            _randomTargetPosition = new Vector3(
+                Random.Range(_boundaryMin.x, _boundaryMax.x),
+                _animalTransform.position.y,
+                Random.Range(_boundaryMin.z, _boundaryMax.z)
+            );
         }
     }
 }

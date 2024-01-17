@@ -1,7 +1,4 @@
 // Author: Jan Vaculik
-// Created: 10.12.2023
-// Copyright (c) Noxgames
-// http://www.noxgames.com/
 
 using System.Collections.Generic;
 using System.Linq;

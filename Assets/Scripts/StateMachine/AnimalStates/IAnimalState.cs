@@ -1,23 +1,30 @@
 // Author: Jan Vaculik
 
-using Unity.MLAgents.Actuators;
+using System.Collections.Generic;
 
 namespace StateMachine.AnimalStates
 {
     public interface IAnimalState : IState
     {
-        AnimalStateEnum StateID { get; }
-        public void SetStateMask(ref IDiscreteActionMask actionMask, int actionSize);
+        AnimalState StateID { get; }
     }
 
-    public enum AnimalStateEnum
+    public enum AnimalState
     {
-        None = 0,
-        Idle = 1,
-        Wander = 2,
-        Seek = 3,
-        Eat = -1,
-        Pursue = 5,
-        Sleep = 7,
+        None,
+        Idle,
+        Wander,
+        Seek,
+        Eat,
+        Pursue,
+        Attack,
+        Sleep,
+        Flee
+    }
+    
+    public struct AnimalStateInfo
+    {
+        public List<AnimalState> ValidTransitions;
+        public List<int> ActionMap;
     }
 }
