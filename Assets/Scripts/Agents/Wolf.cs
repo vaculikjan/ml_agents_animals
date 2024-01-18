@@ -9,22 +9,26 @@ using StateMachine.AnimalStates;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Agents
 {
-    public class Wolf : AAnimal<IWolfEdible>
+    public class Wolf : AAnimal<IWolfEdible>, IThreat<Wolf>
     {
         [Header("Wolf variables")]
         [SerializeField]
         private float _AttackRange;
         [SerializeField]
         private float _PursueSpeed;
+        [SerializeField]
+        private float _PursueEnergyMultiplier = 1.5f;
         
         private int _fixedUpdateCounter;
         private AttributeAggregate _attributeAggregate;
         private IEdible _foodToEat;
 
         private bool Resting => CurrentState?.StateID == AnimalState.Sleep;
+        private bool Pursuing => CurrentState?.StateID == AnimalState.Pursue;
 
         protected override Dictionary<AnimalState, AnimalStateInfo> StateParams => new()
         {
@@ -62,6 +66,45 @@ namespace Agents
             }},
         };
         
+        public override void DetectFood()
+        {
+            var foundColliders = Physics.OverlapSphere(transform.position, _FoodDetectionRadius);
+            foreach (var food in foundColliders)
+            {
+                var foodComponent = food.GetComponent<IWolfEdible>();
+                var deerComponent = foodComponent as Deer;
+                
+                if (foodComponent == null || deerComponent == null) continue;
+                if (FoodList.Contains(foodComponent)) continue;
+                
+                AddReward(5f);
+                FoodList.Add(foodComponent);
+                
+                foodComponent.FoodDepleted += OnFoodDepleted;
+                deerComponent.Died += OnFoodDied;
+            }
+        }
+
+        private void OnFoodDied(AAnimal<IDeerEdible> animal, DeathType deathtype)
+        {
+            var foodComponent = animal as IWolfEdible;
+            if (foodComponent == null) return;
+            
+            FoodList.Remove(foodComponent);
+            
+            var index = Array.IndexOf(AvailableFood, foodComponent);
+            
+            if (index != -1)
+            {
+                AvailableFood[index] = null;
+            }
+
+            if (NearestFood == foodComponent)
+            {
+                NearestFood = null;
+            }
+        }
+
     #region UnityEvents
         private void FixedUpdate()
         {
@@ -73,7 +116,7 @@ namespace Agents
             _fixedUpdateCounter++;
             
             HandleHunger();
-            //HandleEnergy();
+            HandleEnergy();
             
             if (_fixedUpdateCounter % 50 != 0) return;
             var reward = _attributeAggregate.CalculateReward();
@@ -117,8 +160,10 @@ namespace Agents
             foreach (var food in AvailableFood)
             {
                 if (food == null) continue;
-                var foodPosition = food.GetSelf().transform.localPosition;
-                var distanceToFood = Vector3.Distance(transform.localPosition, foodPosition);
+                var foodObject = food.GetSelf();
+                if (foodObject == null) continue;
+                
+                var distanceToFood = Vector3.Distance(transform.localPosition, foodObject.transform.localPosition);
                 var foodObservation = new float[]
                 {
                     distanceToFood
@@ -189,9 +234,12 @@ namespace Agents
             {
                 return;
             }
-            
-            MaskPursueState(ref actionMask);
-            
+
+            if (Energy.Value > 0.2f)
+            {
+                MaskPursueState(ref actionMask);
+            }
+
             if (CurrentState.StateID is AnimalState.Seek)
             {
                 return;
@@ -207,13 +255,13 @@ namespace Agents
             
             if (_fixedUpdateCounter % 50 == 0)
             {
-                _Hunger.Value += _HungerPerSecond * (Resting ? 0.5f : 1f);
+                _Hunger.Value += _HungerPerSecond * (Resting ? 0.2f : 1f);
             }
 
             if (!(_Hunger.Value >= _Hunger.MaxValue)) return;
             
-            SetReward(-100f);
-            EndEpisode();
+            // EndEpisode();
+            OnDeath(DeathType.Starvation);
         }
 
         private void HandleEnergy()
@@ -221,22 +269,32 @@ namespace Agents
             
             if (_fixedUpdateCounter % 50 == 0)
             {
-                _Energy.Value += _EnergyPerSecond;
+                _Energy.Value += _EnergyPerSecond * (Pursuing ? _PursueEnergyMultiplier : 1f);
             }
             
 
             if (!(_Energy.Value <= _Energy.MinValue)) return;
             
+            /*
             SetReward(-1000f);
             EndEpisode();
+            */
         }
         
-        protected override void OnFoodDepleted(IEdible food)
+        protected override void OnFoodDepleted(IEdible food)             
         {
             FoodList.Remove(food as IWolfEdible);
-            if (AvailableFood.Contains(food))
+            
+            var index = Array.IndexOf(AvailableFood, food as IWolfEdible);
+            
+            if (index != -1)
             {
-                AvailableFood[Array.IndexOf(AvailableFood, food as IWolfEdible)] = null;
+                AvailableFood[index] = null;
+            }
+
+            if (NearestFood == food as IWolfEdible)
+            {
+                NearestFood = null;
             }
         }
         
@@ -246,6 +304,17 @@ namespace Agents
             {
                 actionMask.SetActionEnabled(0, i, i - StateParams[AnimalState.Pursue].ActionMap.First() < AvailableFood.Length && AvailableFood[i - StateParams[AnimalState.Pursue].ActionMap.First()] != null);
             }
+        }
+
+        public bool DetectThreat(out Wolf animal)
+        {
+            animal = this;
+            return CurrentState.StateID switch
+            {
+                AnimalState.Pursue => Random.Range(0, 100) < 75,
+                AnimalState.Seek => Random.Range(0, 100) < 40,
+                _ => Random.Range(0, 100) < 25
+            };
         }
     }
 }

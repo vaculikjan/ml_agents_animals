@@ -59,5 +59,13 @@ namespace Environment
                 (Min.z + Max.z) / 2
             );
         }
+
+        public Vector3 ClosestPoint(Vector3 position) { 
+            var x = Mathf.Clamp(position.x, Min.x, Max.x);
+            var y = Mathf.Clamp(position.y, Min.y, Max.y);
+            var z = Mathf.Clamp(position.z, Min.z, Max.z);
+
+            return new Vector3(x, y, z);
+        }
     }
 }

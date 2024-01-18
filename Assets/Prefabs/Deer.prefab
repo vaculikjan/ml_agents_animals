@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 197278023688713977}
   - component: {fileID: 197278023128598000}
   - component: {fileID: 8747480117225782196}
+  - component: {fileID: -1031510366323710277}
   - component: {fileID: 197278023128598001}
   m_Layer: 0
   m_Name: Deer
@@ -293,6 +294,10 @@ MonoBehaviour:
   _FoodSensor: {fileID: 8747480117225782196}
   _MaxLifeSpan: 1200
   _MinLifeSpan: 1200
+  _ThreatDetectionRadius: 50
+  _FleeSpeed: 50
+  _FleeEnergyMultiplier: 1.5
+  _ThreatSensor: {fileID: -1031510366323710277}
   _TimeToEat: 0
   _FoodValue: 1
 --- !u!114 &197278023128598000
@@ -312,8 +317,8 @@ MonoBehaviour:
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
-      BranchSizes: 08000000
-    VectorActionSize: 08000000
+      BranchSizes: 09000000
+    VectorActionSize: 09000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
@@ -340,6 +345,21 @@ MonoBehaviour:
   m_SensorName: FoodBufferSensor
   m_ObservableSize: 1
   m_MaxNumObservables: 3
+--- !u!114 &-1031510366323710277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197278023688713980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd8012d5925524537b27131fef517017, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SensorName: ThreatBufferSensor
+  m_ObservableSize: 1
+  m_MaxNumObservables: 1
 --- !u!114 &197278023128598001
 MonoBehaviour:
   m_ObjectHideFlags: 0

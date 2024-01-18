@@ -20,10 +20,13 @@ namespace Environment
                 case DeathType.Fatigue:
                     break;
                 case DeathType.Starvation:
+                    animal.SetReward(-1000f);
                     break;
                 case DeathType.Natural:
                     break;
                 case DeathType.Eaten:
+                    animal.SetReward(-100f);
+                    break;
                 default:
                     break;
             }

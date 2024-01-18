@@ -22,6 +22,11 @@ namespace StateMachine.AnimalStates
 
         public void Execute()
         {
+            if (_target == null)
+            {
+                _animal.SetState(new IdleState(_animal));
+                return;
+            }
             _target.GetAttacked();
             _animal.SetState(new EatState(_animal, _target));
         }

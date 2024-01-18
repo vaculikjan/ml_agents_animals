@@ -73,8 +73,18 @@ namespace StateMachine.AnimalStates
         private void CheckBounds()
         {
             if (_boundary.Contains(_animalTransform.position)) return;
-            var directionToCenter = _boundary.GetCenter() - _animalTransform.position;
-            _animalTransform.rotation = Quaternion.LookRotation(directionToCenter);
+
+            var position = _animalTransform.position;
+            var closestPointOnBoundary = _boundary.ClosestPoint(position);
+    
+            var directionAwayFromThreat = (position - _threatTransform.position).normalized;
+            var directionToBoundaryPoint = (closestPointOnBoundary - position).normalized;
+            var blendedDirection = Vector3.Lerp(directionAwayFromThreat, directionToBoundaryPoint, 0.5f).normalized;
+
+            var flatBlendedDirection = new Vector3(blendedDirection.x, 0, blendedDirection.z);
+            var targetRotation = Quaternion.LookRotation(flatBlendedDirection, Vector3.up);
+            _animalTransform.rotation = Quaternion.RotateTowards(_animalTransform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
         }
+
     }
 }

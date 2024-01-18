@@ -98,7 +98,7 @@ namespace Agents
             Hunger.Value -= food.Eat();
         }
         
-        public void DetectFood()
+        public virtual void DetectFood()
         { 
             var foundColliders = Physics.OverlapSphere(transform.position, _FoodDetectionRadius);
             foreach (var food in foundColliders)
@@ -119,7 +119,7 @@ namespace Agents
         {
             var selfPosition = transform.position;
             FoodList.Sort((x, y) => Vector3.Distance(selfPosition, x.GetSelf().transform.position).CompareTo(Vector3.Distance(selfPosition, y.GetSelf().transform.position)));
-            
+           
             for (var i = 0; i < AvailableFood.Length; i++)
             {
                 if (i >= FoodList.Count)
@@ -134,11 +134,15 @@ namespace Agents
         protected bool CanEatAvailableFood(out TEdible food)
         {
             food = default;
-            
+
+            if (transform == null) return false;
+
             foreach (var x in AvailableFood)
             {
                 if (x == null) continue;
-                if (!(Vector3.Distance(transform.position, x.GetSelf().transform.position) <= _FoodConsumeRadius)) continue;
+                var xTransform = x.GetSelf()?.transform;
+                if (xTransform == null) continue;
+                if (!(Vector3.Distance(transform.position, xTransform.position) <= _FoodConsumeRadius)) continue;
                 food = x;
                 return true;
             }

@@ -42,6 +42,12 @@ namespace StateMachine.AnimalStates
 
         public void Execute()
         {
+            if (_target == null || _targetTransform == null)
+            {
+                _animal.SetState(new IdleState(_animal));
+                return;
+            }
+            
             if (_hasReachedTarget)
             {
                 _animal.SetState(new AttackState(_animal, _target));
@@ -53,7 +59,7 @@ namespace StateMachine.AnimalStates
                 _animal.SetState(new IdleState(_animal));
                 return;
             }
-
+            
             RotateTowardsTarget();
             MoveTowardsTarget();
             CheckIfReachedTarget();

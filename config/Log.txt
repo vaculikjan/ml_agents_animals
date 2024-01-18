@@ -45,3 +45,9 @@ curiosity7 - bug fixes
 curiosity8 - increase timespan
 curiosity9 - double attribute gains
 curiosity10 - half attribute gains, increase life span, remove positive reward at life end
+
+--- ---
+WolfTests - testing whether wolf learns to eat the deer (he did)
+
+-- -- 
+sim_test1 - give deer the capability to run away and thest their first interactions
