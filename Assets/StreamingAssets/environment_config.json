@@ -1,0 +1,7 @@
+{
+    "deer_count": 1,
+    "deer_hunger_per_second": 0.02,
+    "wolf_hunger_per_second": 0.04,
+    "wolf_count": 1,
+    "output_path": "D:\\Unity\\DiplomaThesis\\Build\\Build1\\log_folder"
+}

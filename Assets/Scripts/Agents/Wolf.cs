@@ -115,6 +115,7 @@ namespace Agents
             
             _fixedUpdateCounter++;
             
+            HandleLifeSpan();
             HandleHunger();
             HandleEnergy();
             
@@ -141,6 +142,8 @@ namespace Agents
             AvailableFood = new IWolfEdible[StateParams[AnimalState.Seek].ActionMap.Count];
             
             _fixedUpdateCounter = 0;
+            
+            _HungerPerSecond = EnvironmentController.Instance.EnvironmentConfig.WolfHungerPerSecond;
         }
             
         public override void Heuristic(in ActionBuffers actionsOut)

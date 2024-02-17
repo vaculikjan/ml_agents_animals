@@ -431,6 +431,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff82d305cf7442c286143014d082acd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _EnvironmentConfig: {fileID: 11400000, guid: 450f5b5b0ae90f549a33916ec5b7b158, type: 2}
   _ArenaBounds:
     _Min: {x: -210, y: 0, z: -210}
     _Max: {x: 210, y: 0, z: 210}

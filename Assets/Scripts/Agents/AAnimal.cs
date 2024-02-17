@@ -57,6 +57,12 @@ namespace Agents
         [SerializeField]
         protected BufferSensorComponent _FoodSensor;
         
+        [Header("Lifespan")]
+        [SerializeField]
+        private float _MaxLifeSpan = 180f;
+        [SerializeField]
+        private float _MinLifeSpan = 120f;
+        
         protected int MaxDiscreteStates => _BehaviorParameters.BrainParameters.ActionSpec.BranchSizes[0];
         
         protected abstract Dictionary<AnimalState, AnimalStateInfo> StateParams { get; }
@@ -64,7 +70,10 @@ namespace Agents
         protected List<TEdible> FoodList;
         protected TEdible[] AvailableFood;
         protected TEdible NearestFood;
-        
+
+        public float CurrentLifeSpan { get; private set; }
+        public float TimeLiving { get; private set; }
+
         public AnimalAttribute Hunger => _Hunger;
         public AnimalAttribute Curiosity => _Curiosity;
         public AnimalAttribute Energy => _Energy;
@@ -87,7 +96,15 @@ namespace Agents
 
             return StateParams.TryGetValue(CurrentState.StateID, out var stateInfo) && stateInfo.ValidTransitions.Contains(newState.StateID) && CurrentState.CanExit();
         }
-
+        
+        protected void HandleLifeSpan()
+        {
+            TimeLiving += Time.fixedDeltaTime;
+            if (TimeLiving < CurrentLifeSpan) return;
+            
+            EndEpisode();
+        }
+        
         public void ResolveSleeping(float timeSlept)
         {
             Energy.Value += timeSlept * _EnergyRegenPerSecond;
@@ -179,6 +196,9 @@ namespace Agents
             _Hunger.Reset();
             _Energy.Reset();
             _Curiosity.Reset();
+            
+            CurrentLifeSpan = Random.Range(_MinLifeSpan, _MaxLifeSpan);
+            TimeLiving = 0f;
         }
 
         protected virtual void OnDrawGizmos()

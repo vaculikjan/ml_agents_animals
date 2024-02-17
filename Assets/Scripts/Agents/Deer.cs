@@ -3,25 +3,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Serialization;
 using AgentProperties.Attributes;
 using Environment;
 using StateMachine.AnimalStates;
+using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
-using UnityEngine.Serialization;
-using Random = UnityEngine.Random;
 
 namespace Agents
 {
     public class Deer : AAnimal<IDeerEdible>, IWolfEdible
     {
         [Header("Deer Specific")]
-        [SerializeField]
-        private float _MaxLifeSpan = 180f;
-        [SerializeField]
-        private float _MinLifeSpan = 120f;
         [SerializeField]
         private float _ThreatDetectionRadius = 10f;
         [SerializeField]
@@ -37,9 +31,6 @@ namespace Agents
         [SerializeField]
         private float _FoodValue = 1f;
         
-        private float _currentLifeSpan;
-        private float _timeLiving;
-
         private int _fixedUpdateCounter;
         private bool Resting => CurrentState?.StateID == AnimalState.Sleep;
         private bool Fleeing => CurrentState?.StateID == AnimalState.Flee;
@@ -47,6 +38,8 @@ namespace Agents
         private AttributeAggregate _attributeAggregate;
         
         private IThreat<Wolf>[] _threats;
+        
+        private StatsRecorder _statsRecorder;
         
         public float TimeToEat => _TimeToEat;
         public event FoodEventHandler FoodDepleted = delegate {  };
@@ -93,14 +86,6 @@ namespace Agents
             {
                 _Curiosity.Value += _CuriosityPerSecond;
             }
-        }
-        
-        private void HandleLifeSpan()
-        {
-            _timeLiving += Time.fixedDeltaTime;
-            if (_timeLiving < _currentLifeSpan) return;
-            
-            EndEpisode();
         }
         
         private void HandleThreatDetection()
@@ -202,16 +187,16 @@ namespace Agents
         public override void Initialize()
         {
             base.Initialize();
+            _statsRecorder = Academy.Instance.StatsRecorder;
             
             _attributeAggregate = new AttributeAggregate(new List<AnimalAttribute> {_Hunger});
             
             AvailableFood = new IDeerEdible[StateParams[AnimalState.Seek].ActionMap.Count];
             _threats = new IThreat<Wolf>[StateParams[AnimalState.Flee].ActionMap.Count];
             
-            _currentLifeSpan = Random.Range(_MinLifeSpan, _MaxLifeSpan);
-            _timeLiving = 0f;
-            
             _fixedUpdateCounter = 0;
+            
+            _HungerPerSecond = EnvironmentController.Instance.EnvironmentConfig.DeerHungerPerSecond;
         }
             
         public override void Heuristic(in ActionBuffers actionsOut)
@@ -360,6 +345,8 @@ namespace Agents
             if (_fixedUpdateCounter % 50 != 0) return;
             var reward = _attributeAggregate.CalculateReward();
             AddReward(reward);
+            _statsRecorder.Add("Hunger", _Hunger.Value);
+            _statsRecorder.Add("Energy", _Energy.Value);
         }
 
         protected override void OnDrawGizmos()
