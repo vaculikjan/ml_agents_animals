@@ -72,7 +72,7 @@ namespace StateMachine.AnimalStates
             _animal.AnimalRigidbody.MoveRotation(rotation);
         }
 
-        private void MoveTowardsTarget() { _animal.AnimalRigidbody.velocity = _animalTransform.forward * _moveSpeed; }
+        private void MoveTowardsTarget() { _animal.AnimalRigidbody.velocity = _animalTransform.forward * (_moveSpeed * _animal.Acceleration); }
 
         private void CheckAlignment()
         {

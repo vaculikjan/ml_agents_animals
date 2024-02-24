@@ -110,7 +110,7 @@ namespace StateMachine.AnimalStates
 
         private void SetVelocity()
         {
-            _animal.AnimalRigidbody.velocity = _animalTransform.forward * _moveSpeed;
+            _animal.AnimalRigidbody.velocity = _animalTransform.forward * (_moveSpeed * _animal.Acceleration);
         }
         
         private void HandleRandomTargetPosition()

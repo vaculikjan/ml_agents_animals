@@ -11,6 +11,7 @@ namespace StateMachine.AnimalStates
         private readonly IAnimal _animal;
         private readonly Transform _animalTransform;
         private readonly float _moveSpeed;
+        private readonly float _pursuitAccelMultiplier;
         private readonly float _rotationSpeed;
         private readonly IAttackableEdible _target;
         private readonly Transform _targetTransform;
@@ -20,11 +21,12 @@ namespace StateMachine.AnimalStates
         private float _pursuitTimer;
         private bool _hasReachedTarget;
 
-        public PursueState(IAnimal animal, float moveSpeed, float rotationSpeed, IAttackableEdible target, float pursuitDuration, float attackRange)
+        public PursueState(IAnimal animal, float moveSpeed, float pursueAccelMultiplier, float rotationSpeed, IAttackableEdible target, float pursuitDuration, float attackRange)
         {
             _animal = animal;
             _animalTransform = animal.GetSelf().transform;
             _moveSpeed = moveSpeed;
+            _pursuitAccelMultiplier = pursueAccelMultiplier;
             _rotationSpeed = rotationSpeed;
             _target = target;
             _targetTransform = target.GetSelf().transform;
@@ -38,6 +40,7 @@ namespace StateMachine.AnimalStates
         {
             _hasReachedTarget = false;
             _pursuitTimer = 0f;
+            _animal.MaxAcceleration = _pursuitAccelMultiplier;
         }
 
         public void Execute()
@@ -70,6 +73,7 @@ namespace StateMachine.AnimalStates
         public void Exit()
         {
             _animal.AnimalRigidbody.velocity = Vector3.zero;
+            _animal.MaxAcceleration = 1.0f;
         }
 
         public bool CanExit() { return true; }
@@ -84,7 +88,7 @@ namespace StateMachine.AnimalStates
             _animal.AnimalRigidbody.MoveRotation(rotation);
         }
 
-        private void MoveTowardsTarget() { _animal.AnimalRigidbody.velocity = _animalTransform.forward * _moveSpeed; }
+        private void MoveTowardsTarget() { _animal.AnimalRigidbody.velocity = _animalTransform.forward * (_moveSpeed * _animal.Acceleration); }
 
         private void CheckIfReachedTarget()
         {

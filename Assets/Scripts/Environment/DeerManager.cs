@@ -38,7 +38,9 @@ namespace Environment
                 Agents.Remove(animal as Deer);
             
             Destroy(animal.gameObject);
-            SpawnAgent();
+            
+            if (Agents.Count == 0)
+                SpawnAgent();
         }
 
         public ILogData LogData()

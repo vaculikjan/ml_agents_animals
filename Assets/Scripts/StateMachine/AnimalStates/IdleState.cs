@@ -22,6 +22,7 @@ namespace StateMachine.AnimalStates
         public void Enter()
         {
             _timeSpentIdle = 0;
+            _animal.Acceleration = 0;
         }
 
         public void Execute()

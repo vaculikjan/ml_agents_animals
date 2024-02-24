@@ -9,6 +9,7 @@ namespace StateMachine.AnimalStates
         private readonly IAnimal _animal;
         private readonly Transform _animalTransform;
         private readonly float _moveSpeed;
+        private readonly float _accelMultiplier;
         private readonly float _rotationSpeed;
         private readonly Transform _threatTransform;
         private readonly Bounds _boundary;
@@ -16,11 +17,12 @@ namespace StateMachine.AnimalStates
         private readonly float _safeDistance;
         private bool _isSafe;
 
-        public FleeState(IAnimal animal, float moveSpeed, float rotationSpeed, Transform threatTransform, float safeDistance, Bounds boundary)
+        public FleeState(IAnimal animal, float moveSpeed, float accelMultiplier, float rotationSpeed, Transform threatTransform, float safeDistance, Bounds boundary)
         {
             _animal = animal;
             _animalTransform = animal.GetSelf().transform;
             _moveSpeed = moveSpeed;
+            _accelMultiplier = accelMultiplier;
             _rotationSpeed = rotationSpeed;
             _threatTransform = threatTransform;
             _safeDistance = safeDistance;
@@ -29,7 +31,11 @@ namespace StateMachine.AnimalStates
 
         public AnimalState StateID => AnimalState.Flee;
 
-        public void Enter() { _isSafe = false; }
+        public void Enter()
+        {
+            _isSafe = false; 
+            _animal.MaxAcceleration = _accelMultiplier;
+        }
 
         public void Execute()
         {
@@ -45,7 +51,11 @@ namespace StateMachine.AnimalStates
             CheckIfSafe();
         }
 
-        public void Exit() { _animal.AnimalRigidbody.velocity = Vector3.zero; }
+        public void Exit()
+        {
+            _animal.AnimalRigidbody.velocity = Vector3.zero; 
+            _animal.MaxAcceleration = 1;
+        }
 
         public bool CanExit() { return true; }
 
@@ -59,7 +69,7 @@ namespace StateMachine.AnimalStates
             _animal.AnimalRigidbody.MoveRotation(rotation);
         }
 
-        private void MoveAwayFromThreat() { _animal.AnimalRigidbody.velocity = _animalTransform.forward * _moveSpeed; }
+        private void MoveAwayFromThreat() { _animal.AnimalRigidbody.velocity = _animalTransform.forward * (_moveSpeed * _animal.Acceleration); }
 
         private void CheckIfSafe()
         {

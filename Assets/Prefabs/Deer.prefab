@@ -138,6 +138,7 @@ MonoBehaviour:
   _BehaviorParameters: {fileID: 197278023128598000}
   _AnimalRigidbody: {fileID: 197278023688713978}
   _MovementSpeed: 45
+  _AccelerationRate: 0.3
   _RotationSpeed: 900
   _Hunger:
     _MinValue: 0
@@ -294,10 +295,12 @@ MonoBehaviour:
   _FoodSensor: {fileID: 8747480117225782196}
   _MaxLifeSpan: 1200
   _MinLifeSpan: 1200
-  _ThreatDetectionRadius: 50
-  _FleeSpeed: 50
+  _ThreatDetectionRadius: 40
+  _ThreatRadiusOffset: 15
+  _FleeAccelerationMultiplier: 1.6
   _FleeEnergyMultiplier: 1.5
   _ThreatSensor: {fileID: -1031510366323710277}
+  _ThreatDetectionInterval: 25
   _TimeToEat: 0
   _FoodValue: 1
 --- !u!114 &197278023128598000

@@ -137,6 +137,7 @@ MonoBehaviour:
   _BehaviorParameters: {fileID: 197278023128598000}
   _AnimalRigidbody: {fileID: 197278023688713978}
   _MovementSpeed: 40
+  _AccelerationRate: 0.3
   _RotationSpeed: 1000
   _Hunger:
     _MinValue: 0
@@ -291,8 +292,11 @@ MonoBehaviour:
   _FoodDetectionRadius: 150
   _FoodConsumeRadius: 3
   _FoodSensor: {fileID: 2398579096913360385}
+  _MaxLifeSpan: 180
+  _MinLifeSpan: 120
   _AttackRange: 2
-  _PursueSpeed: 70
+  _PursueAccelMultiplier: 1.5
+  _PursueEnergyMultiplier: 1.5
 --- !u!114 &197278023128598000
 MonoBehaviour:
   m_ObjectHideFlags: 0

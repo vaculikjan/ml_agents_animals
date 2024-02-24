@@ -24,6 +24,7 @@ namespace StateMachine.AnimalStates
         public void Enter()
         {
             _sleepTime = 0.0f;
+            _animal.Acceleration = 0;
         }
 
         public void Execute()

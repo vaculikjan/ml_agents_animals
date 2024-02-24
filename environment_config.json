@@ -1,0 +1,18 @@
+{
+    "deer_config" : {
+        "count" : 1,
+        "hunger_per_second" : 1,
+        "hunger_reward_curve" : [1,-1,1,-1],
+        "energy_per_second": 1,
+        "energy_regen_per_second" : 1,
+        "energy_reward_curve" : [1,1,1,1]
+    },
+    "wolf_config" : {
+        "count" : 1,
+        "hunger_per_second" : 1,
+        "hunger_reward_curve" : [1,1,1,1],
+        "energy_per_second": 1,
+        "energy_regen_per_second" : 1,
+        "energy_reward_curve" : [1,1,1,1]
+    }
+}

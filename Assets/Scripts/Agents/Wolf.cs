@@ -19,7 +19,7 @@ namespace Agents
         [SerializeField]
         private float _AttackRange;
         [SerializeField]
-        private float _PursueSpeed;
+        private float _PursueAccelMultiplier;
         [SerializeField]
         private float _PursueEnergyMultiplier = 1.5f;
         
@@ -137,15 +137,26 @@ namespace Agents
         {
             base.Initialize();
             
-            _attributeAggregate = new AttributeAggregate(new List<AnimalAttribute> {_Hunger});
+            _attributeAggregate = new AttributeAggregate(new List<AnimalAttribute> {_Hunger, _Energy});
             
             AvailableFood = new IWolfEdible[StateParams[AnimalState.Seek].ActionMap.Count];
             
             _fixedUpdateCounter = 0;
             
-            _HungerPerSecond = EnvironmentController.Instance.EnvironmentConfig.WolfHungerPerSecond;
+            LoadFromConfig(EnvironmentController.Instance.EnvironmentConfig.WolfConfig);
         }
+
+        protected override void LoadFromConfig(IAgentConfig config)
+        {
+            base.LoadFromConfig(config);
+
+            if (config is not WolfConfig wolfConfig) return;
             
+            _AttackRange = wolfConfig.AttackRange;
+            _PursueAccelMultiplier = wolfConfig.PursuitAccelMultiplier;
+            _PursueEnergyMultiplier = wolfConfig.PursuitEnergyMultiplier;
+        }
+
         public override void Heuristic(in ActionBuffers actionsOut)
         {
             if (Input.GetKey(KeyCode.A)) actionsOut.DiscreteActions.Array[0] = 1;
@@ -189,7 +200,7 @@ namespace Agents
                     break;
                 case AnimalState.Seek: SetState(new SeekState(this, _MovementSpeed, _RotationSpeed, AvailableFood[0].GetSelf().transform.position));
                     break;
-                case AnimalState.Pursue: SetState(new PursueState(this, _PursueSpeed, _RotationSpeed, AvailableFood[0], 2f, _AttackRange));
+                case AnimalState.Pursue: SetState(new PursueState(this, _MovementSpeed,_PursueAccelMultiplier, _RotationSpeed, AvailableFood[0], 2f, _AttackRange));
                     break;
                 case AnimalState.Eat: SetState(new EatState(this, _foodToEat));
                     break;

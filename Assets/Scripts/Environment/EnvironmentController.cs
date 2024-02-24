@@ -25,10 +25,8 @@ namespace Environment
         [Header("Managers")]
         [SerializeField] 
         private FoodManager _FoodManager;
-        [FormerlySerializedAs("_DeersManager")]
         [SerializeField]
         private DeerManager _DeerManager;
-        [FormerlySerializedAs("_WolfsManager")]
         [SerializeField]
         private WolvesManager _WolvesManager;
 
@@ -94,6 +92,9 @@ namespace Environment
             {
                 Debug.LogError($"Unable to find environment config file at {_environmentConfigPath}! Using default values.");
             }
+
+            _DeerManager.Initialize(_EnvironmentConfig.DeerConfig);
+            _WolvesManager.Initialize(_EnvironmentConfig.WolfConfig);
         }
         
         private static void AddDataItem(ILogData dataItem, Dictionary<string, List<ILogData>> dataItemsByType)
@@ -111,6 +112,7 @@ namespace Environment
             var data = new Dictionary<string, List<ILogData>>();
             AddDataItem(_DeerManager.LogData(), data);
             AddDataItem(_WolvesManager.LogData(), data);
+            AddDataItem(_EnvironmentConfig.LogData(), data);
     
             var json = JsonConvert.SerializeObject(data, Formatting.Indented);
     
@@ -118,12 +120,11 @@ namespace Environment
                 ? Application.persistentDataPath 
                 : Path.GetDirectoryName(_environmentConfigPath);
 
-            if (directoryPath != null)
-            {
-                var path = Path.Combine(directoryPath, "dataOutput.json");
+            if (directoryPath == null) return;
+            
+            var path = Path.Combine(directoryPath, "dataOutput.json");
 
-                File.WriteAllText(path, json);
-            }
+            File.WriteAllText(path, json);
         }
     }
 }

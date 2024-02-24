@@ -9,6 +9,8 @@ namespace Agents
 {
     public interface IAnimal
     {
+        public float Acceleration { get; set; }
+        public float MaxAcceleration { set; }
         public bool SetState(IAnimalState state);
         public Rigidbody AnimalRigidbody { get; }
         public AnimalAttribute Hunger { get; }

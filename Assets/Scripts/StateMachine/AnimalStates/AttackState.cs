@@ -17,8 +17,11 @@ namespace StateMachine.AnimalStates
         }
         
         public AnimalState StateID => AnimalState.Attack;
-        
-        public void Enter() { }
+
+        public void Enter()
+        {
+            _animal.Acceleration = 0;
+        }
 
         public void Execute()
         {

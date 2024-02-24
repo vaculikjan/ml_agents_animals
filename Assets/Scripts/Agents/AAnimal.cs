@@ -10,6 +10,7 @@ using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Policies;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Agents
 {
@@ -24,6 +25,8 @@ namespace Agents
         private Rigidbody _AnimalRigidbody;
         [SerializeField]
         protected float _MovementSpeed;
+        [SerializeField]
+        protected float _AccelerationRate;
         [SerializeField]
         protected float _RotationSpeed;
         
@@ -59,9 +62,13 @@ namespace Agents
         
         [Header("Lifespan")]
         [SerializeField]
-        private float _MaxLifeSpan = 180f;
+        protected float _MaxLifeSpan = 180f;
         [SerializeField]
-        private float _MinLifeSpan = 120f;
+        protected float _MinLifeSpan = 120f;
+        
+        private float _lastFixedTime;
+        private float _currentAcceleration;
+        private float _maxAcceleration = 1f;
         
         protected int MaxDiscreteStates => _BehaviorParameters.BrainParameters.ActionSpec.BranchSizes[0];
         
@@ -81,6 +88,29 @@ namespace Agents
         
         public delegate void DeathEventHandler(AAnimal<TEdible> animal, DeathType deathType);
         public event DeathEventHandler Died = delegate {  };
+        
+        protected virtual void LoadFromConfig(IAgentConfig config)
+        {
+            _MovementSpeed = config.MoveSpeed;
+            _AccelerationRate = config.AccelerationRate;
+            
+            _Hunger.SetCurveFromArray(config.HungerRewardCurve); 
+            _Energy.SetCurveFromArray(config.EnergyRewardCurve);
+            _Curiosity.SetCurveFromArray(config.CuriosityRewardCurve);
+            
+            _TimeToSleep = config.TimeToSleep;
+            _HungerPerSecond = config.HungerPerSecond;
+            _EnergyPerSecond = config.EnergyPerSecond;
+            _EnergyRegenPerSecond = config.EnergyRegenPerSecond;
+            _CuriosityPerSecond = config.CuriosityPerSecond;
+            _CuriosityDecayPerSecond = config.CuriosityDecayPerSecond;
+            
+            _FoodDetectionRadius = config.FoodDetectionRadius;
+            _FoodConsumeRadius = config.FoodConsumeRadius;
+            
+            _MaxLifeSpan = config.MaxLifeSpan;
+            _MinLifeSpan = config.MinLifeSpan;
+        }
         
         protected void SetStateMask(ref IDiscreteActionMask actionMask, AnimalState state)
         {
@@ -171,7 +201,29 @@ namespace Agents
         {
             return gameObject;
         }
-        
+
+        public float Acceleration
+        {
+            set => _currentAcceleration = value;
+            
+            get
+            {
+                if (_currentAcceleration <= 0f)
+                {
+                    _lastFixedTime = Time.fixedTime;
+                    _currentAcceleration = _maxAcceleration / 100f;
+                }
+
+                var timeSinceLastFixedUpdate = Time.fixedTime - _lastFixedTime;
+                _currentAcceleration += _AccelerationRate * timeSinceLastFixedUpdate;
+                _currentAcceleration = Mathf.Min(_currentAcceleration, _maxAcceleration);
+                _lastFixedTime = Time.fixedTime;
+                return _currentAcceleration;
+            }
+        }
+
+        public float MaxAcceleration { set => _maxAcceleration = value; }
+
         public bool SetState(IAnimalState state)
         {
             if (!IsTransitionValid(state))
@@ -199,6 +251,7 @@ namespace Agents
             
             CurrentLifeSpan = Random.Range(_MinLifeSpan, _MaxLifeSpan);
             TimeLiving = 0f;
+            _lastFixedTime = 0f;
         }
 
         protected virtual void OnDrawGizmos()

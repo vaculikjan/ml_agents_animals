@@ -1,5 +1,6 @@
 // Author: Jan Vaculik
 
+using System;
 using System.Collections.Generic;
 using TrainingUtils;
 using Unity.MLAgents;
@@ -11,6 +12,10 @@ namespace Environment
     {
         [SerializeField]
         private int _AgentsCount;
+        [SerializeField]
+        private float _minSpawnInterval;
+        [SerializeField]
+        private float _maxSpawnInterval;
 
         protected readonly List<T> Agents = new();
 
@@ -19,6 +24,9 @@ namespace Environment
         private float _totalLifespanDifference;
         private float _lastLifespan;
         private float _lastMaxLifespan;
+        
+        private float SpawnInterval => UnityEngine.Random.Range(_minSpawnInterval, _maxSpawnInterval);
+        private float _timeToSpawn;
 
         public void ResetAgents()
         {
@@ -45,12 +53,34 @@ namespace Environment
             _lastLifespan = onDeathLifespan;
             _lastMaxLifespan = currentMaxLifespan;
         }
-        
-        public void GetLifespanData(out float averageLifespan, out float averageLifespanDifference, out float lastLifespan)
+
+        protected void GetLifespanData(out float averageLifespan, out float averageLifespanDifference, out float lastLifespan)
         {
             averageLifespan = _totalLifespan / _deadAgentCount;
             averageLifespanDifference = _totalLifespanDifference / _deadAgentCount;
             lastLifespan = _lastLifespan;
+        }
+
+        private void Update()
+        {
+            if (Agents.Count >= _AgentsCount) return;
+            
+            if (_timeToSpawn < SpawnInterval)
+            {
+                _timeToSpawn += Time.fixedDeltaTime;
+            }
+            else
+            {
+                SpawnAgent();
+                _timeToSpawn = 0;
+            }
+        }
+        
+        public void Initialize(IAgentConfig agentConfig)
+        {
+            _AgentsCount = agentConfig.Count;
+            _minSpawnInterval = agentConfig.MinSpawnTime;
+            _maxSpawnInterval = agentConfig.MaxSpawnTime;
         }
     }
 }

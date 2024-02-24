@@ -19,11 +19,15 @@ namespace Agents
         [SerializeField]
         private float _ThreatDetectionRadius = 10f;
         [SerializeField]
-        private float _FleeSpeed = 50f;
+        private float _ThreatRadiusOffset = 3f;
+        [SerializeField]
+        private float _FleeAccelerationMultiplier = 1.6f;
         [SerializeField]
         private float _FleeEnergyMultiplier = 1.5f;
         [SerializeField]
         private BufferSensorComponent _ThreatSensor;
+        [SerializeField]
+        private int _ThreatDetectionInterval = 25;
         
         [Header("IEdible Variables")]
         [SerializeField]
@@ -90,7 +94,7 @@ namespace Agents
         
         private void HandleThreatDetection()
         {
-            if (_fixedUpdateCounter % 25 != 0) return;
+            if (_fixedUpdateCounter % _ThreatDetectionInterval != 0) return;
             DetectThreats();
         }
         
@@ -122,7 +126,7 @@ namespace Agents
 
         private void DetectThreats()
         {
-            var foundColliders = Physics.OverlapSphere(transform.position, _ThreatDetectionRadius);
+            var foundColliders = Physics.OverlapSphere(transform.position + new Vector3(0,0, _ThreatRadiusOffset), _ThreatDetectionRadius);
             
             var foundThreats = foundColliders.Select(threat => threat.GetComponent<IThreat<Wolf>>()).Where(threatComponent => threatComponent != null).ToList();
 
@@ -189,16 +193,28 @@ namespace Agents
             base.Initialize();
             _statsRecorder = Academy.Instance.StatsRecorder;
             
-            _attributeAggregate = new AttributeAggregate(new List<AnimalAttribute> {_Hunger});
+            _attributeAggregate = new AttributeAggregate(new List<AnimalAttribute> {_Hunger, _Energy});
             
             AvailableFood = new IDeerEdible[StateParams[AnimalState.Seek].ActionMap.Count];
             _threats = new IThreat<Wolf>[StateParams[AnimalState.Flee].ActionMap.Count];
             
             _fixedUpdateCounter = 0;
-            
-            _HungerPerSecond = EnvironmentController.Instance.EnvironmentConfig.DeerHungerPerSecond;
+
+            LoadFromConfig(EnvironmentController.Instance.EnvironmentConfig.DeerConfig);
         }
-            
+
+        protected override void LoadFromConfig(IAgentConfig config)
+        {
+            base.LoadFromConfig(config);
+            if (config is not DeerConfig deerConfig) return;
+
+            _ThreatDetectionRadius = deerConfig.ThreatDetectionRadius;
+            _FleeAccelerationMultiplier = deerConfig.FleeAccelMultiplier;
+            _FleeEnergyMultiplier = deerConfig.FleeEnergyMultiplier;
+            _ThreatDetectionInterval = deerConfig.ThreatDetectionInterval;
+            _ThreatRadiusOffset = deerConfig.ThreatRadiusOffset;
+        }
+
         public override void Heuristic(in ActionBuffers actionsOut)
         {
             if (Input.GetKey(KeyCode.Q)) actionsOut.DiscreteActions.Array[0] = (int) AnimalState.Idle;
@@ -212,8 +228,8 @@ namespace Agents
         public override void CollectObservations(VectorSensor sensor)
         {
             sensor.AddObservation(_Hunger.Value);
-            // sensor.AddObservation(_Energy.Value);
-            // sensor.AddObservation(_Curiosity.Value);
+            sensor.AddObservation(_Energy.Value);
+            sensor.AddObservation(_Curiosity.Value);
             sensor.AddObservation((int) CurrentState.StateID);
 
             foreach (var food in AvailableFood)
@@ -264,7 +280,7 @@ namespace Agents
                     SetState(new SleepState(this, _TimeToSleep));
                     break;
                 case AnimalState.Flee:
-                    SetState(new FleeState(this, _FleeSpeed, _RotationSpeed, _threats[actions.DiscreteActions[0] - StateParams[AnimalState.Flee].ActionMap.First()].GetSelf().transform, _ThreatDetectionRadius, EnvironmentController.Instance.ArenaBounds));
+                    SetState(new FleeState(this, _MovementSpeed, _FleeAccelerationMultiplier, _RotationSpeed, _threats[actions.DiscreteActions[0] - StateParams[AnimalState.Flee].ActionMap.First()].GetSelf().transform, _ThreatDetectionRadius, EnvironmentController.Instance.ArenaBounds));
                     break;
                 default: throw new ArgumentOutOfRangeException();
             }
@@ -352,7 +368,7 @@ namespace Agents
         protected override void OnDrawGizmos()
         {
             base.OnDrawGizmos();
-            DrawCircle(transform.position, _ThreatDetectionRadius, Color.red);
+            DrawCircle(transform.position + new Vector3(0,0, _ThreatRadiusOffset), _ThreatDetectionRadius, Color.red);
         }
     #endregion
     }

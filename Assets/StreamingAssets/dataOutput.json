@@ -1,0 +1,32 @@
+{
+  "DeerLogData": [
+    {
+      "AverageLifespan": "NaN",
+      "AverageLifespanDifference": "NaN",
+      "LastLifespan": 0.0
+    }
+  ],
+  "WolfLogData": [
+    {
+      "AverageLifespan": "NaN",
+      "AverageLifespanDifference": "NaN",
+      "LastLifespan": 0.0
+    }
+  ],
+  "EnvironmentLogData": [
+    {
+      "DeerLogData": {
+        "Count": 0,
+        "HungerPerSecond": 0.0,
+        "EnergyPerSecond": 0.0,
+        "EnergyRegenPerSecond": 0.0
+      },
+      "WolfLogData": {
+        "Count": 0,
+        "HungerPerSecond": 0.0,
+        "EnergyPerSecond": 0.0,
+        "EnergyRegenPerSecond": 0.0
+      }
+    }
+  ]
+}

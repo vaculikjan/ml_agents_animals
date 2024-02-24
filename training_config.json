@@ -1,0 +1,29 @@
+{
+    "output_path": "D:\\Unity\\DiplomaThesis\\Build\\Build1\\log_folder",
+    "nn_config_path": "D:\\Unity\\DiplomaThesis\\config\\sac_config.yaml",
+    "env_config_path": "D:\\Unity\\DiplomaThesis\\environment_config.json",
+    "log_directory_path": "D:\\Unity\\DiplomaThesis\\log_folder",
+    
+    "env_config": {
+        "deer_config" : {
+            "deer_count" : [1, 10],
+            "deer_hunger_per_second" : [1, 10],
+            "deer_hunger_reward_curve" : [[-1, 1], [-1, 1], [-1, 1], [-1, 1]],
+            "deer_energy_per_second": [1, 10],
+            "deer_energy_regen_per_second" : [1, 10],
+            "deer_energy_reward_curve" : [[-1, 1], [-1, 1], [-1, 1], [-1, 1]]
+        },
+        "wolf_config" : {
+            "wolf_count" : [1, 10],
+            "wolf_hunger_per_second" : [1, 10],
+            "wolf_hunger_reward_curve" : [[-1, 1], [-1, 1], [-1, 1], [-1, 1]],
+            "wolf_energy_per_second": [1, 10],
+            "wolf_energy_regen_per_second" : [1, 10],
+            "wolf_energy_reward_curve" : [[-1, 1], [-1, 1], [-1, 1], [-1, 1]]
+        }
+    },
+    
+    "nn_config": {
+      
+    }
+}

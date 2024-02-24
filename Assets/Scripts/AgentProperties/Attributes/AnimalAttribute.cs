@@ -1,7 +1,7 @@
 // Author: Jan Vaculik
 
 using System;
-using Unity.MLAgents;
+using UnityEditor;
 using UnityEngine;
 
 namespace AgentProperties.Attributes
@@ -45,6 +45,14 @@ namespace AgentProperties.Attributes
         public void Reset()
         {
             _value = _DefaultValue;
+        }
+
+        public void SetCurveFromArray(float[] keys)
+        {
+            for (var i = 0; i < keys.Length; i++)
+            {
+                _RewardCurve.keys[i].value = keys[i];
+            }
         }
     }
 }
