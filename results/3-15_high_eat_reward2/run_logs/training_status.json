@@ -1,0 +1,51 @@
+{
+    "simple_deer": {
+        "checkpoints": [
+            {
+                "steps": 320,
+                "file_path": "results\\3-15_high_eat_reward2\\simple_deer\\simple_deer-320.onnx",
+                "reward": null,
+                "creation_time": 1710534168.3764133,
+                "auxillary_file_paths": [
+                    "results\\3-15_high_eat_reward2\\simple_deer\\simple_deer-320.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 320,
+            "file_path": "results\\3-15_high_eat_reward2\\simple_deer.onnx",
+            "reward": null,
+            "creation_time": 1710534168.3764133,
+            "auxillary_file_paths": [
+                "results\\3-15_high_eat_reward2\\simple_deer\\simple_deer-320.pt"
+            ]
+        }
+    },
+    "simple_wolf": {
+        "checkpoints": [
+            {
+                "steps": 64,
+                "file_path": "results\\3-15_high_eat_reward2\\simple_wolf\\simple_wolf-64.onnx",
+                "reward": null,
+                "creation_time": 1710534168.472418,
+                "auxillary_file_paths": [
+                    "results\\3-15_high_eat_reward2\\simple_wolf\\simple_wolf-64.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 64,
+            "file_path": "results\\3-15_high_eat_reward2\\simple_wolf.onnx",
+            "reward": null,
+            "creation_time": 1710534168.472418,
+            "auxillary_file_paths": [
+                "results\\3-15_high_eat_reward2\\simple_wolf\\simple_wolf-64.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.1.1+cpu"
+    }
+}

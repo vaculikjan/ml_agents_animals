@@ -19,6 +19,8 @@ namespace Agents
         [SerializeField]
         private float _ThreatDetectionRadius = 10f;
         [SerializeField]
+        private float _SafetyDistance = 5f;
+        [SerializeField]
         private float _ThreatRadiusOffset = 3f;
         [SerializeField]
         private float _FleeAccelerationMultiplier = 1.6f;
@@ -35,7 +37,6 @@ namespace Agents
         [SerializeField]
         private float _FoodValue = 1f;
         
-        private int _fixedUpdateCounter;
         private bool Resting => CurrentState?.StateID == AnimalState.Sleep;
         private bool Fleeing => CurrentState?.StateID == AnimalState.Flee;
 
@@ -43,14 +44,12 @@ namespace Agents
         
         private IThreat<Wolf>[] _threats;
         
-        private StatsRecorder _statsRecorder;
-        
         public float TimeToEat => _TimeToEat;
         public event FoodEventHandler FoodDepleted = delegate {  };
         
-        private void HandleHunger()
+        protected override void HandleHunger()
         {
-            if (_fixedUpdateCounter % 50 == 0)
+            if (FixedUpdateCounter % 50 == 0)
             {
                 _Hunger.Value += _HungerPerSecond * (Resting ? 0.3f : 1f);
             }
@@ -58,24 +57,15 @@ namespace Agents
             if (!(_Hunger.Value >= _Hunger.MaxValue)) return;
             
             
-            //EndEpisode();
             OnDeath(DeathType.Starvation);
         }
 
-        private void HandleEnergy()
+        protected override void HandleEnergy()
         {
-            if (_fixedUpdateCounter % 50 == 0)
+            if (FixedUpdateCounter % 50 == 0)
             {
                 _Energy.Value += _EnergyPerSecond * (Fleeing ? _FleeEnergyMultiplier : 1f);
             }
-            
-
-            if (!(_Energy.Value <= _Energy.MinValue)) return;
-            
-            /*
-            SetReward(-1000f);
-            EndEpisode();
-            */
         }
         
         private void HandleCuriosity()
@@ -86,7 +76,7 @@ namespace Agents
                 return;
             }
             
-            if (_fixedUpdateCounter % 50 != 0) return;
+            if (FixedUpdateCounter % 50 != 0) return;
             {
                 _Curiosity.Value += _CuriosityPerSecond;
             }
@@ -94,7 +84,7 @@ namespace Agents
         
         private void HandleThreatDetection()
         {
-            if (_fixedUpdateCounter % _ThreatDetectionInterval != 0) return;
+            if (FixedUpdateCounter % _ThreatDetectionInterval != 0) return;
             DetectThreats();
         }
         
@@ -104,6 +94,11 @@ namespace Agents
             if (AvailableFood.Contains(food))
             {
                 AvailableFood[Array.IndexOf(AvailableFood, food as IDeerEdible)] = null;
+            }
+            
+            if (NearestFood == food)
+            {
+                NearestFood = null;
             }
         }
         
@@ -124,6 +119,8 @@ namespace Agents
             // play death animation
         }
 
+        public IAnimal GetAnimal() { return this;}
+
         private void DetectThreats()
         {
             var foundColliders = Physics.OverlapSphere(transform.position + new Vector3(0,0, _ThreatRadiusOffset), _ThreatDetectionRadius);
@@ -138,7 +135,7 @@ namespace Agents
 
             foreach (var foundThreat in foundThreats.Where(foundThreat => !_threats.Contains(foundThreat)))
             {
-                var availableIndex = Array.IndexOf(_threats, foundThreat);
+                var availableIndex = Array.IndexOf(_threats, null);
                 if (availableIndex == -1) break;
                 _threats[availableIndex] = foundThreat;
                 var wolfComponent = foundThreat.GetSelf().GetComponent<Wolf>();
@@ -148,7 +145,7 @@ namespace Agents
 
         private void OnWolfDied(AAnimal<IWolfEdible> animal, DeathType deathtype)
         {
-            _threats[Array.IndexOf(_threats, animal as IThreat<Wolf>)] = null;
+            _threats = _threats.Where(x => x != null && !x.Equals(null)).ToArray();
         }
 
     #region AnimalOverrides
@@ -181,7 +178,7 @@ namespace Agents
             }},
             {AnimalState.Flee, new AnimalStateInfo
             {
-                ValidTransitions = new List<AnimalState> {AnimalState.None, AnimalState.Idle}, ActionMap = new List<int> {8}
+                ValidTransitions = new List<AnimalState> {AnimalState.None, AnimalState.Idle}, ActionMap = new List<int> {8, 9, 10}
             }},
         };
     #endregion
@@ -190,17 +187,16 @@ namespace Agents
             
         public override void Initialize()
         {
+            LoadFromConfig(EnvironmentController.Instance.EnvironmentConfig.DeerConfig);
+
             base.Initialize();
-            _statsRecorder = Academy.Instance.StatsRecorder;
             
             _attributeAggregate = new AttributeAggregate(new List<AnimalAttribute> {_Hunger, _Energy});
             
             AvailableFood = new IDeerEdible[StateParams[AnimalState.Seek].ActionMap.Count];
             _threats = new IThreat<Wolf>[StateParams[AnimalState.Flee].ActionMap.Count];
             
-            _fixedUpdateCounter = 0;
-
-            LoadFromConfig(EnvironmentController.Instance.EnvironmentConfig.DeerConfig);
+            FixedUpdateCounter = 0;
         }
 
         protected override void LoadFromConfig(IAgentConfig config)
@@ -213,6 +209,7 @@ namespace Agents
             _FleeEnergyMultiplier = deerConfig.FleeEnergyMultiplier;
             _ThreatDetectionInterval = deerConfig.ThreatDetectionInterval;
             _ThreatRadiusOffset = deerConfig.ThreatRadiusOffset;
+            _SafetyDistance = deerConfig.SafeDistance;
         }
 
         public override void Heuristic(in ActionBuffers actionsOut)
@@ -230,7 +227,7 @@ namespace Agents
             sensor.AddObservation(_Hunger.Value);
             sensor.AddObservation(_Energy.Value);
             sensor.AddObservation(_Curiosity.Value);
-            sensor.AddObservation((int) CurrentState.StateID);
+            sensor.AddObservation(StateMemory.ToList());
 
             foreach (var food in AvailableFood)
             {
@@ -245,12 +242,24 @@ namespace Agents
             }
             foreach (var threat in _threats)
             {
-                if (threat == null) continue;
-                var threatPosition = threat.GetSelf().transform.localPosition;
+                if (threat == null || threat.Equals(null)) continue;
+                var self = threat?.GetSelf();
+                if (self == null)
+                {
+                    continue;
+                }
+
+                if (self.transform == null)
+                {
+                    continue;
+                }
+
+                var threatPosition = self.transform.localPosition;
                 var distanceToThreat = Vector3.Distance(transform.localPosition, threatPosition);
                 var threatObservation = new float[]
                 {
-                    distanceToThreat
+                    distanceToThreat,
+                    (float) threat.GetSelf().GetComponent<Wolf>().CurrentState.StateID
                 };
                 _ThreatSensor.AppendObservation(threatObservation);
             }
@@ -268,10 +277,11 @@ namespace Agents
                     SetState(new IdleState(this));
                     break;
                 case AnimalState.Wander:
-                    SetState(new WanderState(this, _MovementSpeed, _RotationSpeed, EnvironmentController.Instance.ArenaBounds));
+                    SetState(new WanderState(this, _RotationSpeed, EnvironmentController.Instance.ArenaBounds));
                     break;
                 case AnimalState.Seek:
-                    SetState(new SeekState(this, _MovementSpeed, _RotationSpeed, AvailableFood[actions.DiscreteActions[0] - StateParams[AnimalState.Seek].ActionMap.First()].GetSelf().transform.position));
+                    Debug.Log("Deer seeking food");
+                    SetState(new SeekState(this, _RotationSpeed, AvailableFood[actions.DiscreteActions[0] - StateParams[AnimalState.Seek].ActionMap.First()].GetSelf().transform.position));
                     break;
                 case AnimalState.Eat:
                     SetState(new EatState(this, NearestFood));
@@ -280,10 +290,15 @@ namespace Agents
                     SetState(new SleepState(this, _TimeToSleep));
                     break;
                 case AnimalState.Flee:
-                    SetState(new FleeState(this, _MovementSpeed, _FleeAccelerationMultiplier, _RotationSpeed, _threats[actions.DiscreteActions[0] - StateParams[AnimalState.Flee].ActionMap.First()].GetSelf().transform, _ThreatDetectionRadius, EnvironmentController.Instance.ArenaBounds));
+                    if (_threats[actions.DiscreteActions[0] - StateParams[AnimalState.Flee].ActionMap.First()] == null || _threats[actions.DiscreteActions[0] - StateParams[AnimalState.Flee].ActionMap.First()].Equals(null))
+                    {
+                        return;
+                    }
+                    SetState(new FleeState(this, _FleeAccelerationMultiplier, _RotationSpeed, _threats[actions.DiscreteActions[0] - StateParams[AnimalState.Flee].ActionMap.First()].GetSelf().transform, _SafetyDistance, EnvironmentController.Instance.ArenaBounds));
                     break;
                 default: throw new ArgumentOutOfRangeException();
             }
+            AddStateToMemory((int) CurrentState.StateID);
         }
         
         public override void WriteDiscreteActionMask(IDiscreteActionMask actionMask)
@@ -293,47 +308,58 @@ namespace Agents
                 actionMask.SetActionEnabled(0, i, false);
             }
             
-            if (CurrentState == null || CurrentState.StateID is AnimalState.Sleep)
+            if (CurrentState == null || CurrentState.StateID is AnimalState.Sleep or AnimalState.Eat)
             {
                 return;
             }
+
+            // If the agent is seeking and has enough energy, only available action is fleeing
+            if (CurrentState.StateID == AnimalState.Seek)
+            {
+                TryEnableFleeState(ref actionMask);
+                return;
+            }
             
+            // Check valid transitions from dict
             StateParams[CurrentState.StateID].ValidTransitions.ForEach(x => SetStateMask(ref actionMask, x));
             
+            // Disable sleep if energy is high
             if (_Energy.Value > 0.5f)
             {
                 MaskState(AnimalState.Sleep, ref actionMask, 0, false);
             }
             
+            // Disable eat if there is no food
             if (!CanEatAvailableFood(out NearestFood))
             {
                 MaskState(AnimalState.Eat, ref actionMask, 0, false);
             }
             
+            // Mask out seek if it was in valid transitions
             for (var i = StateParams[AnimalState.Seek].ActionMap.First(); i <= StateParams[AnimalState.Seek].ActionMap.Last(); i++)
             {
                 actionMask.SetActionEnabled(0, i, false);
             }
-            
-            if (CurrentState.StateID is not AnimalState.Eat and AnimalState.Seek)
+            if (CurrentState.StateID != AnimalState.Seek && CurrentState.StateID != AnimalState.Flee)
             {
-                MaskSeekState(ref actionMask);
+                TryEnableSeekState(ref actionMask);
             }
-         
+            
+            // Mask out flee if it was in valid transitions
             for (var i = StateParams[AnimalState.Flee].ActionMap.First(); i <= StateParams[AnimalState.Flee].ActionMap.Last(); i++)
             {
                 actionMask.SetActionEnabled(0, i, false);
             }
             
-            if (CurrentState.StateID is AnimalState.Flee || _Energy.Value < 0.3f)
+            if (CurrentState.StateID is AnimalState.Flee)
             {
                 return;
             }
             
-            MaskFleeState(ref actionMask);
+            TryEnableFleeState(ref actionMask);
         }
 
-        private void MaskFleeState(ref IDiscreteActionMask actionMask)
+        private void TryEnableFleeState(ref IDiscreteActionMask actionMask)
         {
             for (var i = StateParams[AnimalState.Flee].ActionMap.First(); i <= StateParams[AnimalState.Flee].ActionMap.Last(); i++)
             {
@@ -343,26 +369,15 @@ namespace Agents
     #endregion
         
     #region UnityEvents
-        private void FixedUpdate()
+        protected override void FixedUpdate()
         {
-            // reward distribution
-
-            CalculateClosestFood();
-            CurrentState?.Execute();
+            base.FixedUpdate();
             
-            _fixedUpdateCounter++;
-            
-            HandleLifeSpan();
-            HandleHunger();
-            HandleEnergy();
-            // HandleCuriosity();
             HandleThreatDetection();
             
-            if (_fixedUpdateCounter % 50 != 0) return;
+            if (FixedUpdateCounter % 50 != 0) return;
             var reward = _attributeAggregate.CalculateReward();
             AddReward(reward);
-            _statsRecorder.Add("Hunger", _Hunger.Value);
-            _statsRecorder.Add("Energy", _Energy.Value);
         }
 
         protected override void OnDrawGizmos()

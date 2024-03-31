@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 5956881229360786094}
   - component: {fileID: 197278023128598000}
   - component: {fileID: 2398579096913360385}
+  - component: {fileID: 4494839223870159157}
   - component: {fileID: -6481444930514237695}
   m_Layer: 0
   m_Name: Wolf
@@ -136,9 +137,11 @@ MonoBehaviour:
   MaxStep: 0
   _BehaviorParameters: {fileID: 197278023128598000}
   _AnimalRigidbody: {fileID: 197278023688713978}
-  _MovementSpeed: 40
+  _MovementSpeed: 60
   _AccelerationRate: 0.3
   _RotationSpeed: 1000
+  _ExhaustionThreshold: 0
+  _ExhaustionSlowdown: 0
   _Hunger:
     _MinValue: 0
     _MaxValue: 1
@@ -294,9 +297,12 @@ MonoBehaviour:
   _FoodSensor: {fileID: 2398579096913360385}
   _MaxLifeSpan: 180
   _MinLifeSpan: 120
+  _SpeciesSensor: {fileID: 0}
+  _PastStatesCount: 2
   _AttackRange: 2
   _PursueAccelMultiplier: 1.5
   _PursueEnergyMultiplier: 1.5
+  _ChaseCooldown: 5
 --- !u!114 &197278023128598000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -310,16 +316,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 3
+    VectorObservationSize: 2
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
-      BranchSizes: 06000000
-    VectorActionSize: 06000000
+      BranchSizes: 0a000000
+    VectorActionSize: 0a000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 0}
+  m_Model: {fileID: 5022602860645237092, guid: d680e27ad389c7d43bf3cba78ad2c23b, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: simple_wolf
@@ -340,7 +346,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SensorName: FoodBufferSensor
-  m_ObservableSize: 1
+  m_ObservableSize: 2
+  m_MaxNumObservables: 3
+--- !u!114 &4494839223870159157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197278023688713980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd8012d5925524537b27131fef517017, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SensorName: SpeciesSensor
+  m_ObservableSize: 2
   m_MaxNumObservables: 3
 --- !u!114 &-6481444930514237695
 MonoBehaviour:

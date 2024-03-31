@@ -2,6 +2,7 @@
 
 using Agents;
 using Environment;
+using Unity.MLAgents;
 
 namespace StateMachine.AnimalStates
 {
@@ -21,6 +22,10 @@ namespace StateMachine.AnimalStates
         public void Enter()
         {
             _animal.Acceleration = 0;
+            if (_animal is Agent agent)
+            {
+                agent.AddReward(EnvironmentController.Instance.EnvironmentConfig.AttackStateReward);
+            }
         }
 
         public void Execute()

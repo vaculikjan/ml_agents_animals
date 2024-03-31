@@ -1,0 +1,54 @@
+behaviors:
+  simple_deer:
+    trainer_type: poca
+    hyperparameters:
+      batch_size: 512           # Increased to handle the complexity of multi-agent interactions
+      buffer_size: 5120         # Larger to accumulate more experiences before updates
+      learning_rate: 3.0e-4
+      beta: 1.0e-3               # Adjusted for better exploration/exploitation balance
+      epsilon: 0.2
+      lambd: 0.95                # Slightly higher for better credit assignment over longer trajectories
+      num_epoch: 3               # Adjusted based on the larger batch size and buffer
+      learning_rate_schedule: constant
+      beta_schedule: constant
+      epsilon_schedule: linear
+    network_settings:
+      normalize: true            # Enable normalization for more stable learning
+      hidden_units: 256          # Increased capacity to learn the more complex value functions
+      num_layers: 2              # Additional layer for more complex function approximation
+    reward_signals:
+      extrinsic:
+        gamma: 0.95              # Higher gamma for valuing future rewards more, important in multi-agent settings
+        strength: 1.0
+    max_steps: 200000            # Increased training steps for more learning opportunities
+    time_horizon: 128            # Extended to better capture the outcomes of actions over time
+    summary_freq: 10000          # Adjusted interval for performance summaries
+    keep_checkpoints: 5          # Reduced to save space, adjust based on your needs
+    checkpoint_interval: 25000   # More frequent checkpoints
+
+  simple_wolf:
+    trainer_type: poca
+    hyperparameters:
+      batch_size: 512
+      buffer_size: 5120
+      learning_rate: 3.0e-4
+      beta: 1.0e-3
+      epsilon: 0.2
+      lambd: 0.95
+      num_epoch: 3
+      learning_rate_schedule: linear
+      beta_schedule: constant
+      epsilon_schedule: linear
+    network_settings:
+      normalize: true
+      hidden_units: 256
+      num_layers: 2
+    reward_signals:
+      extrinsic:
+        gamma: 0.95
+        strength: 1.0
+    max_steps: 200000
+    time_horizon: 128
+    summary_freq: 10000
+    keep_checkpoints: 5
+    checkpoint_interval: 25000

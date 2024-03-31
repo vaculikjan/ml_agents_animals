@@ -393,7 +393,7 @@ Transform:
   m_GameObject: {fileID: 1082943842}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -0.5, z: 0}
-  m_LocalScale: {x: 50, y: 50, z: 50}
+  m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1122459864}
@@ -433,8 +433,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _EnvironmentConfig: {fileID: 11400000, guid: 450f5b5b0ae90f549a33916ec5b7b158, type: 2}
   _ArenaBounds:
-    _Min: {x: -210, y: 0, z: -210}
-    _Max: {x: 210, y: 0, z: 210}
+    _Min: {x: -410, y: 0, z: -410}
+    _Max: {x: 410, y: 0, z: 410}
     _Color: {r: 0, g: 0, b: 0, a: 1}
   _FoodManager: {fileID: 1122459865}
   _DeerManager: {fileID: 1122459867}
@@ -468,11 +468,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _SpawnArea:
-    _Min: {x: -200, y: 0, z: -125}
-    _Max: {x: 200, y: 0, z: 125}
+    _Min: {x: -400, y: 0, z: -400}
+    _Max: {x: 400, y: 0, z: 400}
     _Color: {r: 0, g: 0, b: 1, a: 1}
   _Prefab: {fileID: 7194600598616901960, guid: a4492c829e35bed47a0e2924c66276df, type: 3}
-  _FoodCount: 10
+  _FoodCount: 100
 --- !u!114 &1122459866
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -491,6 +491,8 @@ MonoBehaviour:
     _Color: {r: 1, g: 0, b: 0, a: 1}
   _Prefab: {fileID: 5956881229360786094, guid: c3b905db6a149b842930f735eb0365b9, type: 3}
   _AgentsCount: 1
+  _minSpawnInterval: 0
+  _maxSpawnInterval: 0
 --- !u!114 &1122459867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -509,3 +511,5 @@ MonoBehaviour:
     _Color: {r: 0, g: 1, b: 0, a: 1}
   _Prefab: {fileID: 197278023688713977, guid: 3849a12ba839fe343b03d332662b9e39, type: 3}
   _AgentsCount: 1
+  _minSpawnInterval: 0
+  _maxSpawnInterval: 0

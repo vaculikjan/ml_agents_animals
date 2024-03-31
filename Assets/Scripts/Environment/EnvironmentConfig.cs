@@ -24,9 +24,19 @@ namespace Environment
         [SerializeField]
         private WolfConfig _WolfConfig;
         
+        [JsonProperty("flee_state_reward")]
+        [SerializeField]
+        private float _FleeStateReward;
+        
+        [JsonProperty("attack_state_reward")]
+        [SerializeField]
+        private float _AttackStateReward;
+        
         public string OutputPath => _OutputPath;
         public DeerConfig DeerConfig => _DeerConfig;
         public WolfConfig WolfConfig => _WolfConfig;
+        public float FleeStateReward => _FleeStateReward;
+        public float AttackStateReward => _AttackStateReward;
         
         public ILogData LogData()
         {
@@ -140,6 +150,45 @@ namespace Environment
         [SerializeField]
         private float _FleeEnergyMultiplier;
         
+        [JsonProperty("deer_detect_food_reward")]
+        [SerializeField]
+        private float _DetectFoodReward;
+        
+        [JsonProperty("deer_eat_food_reward")]
+        [SerializeField]
+        private float _EatFoodReward;
+        
+        [JsonProperty("deer_sleep_reward")]
+        [SerializeField]
+        private float _SleepReward;
+        
+        [JsonProperty("deer_starvation_reward")]
+        [SerializeField]
+        private float _StarvationReward;
+        
+        [JsonProperty("deer_natural_death_reward")]
+        [SerializeField]
+        private float _NaturalDeathReward;
+        
+        [JsonProperty("deer_eaten_reward")]
+        [SerializeField]
+        private float _EatenReward;
+        
+        [JsonProperty("_ExhaustionThreshold")]
+        [SerializeField]
+        private float _ExhaustionThreshold;
+        
+        [JsonProperty("_ExhaustionSlowdown")]  
+        [SerializeField]
+        private float _ExhaustionSlowdown;
+        
+        [JsonProperty("deer_safe_distance")]
+        [SerializeField]
+        private float _SafeDistance;
+        
+        [JsonProperty("deer_state_memory_size")]
+        [SerializeField]
+        private int _StateMemorySize;
         
         public int Count => _Count;
         public float MinSpawnTime => _MinSpawnTime;
@@ -170,6 +219,21 @@ namespace Environment
         public int ThreatDetectionInterval => _ThreatDetectionInterval;
         public float FleeAccelMultiplier => _FleeAccelMultiplier;
         public float FleeEnergyMultiplier => _FleeEnergyMultiplier;
+        
+        public float DetectFoodReward => _DetectFoodReward;
+        public float EatFoodReward => _EatFoodReward;
+        public float SleepReward => _SleepReward;
+        
+        public float StarvationReward => _StarvationReward;
+        public float NaturalDeathReward => _NaturalDeathReward;
+        public float EatenReward => _EatenReward;
+        
+        public float ExhaustionThreshold => _ExhaustionThreshold;
+        public float ExhaustionSlowdown => _ExhaustionSlowdown;
+        
+        public float SafeDistance => _SafeDistance;
+        
+        public int StateMemorySize => _StateMemorySize;
         
         public ILogData LogData()
         {
@@ -279,6 +343,42 @@ namespace Environment
         [SerializeField]
         private float _PursuitEnergyMultiplier;
         
+        [JsonProperty("wolf_detect_food_reward")]
+        [SerializeField]
+        private float _DetectFoodReward;
+        
+        [JsonProperty("wolf_eat_food_reward")]
+        [SerializeField]
+        private float _EatFoodReward;
+        
+        [JsonProperty("wolf_sleep_reward")]
+        [SerializeField]
+        private float _SleepReward;
+        
+        [JsonProperty("wolf_starvation_reward")]
+        [SerializeField]
+        private float _StarvationReward;
+        
+        [JsonProperty("wolf_natural_death_reward")]
+        [SerializeField]
+        private float _NaturalDeathReward;
+        
+        [JsonProperty("wolf_exhaustion_threshold")]
+        [SerializeField]
+        private float _ExhaustionThreshold;
+        
+        [JsonProperty("wolf_exhaustion_slowdown")]
+        [SerializeField]
+        private float _ExhaustionSlowdown;
+        
+        [JsonProperty("wolf_chase_cooldown")]
+        [SerializeField]
+        private float _ChaseCooldown;
+        
+        [JsonProperty("wolf_state_memory_size")]
+        [SerializeField]
+        private int _StateMemorySize;
+        
         public int Count => _Count;
         public float MinSpawnTime => _MinSpawnTime;
         public float MaxSpawnTime => _MaxSpawnTime;
@@ -306,6 +406,20 @@ namespace Environment
         public float AttackRange => _AttackRange;
         public float PursuitAccelMultiplier => _PursuitAccelMultiplier;
         public float PursuitEnergyMultiplier => _PursuitEnergyMultiplier;
+        
+        public float DetectFoodReward => _DetectFoodReward;
+        public float EatFoodReward => _EatFoodReward;
+        public float SleepReward => _SleepReward;
+        
+        public float StarvationReward => _StarvationReward;
+        public float NaturalDeathReward => _NaturalDeathReward;
+        
+        public float ExhaustionThreshold => _ExhaustionThreshold;
+        public float ExhaustionSlowdown => _ExhaustionSlowdown;
+        
+        public float ChaseCooldown => _ChaseCooldown;
+        
+        public int StateMemorySize => _StateMemorySize;
         
         public ILogData LogData()
         {
@@ -353,5 +467,17 @@ namespace Environment
         
         public float MaxLifeSpan { get; }
         public float MinLifeSpan { get; }
+        
+        public float DetectFoodReward { get; }
+        public float EatFoodReward { get; }
+        public float SleepReward { get; }
+        
+        public float StarvationReward { get; }
+        public float NaturalDeathReward { get; }
+        
+        public float ExhaustionThreshold { get; }
+        public float ExhaustionSlowdown { get; }
+        
+        public int StateMemorySize { get; }
     }
 }

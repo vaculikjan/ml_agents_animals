@@ -22,7 +22,7 @@ behaviors:
         gamma: 0.95  # A slightly lower gamma to balance short-term and long-term rewards
         strength: 1.0
     keep_checkpoints: 10  # Keeping more checkpoints for better progress tracking
-    max_steps: 100  # A higher max steps to allow more time for learning
+    max_steps: 1000000  # A higher max steps to allow more time for learning
     time_horizon: 64  # This should be sufficient for most tasks
     summary_freq: 10000  # Adjusting the frequency of summaries
 
@@ -49,6 +49,6 @@ behaviors:
         gamma: 0.95  # A slightly lower gamma to balance short-term and long-term rewards
         strength: 1.0
     keep_checkpoints: 10  # Keeping more checkpoints for better progress tracking
-    max_steps: 100  # A higher max steps to allow more time for learning
+    max_steps: 1000000  # A higher max steps to allow more time for learning
     time_horizon: 64  # This should be sufficient for most tasks
     summary_freq: 10000  # Adjusting the frequency of summaries

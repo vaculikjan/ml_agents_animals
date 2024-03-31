@@ -2,44 +2,44 @@
     "simple_wolf": {
         "checkpoints": [
             {
-                "steps": 101,
-                "file_path": "results\\new_test_run_0\\simple_wolf\\simple_wolf-101.onnx",
-                "reward": -1000.0,
-                "creation_time": 1708723059.499622,
+                "steps": 50023,
+                "file_path": "results\\new_test_run_0\\simple_wolf\\simple_wolf-50023.onnx",
+                "reward": null,
+                "creation_time": 1709406189.3851817,
                 "auxillary_file_paths": [
-                    "results\\new_test_run_0\\simple_wolf\\simple_wolf-101.pt"
+                    "results\\new_test_run_0\\simple_wolf\\simple_wolf-50023.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 101,
+            "steps": 50023,
             "file_path": "results\\new_test_run_0\\simple_wolf.onnx",
-            "reward": -1000.0,
-            "creation_time": 1708723059.499622,
+            "reward": null,
+            "creation_time": 1709406189.3851817,
             "auxillary_file_paths": [
-                "results\\new_test_run_0\\simple_wolf\\simple_wolf-101.pt"
+                "results\\new_test_run_0\\simple_wolf\\simple_wolf-50023.pt"
             ]
         }
     },
     "simple_deer": {
         "checkpoints": [
             {
-                "steps": 101,
-                "file_path": "results\\new_test_run_0\\simple_deer\\simple_deer-101.onnx",
-                "reward": -996.375,
-                "creation_time": 1708723059.588278,
+                "steps": 201866,
+                "file_path": "results\\new_test_run_0\\simple_deer\\simple_deer-201866.onnx",
+                "reward": -657.592559242184,
+                "creation_time": 1709406189.517446,
                 "auxillary_file_paths": [
-                    "results\\new_test_run_0\\simple_deer\\simple_deer-101.pt"
+                    "results\\new_test_run_0\\simple_deer\\simple_deer-201866.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 101,
+            "steps": 201866,
             "file_path": "results\\new_test_run_0\\simple_deer.onnx",
-            "reward": -996.375,
-            "creation_time": 1708723059.588278,
+            "reward": -657.592559242184,
+            "creation_time": 1709406189.517446,
             "auxillary_file_paths": [
-                "results\\new_test_run_0\\simple_deer\\simple_deer-101.pt"
+                "results\\new_test_run_0\\simple_deer\\simple_deer-201866.pt"
             ]
         }
     },

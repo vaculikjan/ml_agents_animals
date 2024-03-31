@@ -20,7 +20,6 @@ namespace StateMachine.AnimalStates
         
         private readonly IAnimal _animal;
         private readonly Transform _animalTransform;
-        private readonly float _moveSpeed;
         private readonly float _rotationSpeed;
         private readonly Vector3 _boundaryMin;
         private readonly Vector3 _boundaryMax;
@@ -31,11 +30,10 @@ namespace StateMachine.AnimalStates
         private bool _isWithinBoundary = true;
         private Vector3 _randomTargetPosition;
 
-        public WanderState(IAnimal animal, float moveSpeed, float rotationSpeed, Bounds boundary)
+        public WanderState(IAnimal animal,  float rotationSpeed, Bounds boundary)
         {
             _animal = animal;
             _animalTransform = animal.GetSelf().transform;
-            _moveSpeed = moveSpeed;
             _rotationSpeed = rotationSpeed;
 
             _boundaryMin = boundary.Min;
@@ -81,7 +79,7 @@ namespace StateMachine.AnimalStates
 
         private void HandleBoundary()
         {
-            var nextPosition = _animalTransform.position + _targetDirection * (_moveSpeed * Time.deltaTime);
+            var nextPosition = _animalTransform.position + _targetDirection * (_animal.MovementSpeed * Time.deltaTime);
 
             if (nextPosition.x < _boundaryMin.x || nextPosition.x > _boundaryMax.x ||
                 nextPosition.z < _boundaryMin.z || nextPosition.z > _boundaryMax.z)
@@ -110,7 +108,7 @@ namespace StateMachine.AnimalStates
 
         private void SetVelocity()
         {
-            _animal.AnimalRigidbody.velocity = _animalTransform.forward * (_moveSpeed * _animal.Acceleration);
+            _animal.AnimalRigidbody.velocity = _animalTransform.forward * (_animal.MovementSpeed * _animal.Acceleration);
         }
         
         private void HandleRandomTargetPosition()

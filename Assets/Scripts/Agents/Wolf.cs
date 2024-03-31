@@ -8,6 +8,7 @@ using Environment;
 using StateMachine.AnimalStates;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -22,13 +23,17 @@ namespace Agents
         private float _PursueAccelMultiplier;
         [SerializeField]
         private float _PursueEnergyMultiplier = 1.5f;
+        [SerializeField]
+        private float _ChaseCooldown = 5f;
         
-        private int _fixedUpdateCounter;
         private AttributeAggregate _attributeAggregate;
         private IEdible _foodToEat;
+        private IAnimal _targetFood;
 
         private bool Resting => CurrentState?.StateID == AnimalState.Sleep;
         private bool Pursuing => CurrentState?.StateID == AnimalState.Pursue;
+        
+        private float _currentChaseCooldown;
 
         protected override Dictionary<AnimalState, AnimalStateInfo> StateParams => new()
         {
@@ -46,11 +51,11 @@ namespace Agents
             }},
             {AnimalState.Seek, new AnimalStateInfo
             {
-                ValidTransitions = new List<AnimalState> {AnimalState.None, AnimalState.Idle, AnimalState.Eat, AnimalState.Pursue}, ActionMap = new List<int> {3}
+                ValidTransitions = new List<AnimalState> {AnimalState.None, AnimalState.Idle, AnimalState.Eat, AnimalState.Pursue}, ActionMap = new List<int> {3,4,5}
             }},
             {AnimalState.Pursue, new AnimalStateInfo
             {
-                ValidTransitions = new List<AnimalState> {AnimalState.None, AnimalState.Idle, AnimalState.Attack}, ActionMap = new List<int> {4}
+                ValidTransitions = new List<AnimalState> {AnimalState.None, AnimalState.Idle, AnimalState.Attack}, ActionMap = new List<int> {6,7,8}
             }},
             {AnimalState.Attack, new AnimalStateInfo
             {
@@ -62,7 +67,7 @@ namespace Agents
             }},
             {AnimalState.Sleep, new AnimalStateInfo
             {
-                ValidTransitions = new List<AnimalState> {AnimalState.None, AnimalState.Idle}, ActionMap = new List<int> {5}
+                ValidTransitions = new List<AnimalState> {AnimalState.None, AnimalState.Idle}, ActionMap = new List<int> {9}
             }},
         };
         
@@ -77,7 +82,7 @@ namespace Agents
                 if (foodComponent == null || deerComponent == null) continue;
                 if (FoodList.Contains(foodComponent)) continue;
                 
-                AddReward(5f);
+                AddReward(DetectFoodReward);
                 FoodList.Add(foodComponent);
                 
                 foodComponent.FoodDepleted += OnFoodDepleted;
@@ -106,20 +111,14 @@ namespace Agents
         }
 
     #region UnityEvents
-        private void FixedUpdate()
+        protected override void FixedUpdate()
         {
-            // reward distribution
-            
-            CalculateClosestFood();
-            CurrentState?.Execute();
-            
-            _fixedUpdateCounter++;
-            
-            HandleLifeSpan();
-            HandleHunger();
-            HandleEnergy();
-            
-            if (_fixedUpdateCounter % 50 != 0) return;
+            base.FixedUpdate();
+            if (_currentChaseCooldown >= 0)
+            {
+                _currentChaseCooldown -= Time.fixedDeltaTime;
+            }
+            if (FixedUpdateCounter % 50 != 0) return;
             var reward = _attributeAggregate.CalculateReward();
             AddReward(reward);
         }
@@ -135,15 +134,15 @@ namespace Agents
         
         public override void Initialize() 
         {
+            LoadFromConfig(EnvironmentController.Instance.EnvironmentConfig.WolfConfig);
+
             base.Initialize();
             
             _attributeAggregate = new AttributeAggregate(new List<AnimalAttribute> {_Hunger, _Energy});
             
             AvailableFood = new IWolfEdible[StateParams[AnimalState.Seek].ActionMap.Count];
             
-            _fixedUpdateCounter = 0;
-            
-            LoadFromConfig(EnvironmentController.Instance.EnvironmentConfig.WolfConfig);
+            FixedUpdateCounter = 0;
         }
 
         protected override void LoadFromConfig(IAgentConfig config)
@@ -155,6 +154,7 @@ namespace Agents
             _AttackRange = wolfConfig.AttackRange;
             _PursueAccelMultiplier = wolfConfig.PursuitAccelMultiplier;
             _PursueEnergyMultiplier = wolfConfig.PursuitEnergyMultiplier;
+            _ChaseCooldown = wolfConfig.ChaseCooldown;
         }
 
         public override void Heuristic(in ActionBuffers actionsOut)
@@ -169,7 +169,7 @@ namespace Agents
         {
             sensor.AddObservation(_Hunger.Value);
             sensor.AddObservation(_Energy.Value);
-            sensor.AddObservation((int) CurrentState.StateID);
+            sensor.AddObservation(StateMemory.ToList());
 
             foreach (var food in AvailableFood)
             {
@@ -180,7 +180,8 @@ namespace Agents
                 var distanceToFood = Vector3.Distance(transform.localPosition, foodObject.transform.localPosition);
                 var foodObservation = new float[]
                 {
-                    distanceToFood
+                    distanceToFood,
+                    (float) foodObject.GetComponent<Deer>().CurrentState.StateID
                 };
                 _FoodSensor.AppendObservation(foodObservation);
             }
@@ -195,19 +196,26 @@ namespace Agents
                 case AnimalState.None:
                     return;
                 case AnimalState.Idle: SetState(new IdleState(this));
+                    _targetFood = null;
                     break;
-                case AnimalState.Wander: SetState(new WanderState(this, _MovementSpeed, _RotationSpeed, EnvironmentController.Instance.ArenaBounds));
+                case AnimalState.Wander: SetState(new WanderState(this, _RotationSpeed, EnvironmentController.Instance.ArenaBounds));
+                    _targetFood = null;
                     break;
-                case AnimalState.Seek: SetState(new SeekState(this, _MovementSpeed, _RotationSpeed, AvailableFood[0].GetSelf().transform.position));
+                case AnimalState.Seek: SetState(new SeekState(this, _RotationSpeed, AvailableFood[actions.DiscreteActions[0] - StateParams[AnimalState.Seek].ActionMap.First()].GetSelf().transform.position));
+                    _targetFood = AvailableFood[actions.DiscreteActions[0] - StateParams[AnimalState.Seek].ActionMap.First()].GetAnimal();
                     break;
-                case AnimalState.Pursue: SetState(new PursueState(this, _MovementSpeed,_PursueAccelMultiplier, _RotationSpeed, AvailableFood[0], 2f, _AttackRange));
+                case AnimalState.Pursue: SetState(new PursueState(this, _PursueAccelMultiplier, _RotationSpeed, AvailableFood[actions.DiscreteActions[0] - StateParams[AnimalState.Pursue].ActionMap.First()], 2f, _AttackRange));
+                    _targetFood = AvailableFood[actions.DiscreteActions[0] - StateParams[AnimalState.Pursue].ActionMap.First()].GetAnimal();
                     break;
                 case AnimalState.Eat: SetState(new EatState(this, _foodToEat));
+                    _targetFood = null;
                     break;
                 case AnimalState.Sleep: SetState(new SleepState(this, _TimeToSleep));
+                    _targetFood = null;
                     break;
                 default: throw new ArgumentOutOfRangeException();
             }
+            AddStateToMemory((int) CurrentState.StateID);
         }
         
         public override void WriteDiscreteActionMask(IDiscreteActionMask actionMask)
@@ -248,51 +256,43 @@ namespace Agents
             {
                 return;
             }
-
-            if (Energy.Value > 0.2f)
-            {
-                MaskPursueState(ref actionMask);
-            }
+            
+            if (_currentChaseCooldown < 0)
+                TryEnablePursueState(ref actionMask);
 
             if (CurrentState.StateID is AnimalState.Seek)
             {
                 return;
             }
-            
-            MaskSeekState(ref actionMask);
+            if (_currentChaseCooldown < 0)
+                TryEnableSeekState(ref actionMask);
         }
         
     #endregion
 
-        private void HandleHunger()
+        protected override void HandleHunger()
         {
             
-            if (_fixedUpdateCounter % 50 == 0)
+            if (FixedUpdateCounter % 50 == 0)
             {
-                _Hunger.Value += _HungerPerSecond * (Resting ? 0.2f : 1f);
+                _Hunger.Value += _HungerPerSecond * (Resting ? 0.3f : 1f);
             }
 
             if (!(_Hunger.Value >= _Hunger.MaxValue)) return;
             
-            // EndEpisode();
             OnDeath(DeathType.Starvation);
         }
 
-        private void HandleEnergy()
+        protected override void HandleEnergy()
         {
             
-            if (_fixedUpdateCounter % 50 == 0)
+            if (FixedUpdateCounter % 50 == 0)
             {
                 _Energy.Value += _EnergyPerSecond * (Pursuing ? _PursueEnergyMultiplier : 1f);
             }
             
 
             if (!(_Energy.Value <= _Energy.MinValue)) return;
-            
-            /*
-            SetReward(-1000f);
-            EndEpisode();
-            */
         }
         
         protected override void OnFoodDepleted(IEdible food)             
@@ -312,7 +312,7 @@ namespace Agents
             }
         }
         
-        private void MaskPursueState(ref IDiscreteActionMask actionMask)
+        private void TryEnablePursueState(ref IDiscreteActionMask actionMask)
         {
             for (var i = StateParams[AnimalState.Pursue].ActionMap.First(); i <= StateParams[AnimalState.Pursue].ActionMap.Last(); i++)
             {
@@ -329,6 +329,15 @@ namespace Agents
                 AnimalState.Seek => Random.Range(0, 100) < 40,
                 _ => Random.Range(0, 100) < 25
             };
+        }
+        
+        public void MarkEndChase(IAnimal animal)
+        {
+            if (_targetFood == null || animal != _targetFood ) return;
+
+            SetState(new IdleState(this));
+            _currentChaseCooldown = _ChaseCooldown;
+            Debug.Log("Prey escaped");
         }
     }
 }

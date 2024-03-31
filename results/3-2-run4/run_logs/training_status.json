@@ -1,0 +1,105 @@
+{
+    "simple_deer": {
+        "checkpoints": [
+            {
+                "steps": 499988,
+                "file_path": "results\\3-2-run4\\simple_deer\\simple_deer-499988.onnx",
+                "reward": null,
+                "creation_time": 1709412575.2942808,
+                "auxillary_file_paths": [
+                    "results\\3-2-run4\\simple_deer\\simple_deer-499988.pt"
+                ]
+            },
+            {
+                "steps": 999954,
+                "file_path": "results\\3-2-run4\\simple_deer\\simple_deer-999954.onnx",
+                "reward": null,
+                "creation_time": 1709415722.4803305,
+                "auxillary_file_paths": [
+                    "results\\3-2-run4\\simple_deer\\simple_deer-999954.pt"
+                ]
+            },
+            {
+                "steps": 1499993,
+                "file_path": "results\\3-2-run4\\simple_deer\\simple_deer-1499993.onnx",
+                "reward": -985.8735685662557,
+                "creation_time": 1709417758.8677819,
+                "auxillary_file_paths": [
+                    "results\\3-2-run4\\simple_deer\\simple_deer-1499993.pt"
+                ]
+            },
+            {
+                "steps": 1999944,
+                "file_path": "results\\3-2-run4\\simple_deer\\simple_deer-1999944.onnx",
+                "reward": -968.1854938225315,
+                "creation_time": 1709419886.773647,
+                "auxillary_file_paths": [
+                    "results\\3-2-run4\\simple_deer\\simple_deer-1999944.pt"
+                ]
+            },
+            {
+                "steps": 2197912,
+                "file_path": "results\\3-2-run4\\simple_deer\\simple_deer-2197912.onnx",
+                "reward": -951.1911032522128,
+                "creation_time": 1709420779.8415983,
+                "auxillary_file_paths": [
+                    "results\\3-2-run4\\simple_deer\\simple_deer-2197912.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 2197912,
+            "file_path": "results\\3-2-run4\\simple_deer.onnx",
+            "reward": -951.1911032522128,
+            "creation_time": 1709420779.8415983,
+            "auxillary_file_paths": [
+                "results\\3-2-run4\\simple_deer\\simple_deer-2197912.pt"
+            ]
+        }
+    },
+    "simple_wolf": {
+        "checkpoints": [
+            {
+                "steps": 499976,
+                "file_path": "results\\3-2-run4\\simple_wolf\\simple_wolf-499976.onnx",
+                "reward": null,
+                "creation_time": 1709416142.763633,
+                "auxillary_file_paths": [
+                    "results\\3-2-run4\\simple_wolf\\simple_wolf-499976.pt"
+                ]
+            },
+            {
+                "steps": 999993,
+                "file_path": "results\\3-2-run4\\simple_wolf\\simple_wolf-999993.onnx",
+                "reward": null,
+                "creation_time": 1709420779.6648264,
+                "auxillary_file_paths": [
+                    "results\\3-2-run4\\simple_wolf\\simple_wolf-999993.pt"
+                ]
+            },
+            {
+                "steps": 1000057,
+                "file_path": "results\\3-2-run4\\simple_wolf\\simple_wolf-1000057.onnx",
+                "reward": null,
+                "creation_time": 1709420779.7429655,
+                "auxillary_file_paths": [
+                    "results\\3-2-run4\\simple_wolf\\simple_wolf-1000057.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1000057,
+            "file_path": "results\\3-2-run4\\simple_wolf.onnx",
+            "reward": null,
+            "creation_time": 1709420779.7429655,
+            "auxillary_file_paths": [
+                "results\\3-2-run4\\simple_wolf\\simple_wolf-1000057.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.1.1+cpu"
+    }
+}

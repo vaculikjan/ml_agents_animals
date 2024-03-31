@@ -10,7 +10,6 @@ namespace StateMachine.AnimalStates
     {
         private readonly IAnimal _animal;
         private readonly Transform _animalTransform;
-        private readonly float _moveSpeed;
         private readonly float _pursuitAccelMultiplier;
         private readonly float _rotationSpeed;
         private readonly IAttackableEdible _target;
@@ -21,11 +20,10 @@ namespace StateMachine.AnimalStates
         private float _pursuitTimer;
         private bool _hasReachedTarget;
 
-        public PursueState(IAnimal animal, float moveSpeed, float pursueAccelMultiplier, float rotationSpeed, IAttackableEdible target, float pursuitDuration, float attackRange)
+        public PursueState(IAnimal animal, float pursueAccelMultiplier, float rotationSpeed, IAttackableEdible target, float pursuitDuration, float attackRange)
         {
             _animal = animal;
             _animalTransform = animal.GetSelf().transform;
-            _moveSpeed = moveSpeed;
             _pursuitAccelMultiplier = pursueAccelMultiplier;
             _rotationSpeed = rotationSpeed;
             _target = target;
@@ -88,7 +86,7 @@ namespace StateMachine.AnimalStates
             _animal.AnimalRigidbody.MoveRotation(rotation);
         }
 
-        private void MoveTowardsTarget() { _animal.AnimalRigidbody.velocity = _animalTransform.forward * (_moveSpeed * _animal.Acceleration); }
+        private void MoveTowardsTarget() { _animal.AnimalRigidbody.velocity = _animalTransform.forward * (_animal.MovementSpeed * _animal.Acceleration); }
 
         private void CheckIfReachedTarget()
         {

@@ -34,6 +34,7 @@ namespace Environment
         public EnvironmentConfig EnvironmentConfig => _EnvironmentConfig;
         public Bounds ArenaBounds => _ArenaBounds;
         private string _environmentConfigPath;
+        public string EnvironmentConfigPath => _environmentConfigPath;
 
         private void Awake()
         {
@@ -97,19 +98,15 @@ namespace Environment
             _WolvesManager.Initialize(_EnvironmentConfig.WolfConfig);
         }
         
-        private static void AddDataItem(ILogData dataItem, Dictionary<string, List<ILogData>> dataItemsByType)
+        private static void AddDataItem(ILogData dataItem, Dictionary<string, ILogData> dataItemsByType)
         {
             var typeName = dataItem.GetType().Name;
-            if (!dataItemsByType.ContainsKey(typeName))
-            {
-                dataItemsByType[typeName] = new List<ILogData>();
-            }
-            dataItemsByType[typeName].Add(dataItem);
+            dataItemsByType.TryAdd(typeName, dataItem);
         }
 
         private void OnApplicationQuit()
         { 
-            var data = new Dictionary<string, List<ILogData>>();
+            var data = new Dictionary<string, ILogData>();
             AddDataItem(_DeerManager.LogData(), data);
             AddDataItem(_WolvesManager.LogData(), data);
             AddDataItem(_EnvironmentConfig.LogData(), data);

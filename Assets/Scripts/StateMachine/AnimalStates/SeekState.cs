@@ -19,11 +19,10 @@ namespace StateMachine.AnimalStates
         private InternalState _currentInternalState = InternalState.Turning;
         private bool _hasReachedTarget;
 
-        public SeekState(IAnimal animal, float moveSpeed, float rotationSpeed, Vector3 targetPosition)
+        public SeekState(IAnimal animal, float rotationSpeed, Vector3 targetPosition)
         {
             _animal = animal;
             _animalTransform = animal.GetSelf().transform;
-            _moveSpeed = moveSpeed;
             _rotationSpeed = rotationSpeed;
             _targetPosition = targetPosition;
         }
@@ -72,7 +71,7 @@ namespace StateMachine.AnimalStates
             _animal.AnimalRigidbody.MoveRotation(rotation);
         }
 
-        private void MoveTowardsTarget() { _animal.AnimalRigidbody.velocity = _animalTransform.forward * (_moveSpeed * _animal.Acceleration); }
+        private void MoveTowardsTarget() { _animal.AnimalRigidbody.velocity = _animalTransform.forward * (_animal.MovementSpeed * _animal.Acceleration); }
 
         private void CheckAlignment()
         {
@@ -91,6 +90,7 @@ namespace StateMachine.AnimalStates
             
             _hasReachedTarget = true;
             _animal.AnimalRigidbody.velocity = Vector3.zero;
+            
         }
 
         private enum InternalState

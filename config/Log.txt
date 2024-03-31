@@ -51,3 +51,7 @@ WolfTests - testing whether wolf learns to eat the deer (he did)
 
 -- -- 
 sim_test1 - give deer the capability to run away and thest their first interactions
+
+3/24/2024 - added chase cooldown
+3_24_ppo3 - seems promising
+

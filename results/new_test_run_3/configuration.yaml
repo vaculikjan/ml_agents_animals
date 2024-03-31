@@ -36,7 +36,7 @@ behaviors:
     init_path: null
     keep_checkpoints: 10
     checkpoint_interval: 500000
-    max_steps: 100
+    max_steps: 50000
     time_horizon: 64
     summary_freq: 10000
     threaded: false
@@ -78,7 +78,7 @@ behaviors:
     init_path: null
     keep_checkpoints: 10
     checkpoint_interval: 500000
-    max_steps: 100
+    max_steps: 50000
     time_horizon: 64
     summary_freq: 10000
     threaded: false

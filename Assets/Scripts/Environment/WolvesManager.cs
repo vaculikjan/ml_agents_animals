@@ -1,7 +1,10 @@
 // Author: Jan Vaculik
 
+using System;
+using System.IO;
 using Agents;
 using TrainingUtils;
+using UnityEngine;
 
 namespace Environment
 {
@@ -9,33 +12,46 @@ namespace Environment
     {
         public override Wolf Spawn()
         {
-            var deer = base.Spawn();
-            deer.Died += OnWolfDied;
-            return deer;
+            var wolf = base.Spawn();
+            wolf.Died += OnWolfDied;
+            return wolf;
         }
 
         private void OnWolfDied(AAnimal<IWolfEdible> animal, DeathType deathtype)
         {
             LogLifespanOnDeath(animal.TimeLiving, animal.CurrentLifeSpan);
-            
+
+            var logMessage = $"Wolf died: {deathtype} - {animal.TimeLiving} - Timestamp: {DateTime.UtcNow}";
+    
+            var directoryPath = string.IsNullOrEmpty(EnvironmentController.Instance.EnvironmentConfigPath) 
+                ? Application.persistentDataPath 
+                : Path.GetDirectoryName(EnvironmentController.Instance.EnvironmentConfigPath);
+            if (directoryPath != null)
+            {
+                var logFilePath = Path.Combine(directoryPath, "deathLogs.txt");
+    
+                LogToFileAsync(logMessage, logFilePath);
+            }
+
             switch (deathtype)
             {
                 case DeathType.Fatigue:
                     break;
                 case DeathType.Starvation:
-                    animal.SetReward(-1000f);
+                    animal.AddReward(_StarvationReward);
                     break;
                 case DeathType.Natural:
                     break;
-                default:
-                    break;
             }
-            
+    
+            animal.AddReward(animal.TimeLiving / animal.CurrentLifeSpan * _NaturalDeathReward);
+            Debug.Log($"Wolf died: {deathtype} - {animal.TimeLiving}");
+    
             if (Agents.Contains(animal as Wolf))
                 Agents.Remove(animal as Wolf);
-            
+    
             Destroy(animal.gameObject);
-            
+    
             if (Agents.Count == 0)
                 SpawnAgent();
         }

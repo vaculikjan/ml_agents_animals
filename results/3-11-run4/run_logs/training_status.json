@@ -1,0 +1,105 @@
+{
+    "simple_deer": {
+        "checkpoints": [
+            {
+                "steps": 499983,
+                "file_path": "results\\3-11-run4\\simple_deer\\simple_deer-499983.onnx",
+                "reward": null,
+                "creation_time": 1710200278.9794962,
+                "auxillary_file_paths": [
+                    "results\\3-11-run4\\simple_deer\\simple_deer-499983.pt"
+                ]
+            },
+            {
+                "steps": 999995,
+                "file_path": "results\\3-11-run4\\simple_deer\\simple_deer-999995.onnx",
+                "reward": null,
+                "creation_time": 1710203613.4477744,
+                "auxillary_file_paths": [
+                    "results\\3-11-run4\\simple_deer\\simple_deer-999995.pt"
+                ]
+            },
+            {
+                "steps": 1499978,
+                "file_path": "results\\3-11-run4\\simple_deer\\simple_deer-1499978.onnx",
+                "reward": 94.88180810548492,
+                "creation_time": 1710205655.1789138,
+                "auxillary_file_paths": [
+                    "results\\3-11-run4\\simple_deer\\simple_deer-1499978.pt"
+                ]
+            },
+            {
+                "steps": 1999983,
+                "file_path": "results\\3-11-run4\\simple_deer\\simple_deer-1999983.onnx",
+                "reward": 95.19679425822451,
+                "creation_time": 1710207723.1209958,
+                "auxillary_file_paths": [
+                    "results\\3-11-run4\\simple_deer\\simple_deer-1999983.pt"
+                ]
+            },
+            {
+                "steps": 2040911,
+                "file_path": "results\\3-11-run4\\simple_deer\\simple_deer-2040911.onnx",
+                "reward": 94.346230411993,
+                "creation_time": 1710207892.306559,
+                "auxillary_file_paths": [
+                    "results\\3-11-run4\\simple_deer\\simple_deer-2040911.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 2040911,
+            "file_path": "results\\3-11-run4\\simple_deer.onnx",
+            "reward": 94.346230411993,
+            "creation_time": 1710207892.306559,
+            "auxillary_file_paths": [
+                "results\\3-11-run4\\simple_deer\\simple_deer-2040911.pt"
+            ]
+        }
+    },
+    "simple_wolf": {
+        "checkpoints": [
+            {
+                "steps": 499999,
+                "file_path": "results\\3-11-run4\\simple_wolf\\simple_wolf-499999.onnx",
+                "reward": null,
+                "creation_time": 1710203573.852918,
+                "auxillary_file_paths": [
+                    "results\\3-11-run4\\simple_wolf\\simple_wolf-499999.pt"
+                ]
+            },
+            {
+                "steps": 999954,
+                "file_path": "results\\3-11-run4\\simple_wolf\\simple_wolf-999954.onnx",
+                "reward": null,
+                "creation_time": 1710207892.1220636,
+                "auxillary_file_paths": [
+                    "results\\3-11-run4\\simple_wolf\\simple_wolf-999954.pt"
+                ]
+            },
+            {
+                "steps": 1000018,
+                "file_path": "results\\3-11-run4\\simple_wolf\\simple_wolf-1000018.onnx",
+                "reward": null,
+                "creation_time": 1710207892.2011209,
+                "auxillary_file_paths": [
+                    "results\\3-11-run4\\simple_wolf\\simple_wolf-1000018.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1000018,
+            "file_path": "results\\3-11-run4\\simple_wolf.onnx",
+            "reward": null,
+            "creation_time": 1710207892.2011209,
+            "auxillary_file_paths": [
+                "results\\3-11-run4\\simple_wolf\\simple_wolf-1000018.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.1.1+cpu"
+    }
+}

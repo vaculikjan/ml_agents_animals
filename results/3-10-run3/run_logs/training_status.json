@@ -1,0 +1,96 @@
+{
+    "simple_deer": {
+        "checkpoints": [
+            {
+                "steps": 499960,
+                "file_path": "results\\3-10-run3\\simple_deer\\simple_deer-499960.onnx",
+                "reward": null,
+                "creation_time": 1710108108.8157544,
+                "auxillary_file_paths": [
+                    "results\\3-10-run3\\simple_deer\\simple_deer-499960.pt"
+                ]
+            },
+            {
+                "steps": 999993,
+                "file_path": "results\\3-10-run3\\simple_deer\\simple_deer-999993.onnx",
+                "reward": null,
+                "creation_time": 1710111478.2939963,
+                "auxillary_file_paths": [
+                    "results\\3-10-run3\\simple_deer\\simple_deer-999993.pt"
+                ]
+            },
+            {
+                "steps": 1499948,
+                "file_path": "results\\3-10-run3\\simple_deer\\simple_deer-1499948.onnx",
+                "reward": -73.0145707464228,
+                "creation_time": 1710113730.2575457,
+                "auxillary_file_paths": [
+                    "results\\3-10-run3\\simple_deer\\simple_deer-1499948.pt"
+                ]
+            },
+            {
+                "steps": 1909689,
+                "file_path": "results\\3-10-run3\\simple_deer\\simple_deer-1909689.onnx",
+                "reward": -82.29873359909949,
+                "creation_time": 1710115794.8143384,
+                "auxillary_file_paths": [
+                    "results\\3-10-run3\\simple_deer\\simple_deer-1909689.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1909689,
+            "file_path": "results\\3-10-run3\\simple_deer.onnx",
+            "reward": -82.29873359909949,
+            "creation_time": 1710115794.8143384,
+            "auxillary_file_paths": [
+                "results\\3-10-run3\\simple_deer\\simple_deer-1909689.pt"
+            ]
+        }
+    },
+    "simple_wolf": {
+        "checkpoints": [
+            {
+                "steps": 499989,
+                "file_path": "results\\3-10-run3\\simple_wolf\\simple_wolf-499989.onnx",
+                "reward": null,
+                "creation_time": 1710111702.910158,
+                "auxillary_file_paths": [
+                    "results\\3-10-run3\\simple_wolf\\simple_wolf-499989.pt"
+                ]
+            },
+            {
+                "steps": 999956,
+                "file_path": "results\\3-10-run3\\simple_wolf\\simple_wolf-999956.onnx",
+                "reward": null,
+                "creation_time": 1710115794.7216787,
+                "auxillary_file_paths": [
+                    "results\\3-10-run3\\simple_wolf\\simple_wolf-999956.pt"
+                ]
+            },
+            {
+                "steps": 1000020,
+                "file_path": "results\\3-10-run3\\simple_wolf\\simple_wolf-1000020.onnx",
+                "reward": null,
+                "creation_time": 1710115794.8948328,
+                "auxillary_file_paths": [
+                    "results\\3-10-run3\\simple_wolf\\simple_wolf-1000020.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1000020,
+            "file_path": "results\\3-10-run3\\simple_wolf.onnx",
+            "reward": null,
+            "creation_time": 1710115794.8948328,
+            "auxillary_file_paths": [
+                "results\\3-10-run3\\simple_wolf\\simple_wolf-1000020.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.1.1+cpu"
+    }
+}

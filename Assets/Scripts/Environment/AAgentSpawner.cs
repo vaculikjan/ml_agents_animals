@@ -2,9 +2,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using TrainingUtils;
 using Unity.MLAgents;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Environment
 {
@@ -13,9 +15,13 @@ namespace Environment
         [SerializeField]
         private int _AgentsCount;
         [SerializeField]
-        private float _minSpawnInterval;
+        private float _MinSpawnInterval;
         [SerializeField]
-        private float _maxSpawnInterval;
+        private float _MaxSpawnInterval;
+        [SerializeField]
+        protected float _StarvationReward;
+        [SerializeField]
+        protected float _NaturalDeathReward;
 
         protected readonly List<T> Agents = new();
 
@@ -25,7 +31,7 @@ namespace Environment
         private float _lastLifespan;
         private float _lastMaxLifespan;
         
-        private float SpawnInterval => UnityEngine.Random.Range(_minSpawnInterval, _maxSpawnInterval);
+        private float SpawnInterval => UnityEngine.Random.Range(_MinSpawnInterval, _MaxSpawnInterval);
         private float _timeToSpawn;
 
         public void ResetAgents()
@@ -76,11 +82,27 @@ namespace Environment
             }
         }
         
-        public void Initialize(IAgentConfig agentConfig)
+        public virtual void Initialize(IAgentConfig agentConfig)
         {
             _AgentsCount = agentConfig.Count;
-            _minSpawnInterval = agentConfig.MinSpawnTime;
-            _maxSpawnInterval = agentConfig.MaxSpawnTime;
+            _MinSpawnInterval = agentConfig.MinSpawnTime;
+            _MaxSpawnInterval = agentConfig.MaxSpawnTime;
+            _StarvationReward = agentConfig.StarvationReward;
+            _NaturalDeathReward = agentConfig.NaturalDeathReward;
         }
+        
+        protected async void LogToFileAsync(string logMessage, string filePath)
+        {
+            try
+            {
+                await using StreamWriter streamWriter = File.AppendText(filePath);
+                await streamWriter.WriteLineAsync(logMessage);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Failed to log data: {ex.Message}");
+            }
+        }
+
     }
 }

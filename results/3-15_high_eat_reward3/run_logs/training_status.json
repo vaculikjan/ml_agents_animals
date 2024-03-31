@@ -1,0 +1,29 @@
+{
+    "simple_wolf": {
+        "checkpoints": [
+            {
+                "steps": 8926,
+                "file_path": "results\\3-15_high_eat_reward3\\simple_wolf\\simple_wolf-8926.onnx",
+                "reward": 9361.124184759763,
+                "creation_time": 1710536750.5927207,
+                "auxillary_file_paths": [
+                    "results\\3-15_high_eat_reward3\\simple_wolf\\simple_wolf-8926.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 8926,
+            "file_path": "results\\3-15_high_eat_reward3\\simple_wolf.onnx",
+            "reward": 9361.124184759763,
+            "creation_time": 1710536750.5927207,
+            "auxillary_file_paths": [
+                "results\\3-15_high_eat_reward3\\simple_wolf\\simple_wolf-8926.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.1.1+cpu"
+    }
+}

@@ -1,4 +1,6 @@
 using Agents;
+using Environment;
+using Unity.MLAgents;
 using UnityEngine;
 using Bounds = Environment.Bounds;
 
@@ -8,7 +10,6 @@ namespace StateMachine.AnimalStates
     {
         private readonly IAnimal _animal;
         private readonly Transform _animalTransform;
-        private readonly float _moveSpeed;
         private readonly float _accelMultiplier;
         private readonly float _rotationSpeed;
         private readonly Transform _threatTransform;
@@ -17,11 +18,10 @@ namespace StateMachine.AnimalStates
         private readonly float _safeDistance;
         private bool _isSafe;
 
-        public FleeState(IAnimal animal, float moveSpeed, float accelMultiplier, float rotationSpeed, Transform threatTransform, float safeDistance, Bounds boundary)
+        public FleeState(IAnimal animal, float accelMultiplier, float rotationSpeed, Transform threatTransform, float safeDistance, Bounds boundary)
         {
             _animal = animal;
             _animalTransform = animal.GetSelf().transform;
-            _moveSpeed = moveSpeed;
             _accelMultiplier = accelMultiplier;
             _rotationSpeed = rotationSpeed;
             _threatTransform = threatTransform;
@@ -55,12 +55,23 @@ namespace StateMachine.AnimalStates
         {
             _animal.AnimalRigidbody.velocity = Vector3.zero; 
             _animal.MaxAcceleration = 1;
+            
+            if (_animal is Agent agent)
+            {
+                agent.AddReward(EnvironmentController.Instance.EnvironmentConfig.FleeStateReward);
+            }
         }
 
         public bool CanExit() { return true; }
 
         private void RotateAwayFromThreat()
         {
+            if (!_threatTransform || _threatTransform.Equals(null))
+            {
+                _isSafe = true;
+                return;
+            }
+            
             var directionAwayFromThreat = (_animalTransform.position - _threatTransform.position).normalized;
             var flatDirectionAwayFromThreat = new Vector3(directionAwayFromThreat.x, 0, directionAwayFromThreat.z);
             var targetRotation = Quaternion.LookRotation(flatDirectionAwayFromThreat, Vector3.up);
@@ -69,20 +80,34 @@ namespace StateMachine.AnimalStates
             _animal.AnimalRigidbody.MoveRotation(rotation);
         }
 
-        private void MoveAwayFromThreat() { _animal.AnimalRigidbody.velocity = _animalTransform.forward * (_moveSpeed * _animal.Acceleration); }
+        private void MoveAwayFromThreat() { _animal.AnimalRigidbody.velocity = _animalTransform.forward * (_animal.MovementSpeed * _animal.Acceleration); }
 
         private void CheckIfSafe()
         {
+            if (!_threatTransform || _threatTransform.Equals(null))
+            {
+                _isSafe = true;
+                return;
+            }
+            
             var distanceToThreat = Vector3.Distance(_animalTransform.position, _threatTransform.position);
             
             if (!(distanceToThreat >= _safeDistance)) return;
+            
             _isSafe = true;
+            
             _animal.AnimalRigidbody.velocity = Vector3.zero;
+            var wolf = _threatTransform.GetComponent<Wolf>();
+            
+            if (wolf)
+            {
+                wolf.MarkEndChase(_animal);
+            }
         }
         
         private void CheckBounds()
         {
-            if (_boundary.Contains(_animalTransform.position)) return;
+            if (_boundary.Contains(_animalTransform.position) || !_threatTransform || _threatTransform.Equals(null)) return;
 
             var position = _animalTransform.position;
             var closestPointOnBoundary = _boundary.ClosestPoint(position);

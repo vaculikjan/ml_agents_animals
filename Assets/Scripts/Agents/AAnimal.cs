@@ -9,6 +9,7 @@ using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Policies;
 using Unity.MLAgents.Sensors;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -29,6 +30,10 @@ namespace Agents
         protected float _AccelerationRate;
         [SerializeField]
         protected float _RotationSpeed;
+        [SerializeField]
+        protected float _ExhaustionThreshold;
+        [SerializeField]
+        protected float _ExhaustionSlowdown;
         
         [Header("Animal Attributes")]
         [SerializeField]
@@ -66,17 +71,34 @@ namespace Agents
         [SerializeField]
         protected float _MinLifeSpan = 120f;
         
+        [Header("Other members")]
+        [SerializeField]
+        private BufferSensorComponent _SpeciesSensor;
+        
+        [Header("State Memory")]
+        [SerializeField]
+        private int _PastStatesCount;
+        
         private float _lastFixedTime;
         private float _currentAcceleration;
         private float _maxAcceleration = 1f;
         
         protected int MaxDiscreteStates => _BehaviorParameters.BrainParameters.ActionSpec.BranchSizes[0];
+        public float MovementSpeed => _Energy.Value > _ExhaustionThreshold ? _MovementSpeed : _MovementSpeed * _ExhaustionSlowdown;
         
         protected abstract Dictionary<AnimalState, AnimalStateInfo> StateParams { get; }
-        protected IAnimalState CurrentState;
+        public IAnimalState CurrentState { get; private set; }
         protected List<TEdible> FoodList;
         protected TEdible[] AvailableFood;
         protected TEdible NearestFood;
+        protected int FixedUpdateCounter;
+
+        protected Queue<float> StateMemory;
+        
+        // rewards
+        protected float DetectFoodReward = 0.0f;
+        private float _eatFoodReward = 0.0f;
+        private float _sleepReward = 0.0f;
 
         public float CurrentLifeSpan { get; private set; }
         public float TimeLiving { get; private set; }
@@ -110,6 +132,15 @@ namespace Agents
             
             _MaxLifeSpan = config.MaxLifeSpan;
             _MinLifeSpan = config.MinLifeSpan;
+            
+            DetectFoodReward = config.DetectFoodReward;
+            _eatFoodReward = config.EatFoodReward;
+            _sleepReward = config.SleepReward;
+            
+            _ExhaustionThreshold = config.ExhaustionThreshold;
+            _ExhaustionSlowdown = config.ExhaustionSlowdown;
+
+            _PastStatesCount = config.StateMemorySize;
         }
         
         protected void SetStateMask(ref IDiscreteActionMask actionMask, AnimalState state)
@@ -132,17 +163,44 @@ namespace Agents
             TimeLiving += Time.fixedDeltaTime;
             if (TimeLiving < CurrentLifeSpan) return;
             
-            EndEpisode();
+            OnDeath(DeathType.Natural);
         }
         
         public void ResolveSleeping(float timeSlept)
         {
+            if (Energy.Value <= 0.5f)
+                AddReward(_sleepReward);
             Energy.Value += timeSlept * _EnergyRegenPerSecond;
         }
         
         public void ResolveEating(IEdible food)
         {
+            if (Hunger.Value >= 0.5f)
+                AddReward(_eatFoodReward);
             Hunger.Value -= food.Eat();
+        }
+        
+        private void DetectOtherAnimalsOfSpecies()
+        {
+            var foundColliders = Physics.OverlapSphere(transform.position, _FoodDetectionRadius);
+            
+            foreach (var animal in foundColliders)
+            {
+                if (!animal || animal.Equals(null)) continue;
+                
+                var animalComponent = animal.GetComponent<IAnimal>();
+                if (animalComponent == null || animalComponent.Equals(null) || animalComponent.Equals(this)) continue;
+                
+                var distanceToAnimal = Vector3.Distance(transform.position, animal.transform.position);
+                
+                var animalObservation = new float[]
+                {
+                    distanceToAnimal,
+                    (float) animalComponent.CurrentState.StateID,
+                };
+                
+                _SpeciesSensor.AppendObservation(animalObservation);
+            }
         }
         
         public virtual void DetectFood()
@@ -155,7 +213,7 @@ namespace Agents
                 if (foodComponent == null) continue;
                 if (FoodList.Contains(foodComponent)) continue;
                 
-                AddReward(5f);
+                AddReward(DetectFoodReward);
                 FoodList.Add(foodComponent);
                 
                 foodComponent.FoodDepleted += OnFoodDepleted;
@@ -165,6 +223,7 @@ namespace Agents
         protected void CalculateClosestFood()
         {
             var selfPosition = transform.position;
+            FoodList.RemoveAll(x => x == null || x.Equals(null) || !x.GetSelf() || x.GetSelf().Equals(null));
             FoodList.Sort((x, y) => Vector3.Distance(selfPosition, x.GetSelf().transform.position).CompareTo(Vector3.Distance(selfPosition, y.GetSelf().transform.position)));
            
             for (var i = 0; i < AvailableFood.Length; i++)
@@ -183,11 +242,10 @@ namespace Agents
             food = default;
 
             if (transform == null) return false;
-
+            
             foreach (var x in AvailableFood)
             {
-                if (x == null) continue;
-                var xTransform = x.GetSelf()?.transform;
+                var xTransform = x?.GetSelf()?.transform;
                 if (xTransform == null) continue;
                 if (!(Vector3.Distance(transform.position, xTransform.position) <= _FoodConsumeRadius)) continue;
                 food = x;
@@ -241,9 +299,17 @@ namespace Agents
 
         public override void Initialize()
         {
+            _BehaviorParameters.BrainParameters.VectorObservationSize += _PastStatesCount;
             SetState(new IdleState(this));
             
             FoodList = new List<TEdible>();
+            StateMemory = new Queue<float>(_PastStatesCount);
+            for (var i = 0; i < _PastStatesCount; i++)
+            {
+                StateMemory.Enqueue(0);
+            }
+            
+            AddStateToMemory((int) CurrentState.StateID);
             
             _Hunger.Reset();
             _Energy.Reset();
@@ -257,7 +323,11 @@ namespace Agents
         protected virtual void OnDrawGizmos()
         {
             var position = transform.position;
-            DrawCircle(position, _FoodDetectionRadius, Color.cyan);
+            if (this is Deer deer)
+                DrawCircle(position, _FoodDetectionRadius, Color.cyan);
+            else
+                DrawCircle(position, _FoodDetectionRadius, Color.red);
+            
             DrawCircle(position, _FoodConsumeRadius, Color.green);
         }
 
@@ -294,12 +364,40 @@ namespace Agents
             }
         }
         
-        protected void MaskSeekState(ref IDiscreteActionMask actionMask)
+        protected void TryEnableSeekState(ref IDiscreteActionMask actionMask)
         {
             for (var i = StateParams[AnimalState.Seek].ActionMap.First(); i <= StateParams[AnimalState.Seek].ActionMap.Last(); i++)
             {
                 actionMask.SetActionEnabled(0, i, i - StateParams[AnimalState.Seek].ActionMap.First() < AvailableFood.Length && AvailableFood[i - StateParams[AnimalState.Seek].ActionMap.First()] != null);
             }
+        }
+        
+        protected void AddStateToMemory(int state)
+        {
+            if (StateMemory.Count >= _PastStatesCount)
+            {
+                StateMemory.Dequeue();
+            }
+            
+            StateMemory.Enqueue(state);
+        }
+
+        protected abstract void HandleHunger();
+        protected abstract void HandleEnergy();
+        
+        protected virtual void FixedUpdate()
+        {
+            CalculateClosestFood();
+            CurrentState?.Execute();
+            
+            FixedUpdateCounter++;
+            
+            HandleLifeSpan();
+            HandleHunger();
+            HandleEnergy();
+            
+            if (_SpeciesSensor != null)
+                DetectOtherAnimalsOfSpecies();
         }
     }
 }
