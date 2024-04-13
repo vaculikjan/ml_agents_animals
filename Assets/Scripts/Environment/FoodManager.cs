@@ -31,6 +31,9 @@ namespace Environment
         
         private void RemoveFood(Food food)
         {
+            if (!food || food.Equals(null) || !food.gameObject) return;
+            if (!_foodList.Contains(food)) return;
+            
             _foodList.Remove(food);
             Destroy(food.gameObject);
         }

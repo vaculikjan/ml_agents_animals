@@ -14,6 +14,7 @@ namespace Environment
     {
         private const string CONFIG_PATH = "environment_config.json";
         
+        [FormerlySerializedAs("_TrainingConfig")]
         [Header("Config")]
         [SerializeField]
         private EnvironmentConfig _EnvironmentConfig;

@@ -1,5 +1,6 @@
 // Author: Jan Vaculik
 
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AgentProperties.Attributes;
@@ -12,6 +13,7 @@ using Unity.MLAgents.Sensors;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.XR;
 
 namespace Agents
 {
@@ -82,6 +84,7 @@ namespace Agents
         private float _lastFixedTime;
         private float _currentAcceleration;
         private float _maxAcceleration = 1f;
+        public bool IsAccelerating = true;
         
         protected int MaxDiscreteStates => _BehaviorParameters.BrainParameters.ActionSpec.BranchSizes[0];
         public float MovementSpeed => _Energy.Value > _ExhaustionThreshold ? _MovementSpeed : _MovementSpeed * _ExhaustionSlowdown;
@@ -110,6 +113,8 @@ namespace Agents
         
         public delegate void DeathEventHandler(AAnimal<TEdible> animal, DeathType deathType);
         public event DeathEventHandler Died = delegate {  };
+
+        protected bool Transitioning;
         
         protected virtual void LoadFromConfig(IAgentConfig config)
         {
@@ -290,11 +295,26 @@ namespace Agents
                 return false;
             }
             
-            CurrentState?.Exit();
-            CurrentState = state;
-            CurrentState.Enter();
+            if (this)
+                StartCoroutine(SetStateRoutine(state));
 
             return true;
+        }
+        
+        private IEnumerator SetStateRoutine(IAnimalState state)
+        {
+            if (!IsTransitionValid(state))
+            {
+                Debug.LogWarning($"Transition from {CurrentState.StateID} to {state.StateID} is not valid!");
+                yield break;
+            }
+            
+            Transitioning = true;
+            if (CurrentState != null)
+                yield return CurrentState?.ExitCoroutine();
+            CurrentState = state;
+            yield return CurrentState?.EnterCoroutine();
+            Transitioning = false;
         }
 
         public override void Initialize()
@@ -309,7 +329,8 @@ namespace Agents
                 StateMemory.Enqueue(0);
             }
             
-            AddStateToMemory((int) CurrentState.StateID);
+            if (CurrentState != null)
+                AddStateToMemory((int) CurrentState.StateID);
             
             _Hunger.Reset();
             _Energy.Reset();
@@ -384,17 +405,20 @@ namespace Agents
 
         protected abstract void HandleHunger();
         protected abstract void HandleEnergy();
+        protected abstract void HandleCuriosity();
         
         protected virtual void FixedUpdate()
         {
             CalculateClosestFood();
-            CurrentState?.Execute();
+            if (!Transitioning)
+                CurrentState?.Execute();
             
             FixedUpdateCounter++;
             
             HandleLifeSpan();
             HandleHunger();
             HandleEnergy();
+            HandleCuriosity();
             
             if (_SpeciesSensor != null)
                 DetectOtherAnimalsOfSpecies();

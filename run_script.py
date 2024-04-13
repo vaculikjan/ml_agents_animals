@@ -1,16 +1,18 @@
+import importlib
+import math
 import optuna
 import argparse
 import json
 import subprocess
 import yaml
 import os
-import re
 
 
 class Trainer:
 
     def __init__(self, env, training_config, run_id):
         self.env = env
+        self.training_config = training_config
         self.env_config_template = training_config["env_config"]
         self.env_config = training_config["env_config_path"]
         self.nn_config_template = training_config["nn_config"]
@@ -36,7 +38,10 @@ class Trainer:
                     elif value["type"] == "list_float":
                         config[self.strip_animal_suffixes(key)] = [
                             trial.suggest_float(
-                                f"{key}_{i}", value["val"][i][0], value["val"][i][1], step=value["step"]
+                                f"{key}_{i}",
+                                value["val"][i][0],
+                                value["val"][i][1],
+                                step=value["step"],
                             )
                             for i in range(len(value["val"]))
                         ]
@@ -105,7 +110,7 @@ class Trainer:
         ]
 
         evaluation_score = self.run_training_script(run_command, trial.number)
-        return -evaluation_score
+        return evaluation_score
 
     def run_training_script(self, run_command, trial_number):
         log_file_path = os.path.join(
@@ -116,11 +121,43 @@ class Trainer:
         with open(log_file_path, "w") as log_file:
             subprocess.run(run_command, stdout=log_file, stderr=log_file)
 
-        evaluation_score = self.read_and_evaluate(self.output_path + f"/{trial_number}")
+        self.parse_log(
+            self.output_path + f"/{trial_number}", self.output_path + f"/{trial_number}"
+        )
+        # evaluation_score = self.read_and_evaluate(self.output_path + f"/{trial_number}")
+        evaluation_score = importlib.import_module(
+            self.training_config["evaluator_module"]
+        ).evaluate(
+            self.output_path
+            + f"/{trial_number}/"
+            + self.training_config["evaluator_file_name"],
+            **self.training_config["evaluator_kwargs"],
+        )
+        print(f"Evaluation Score: {evaluation_score}")
         return evaluation_score
+
+    def parse_log(self, log_file_path, output_path):
+        python_executable = os.path.join(
+            self.training_config["venv_path"],
+            "python" if os.name != "nt" else "Scripts\\python.exe",
+        )
+        file_path = os.path.join(log_file_path, "deathLogs.txt")
+        run_command = [
+            python_executable,
+            self.training_config["log_script_path"],
+            "--log",
+            file_path,
+            "--output-path",
+            output_path,
+        ]
+        subprocess.run(run_command)
 
     def read_and_evaluate(self, run_directory):
         filepath = os.path.join(run_directory, "dataOutput.json")
+
+        if not os.path.exists(filepath):
+            print("No data output file found.")
+            return -math.inf
         with open(filepath, "r") as file:
             data = json.load(file)
 
@@ -129,10 +166,11 @@ class Trainer:
 
         balance_metric = (
             average_time_alive_deers
-            + average_time_alive_deers
+            + average_time_alive_wolves
             - abs(average_time_alive_deers - average_time_alive_wolves)
         )
 
+        print(f"Balance Metric: {balance_metric}")
         return balance_metric
 
 

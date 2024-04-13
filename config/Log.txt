@@ -54,4 +54,15 @@ sim_test1 - give deer the capability to run away and thest their first interacti
 
 3/24/2024 - added chase cooldown
 3_24_ppo3 - seems promising
-
+4_01_ppo - hunger condition was - if (hunger > 0.5) return; - needed to invert
+4_01_ppo2 - wolf is struggling -> changing flee multiplier modifier from 5 to 3
+4_01_ppo3 - wolf is struggling, remove hunger < 0.5f condition
+4_01_ppo4 - wolf is struggling, decrease flee accel from 3 to 2, decrease deer accel rate from 1.5 to 1, increase wolf movement speed from 33 to 40, also make eat not interruptible
+4_01_ppo5 - wolf slight improvement, increase food detection radius from 100 to 150, also increase safety distance to 155 and pursuit range to 100
+4_01_ppo6 - wolf was NOT struggling in last or this one, I just made a mistake, reeverting to ppo4 values and adjusting from there
+4_01_ppo7 - wolf still dominant, further reduce detection radius from 150 to 100 and increase flee accel to 3 from 2.5, also reduce pursuit range to 80
+4_01_ppo8 - wolf still dominant, increase acceleration rate from 1.5 to 3 and increase movement speed to 33 from 30
+4_01_ppo9 - increase deer move speed to 40 from 33, reduce wolf food detection radius to 80 (also adjust safe distance)
+4_01_ppo10 - seems promising, try longer training
+4_01_ppo10-2 - wolf dominant
+4_01_ppo11 - re-enable hunger check

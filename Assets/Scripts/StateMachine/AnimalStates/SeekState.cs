@@ -1,6 +1,7 @@
 // Author: Jan Vaculik
 
 using System;
+using System.Collections;
 using Agents;
 using UnityEngine;
 
@@ -29,8 +30,7 @@ namespace StateMachine.AnimalStates
 
         public AnimalState StateID => AnimalState.Seek;
         
-        public void Enter() { _hasReachedTarget = false; }
-
+        
         public void Execute()
         {
             if (_hasReachedTarget)
@@ -54,10 +54,11 @@ namespace StateMachine.AnimalStates
             }
         }
 
-        public void Exit()
+        public IEnumerator ExitCoroutine()
         {
-            _animal.AnimalRigidbody.velocity = Vector3.zero;
+            yield return null;
         }
+        public IEnumerator EnterCoroutine() { yield return null; }
 
         public bool CanExit() { return true;}
 

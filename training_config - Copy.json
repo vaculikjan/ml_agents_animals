@@ -1,0 +1,38 @@
+{
+    "output_path": "D:\\Unity\\DiplomaThesis\\Build\\Build1\\log_folder",
+    "nn_config_path": "D:\\Unity\\DiplomaThesis\\config\\sac_config.yaml",
+    "env_config_path": "D:\\Unity\\DiplomaThesis\\environment_config.json",
+    "log_directory_path": "D:\\Unity\\DiplomaThesis\\log_folder",
+    "number_of_trials": 16,
+    "parallel_trials": 4,
+    
+    "env_config": {
+        "deer_config" : {
+            "deer_count" : {
+                "type" : "range_int",
+                "val": [1, 10]}
+        },
+        "wolf_config" : {
+            "wolf_count" : {
+                "type" : "range_int",
+                "val": [1, 2]}
+        }
+    },
+    
+    "nn_config": {
+        "behaviors": {
+            "simple_deer": {
+                "max_steps_wolf": {
+                    "type": "range_int",
+                    "val": [50000, 50000]
+                }
+            },
+            "simple_wolf": {
+                "max_steps_deer": {
+                    "type": "range_int",
+                    "val": [50000, 50000]
+                }
+            }
+        }
+    }
+}

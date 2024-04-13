@@ -1,5 +1,6 @@
 // Author: Jan Vaculik
 
+using System.Collections;
 using Agents;
 using Environment;
 using Unity.MLAgents.Actuators;
@@ -21,12 +22,6 @@ namespace StateMachine.AnimalStates
             _timeToSleep = timeToSleep;
         }
         
-        public void Enter()
-        {
-            _sleepTime = 0.0f;
-            _animal.Acceleration = 0;
-        }
-
         public void Execute()
         {
             _sleepTime += Time.deltaTime;
@@ -37,8 +32,20 @@ namespace StateMachine.AnimalStates
             _animal.SetState(new IdleState(_animal));
         }
 
-        public void Exit()
+        public IEnumerator ExitCoroutine()
         {
+            yield return null;
+        }
+
+        public IEnumerator EnterCoroutine()
+        {
+            _animal.Acceleration = 0;
+            var animalRigidbody = _animal.AnimalRigidbody; 
+            while (animalRigidbody.velocity.magnitude > 0.1f)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+            animalRigidbody.velocity = Vector3.zero; 
         }
 
         public bool CanExit()

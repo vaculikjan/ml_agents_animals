@@ -1,0 +1,12 @@
+Wolf died: Starvation - 21.00029 - Timestamp: 4/8/2024 9:56:20 PM
+Deer died: Starvation - 26.0004 - Timestamp: 4/8/2024 9:56:20 PM
+Deer died: Starvation - 26.0004 - Timestamp: 4/8/2024 9:56:20 PM
+Deer died: Starvation - 26.0004 - Timestamp: 4/8/2024 9:56:20 PM
+Deer died: Starvation - 28.00045 - Timestamp: 4/8/2024 9:56:20 PM
+Wolf died: Starvation - 21.00029 - Timestamp: 4/8/2024 9:56:21 PM
+Wolf died: Starvation - 21.00029 - Timestamp: 4/8/2024 9:56:21 PM
+Wolf died: Starvation - 23.00034 - Timestamp: 4/8/2024 9:56:22 PM
+Deer died: Starvation - 55.00107 - Timestamp: 4/8/2024 9:56:23 PM
+Deer died: Starvation - 53.00102 - Timestamp: 4/8/2024 9:56:23 PM
+Wolf died: Starvation - 21.00029 - Timestamp: 4/8/2024 9:56:23 PM
+Deer died: Starvation - 100.9951 - Timestamp: 4/8/2024 9:56:24 PM

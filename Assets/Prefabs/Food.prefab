@@ -99,7 +99,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _FoodValue: 0.5
   _FoodCount: 1
-  _TimeToEat: 0.1
+  _TimeToEat: 1
 --- !u!135 &2445308631701540532
 SphereCollider:
   m_ObjectHideFlags: 0

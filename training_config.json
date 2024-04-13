@@ -1,38 +1,198 @@
 {
-    "output_path": "D:\\Unity\\DiplomaThesis\\Build\\Build1\\log_folder",
-    "nn_config_path": "D:\\Unity\\DiplomaThesis\\config\\sac_config.yaml",
+    "output_path": "D:\\Unity\\DiplomaThesis\\Build\\Build_04_07\\log_folder",
+    "nn_config_path": "D:\\Unity\\DiplomaThesis\\config\\ppo_config.yaml",
     "env_config_path": "D:\\Unity\\DiplomaThesis\\environment_config.json",
     "log_directory_path": "D:\\Unity\\DiplomaThesis\\log_folder",
-    "number_of_trials": 16,
-    "parallel_trials": 4,
-    
-    "env_config": {
-        "deer_config" : {
-            "deer_count" : {
-                "type" : "range_int",
-                "val": [1, 10]}
-        },
-        "wolf_config" : {
-            "wolf_count" : {
-                "type" : "range_int",
-                "val": [1, 2]}
-        }
+    "log_script_path": "D:\\Unity\\DiplomaThesis\\log_parser.py",
+    "venv_path": "D:\\Unity\\DiplomaThesis\\m_env",
+    "number_of_trials": 8,
+    "parallel_trials": 8,
+    "evaluator_module" : "avg_lifetime_evaluator",
+    "evaluator_class" : "WeightedAverageLifeTime",
+    "evaluator_file_name" : "deathLogs.txt",
+    "evaluator_kwargs" : {
+        "discount_factor" : 0.99
     },
     
-    "nn_config": {
-        "behaviors": {
-            "simple_deer": {
-                "max_steps_wolf": {
-                    "type": "range_int",
-                    "val": [50000, 50000]
-                }
+    "env_config": {
+        "pursuit_range": {
+            "type": "range_int",
+            "val": [50, 150],
+            "step": 25
+        },
+        "deer_config" : {
+            "deer_move_speed" : {
+                "type" : "range_int",
+                "val": [25, 50],
+                "step": 5
             },
-            "simple_wolf": {
-                "max_steps_deer": {
-                    "type": "range_int",
-                    "val": [50000, 50000]
-                }
+            "deer_acceleration_rate" : {
+                "type" : "range_float",
+                "val": [0.5, 3],
+                "step": 0.5
+            },
+            "deer_hunger_per_second" : {
+                "type" : "range_float",
+                "val": [0.005, 0.05],
+                "step": 0.005
+            },
+            "deer_hunger_reward_curve" : {
+                "type" : "list_float",
+                "val": [[-5, -1], [-1, 0], [0, 1], [1, 5]],
+                "step": 0.5
+            },
+            "deer_energy_per_second"  : {
+                "type" : "range_float",
+                "val": [0.005, 0.05],
+                "step": 0.005
+            },
+            "deer_energy_reward_curve" : {
+                "type" : "list_float",
+                "val": [[-5, -1], [-1, 0], [0, 1], [1, 5]],
+                "step": 0.5
+            },
+            "deer_curiosity_per_second" : {
+                "type" : "range_float",
+                "val": [0.005, 0.05],
+                "step": 0.005
+            },
+            "deer_curiosity_reward_curve" : {
+                "type" : "list_float",
+                "val": [[-5, -1], [-1, 0], [0, 1], [1, 5]],
+                "step": 0.5
+            },
+            "deer_food_detection_radius" : {
+                "type" : "range_int",
+                "val": [100, 300],
+                "step": 50
+            },
+            "deer_threat_detection_radius": {
+                "type" : "range_int",
+                "val": [50, 150],
+                "step": 25
+            },
+            "deer_flee_acceleration_multiplier" : {
+                "type" : "range_float",
+                "val": [1, 3],
+                "step": 0.5
+            },
+            "deer_eat_food_reward" : {
+                "type" : "range_int",
+                "val": [1, 5],
+                "step": 1
+            },
+            "deer_sleep_reward" : {
+                "type" : "range_int",
+                "val": [1, 5],
+                "step": 1
+            },
+            "deer_starvation_reward" : {
+                "type" : "range_int",
+                "val": [-500, -50],
+                "step": 50
+            },
+            "deer_natural_death_reward" : {
+                "type" : "range_int",
+                "val": [100, 1000],
+                "step": 10
+            },
+            "deer_eaten_reward" : {
+                "type" : "range_int",
+                "val": [-5000, -50],
+                "step": 50
+            },
+            "deer_state_memory_size" : {
+                "type" : "range_int",
+                "val": [1, 5],
+                "step": 1
+            }
+        
+        },
+        "wolf_config" : {
+            "wolf_move_speed" : {
+                "type" : "range_int",
+                "val": [25, 50],
+                "step": 5
+            },
+            "wolf_acceleration_rate" : {
+                "type" : "range_float",
+                "val": [0.5, 3],
+                "step": 0.5
+            },
+            "wolf_hunger_per_second" : {
+                "type" : "range_float",
+                "val": [0.005, 0.05],
+                "step": 0.005
+            },
+            "wolf_hunger_reward_curve" : {
+                "type" : "list_float",
+                "val": [[-5, -1], [-1, 0], [0, 1], [1, 5]],
+                "step": 0.5
+            },
+            "wolf_energy_per_second"  : {
+                "type" : "range_float",
+                "val": [0.005, 0.05],
+                "step": 0.005
+            },
+            "wolf_energy_reward_curve" : {
+                "type" : "list_float",
+                "val": [[-5, -1], [-1, 0], [0, 1], [1, 5]],
+                "step": 0.5
+            },
+            "wolf_curiosity_per_second" : {
+                "type" : "range_float",
+                "val": [0.005, 0.05],
+                "step": 0.005
+            },
+            "wolf_curiosity_reward_curve" : {
+                "type" : "list_float",
+                "val": [[-5, -1], [-1, 0], [0, 1], [1, 5]],
+                "step": 0.5
+            },
+            "wolf_food_detection_radius" : {
+                "type" : "range_int",
+                "val": [100, 300],
+                "step": 50
+            },
+            "wolf_pursuit_accel_multiplier" : {
+                "type" : "range_float",
+                "val": [1, 3],
+                "step": 0.5
+            },
+            "wolf_detect_food_reward" : {
+                "type" : "range_int",
+                "val": [1, 10],
+                "step": 1
+            },
+            "wolf_sleep_reward" : {
+                "type" : "range_int",
+                "val": [1, 10],
+                "step": 1
+            },
+            "wolf_starvation_reward" : {
+                "type" : "range_int",
+                "val": [-500, -50],
+                "step": 50
+            },
+            "wolf_natural_death_reward" : {
+                "type" : "range_int",
+                "val": [100, 1000],
+                "step": 10
+            },
+            "wolf_state_memory_size" : {
+                "type" : "range_int",
+                "val": [1, 5],
+                "step": 1
+            },
+            "wolf_pursuit_range" : {
+                "type" : "range_int",
+                "val": [50, 150],
+                "step": 25
             }
         }
+        
+    },
+    "nn_config": {
+    
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections;
 using Agents;
 using Environment;
 using Unity.MLAgents;
@@ -30,13 +31,7 @@ namespace StateMachine.AnimalStates
         }
 
         public AnimalState StateID => AnimalState.Flee;
-
-        public void Enter()
-        {
-            _isSafe = false; 
-            _animal.MaxAcceleration = _accelMultiplier;
-        }
-
+        
         public void Execute()
         {
             if (_isSafe)
@@ -50,16 +45,24 @@ namespace StateMachine.AnimalStates
             MoveAwayFromThreat();
             CheckIfSafe();
         }
-
-        public void Exit()
+        
+        public IEnumerator ExitCoroutine()
         {
-            _animal.AnimalRigidbody.velocity = Vector3.zero; 
+            if (_animal.Equals(null)) yield break;
+            
             _animal.MaxAcceleration = 1;
             
             if (_animal is Agent agent)
             {
                 agent.AddReward(EnvironmentController.Instance.EnvironmentConfig.FleeStateReward);
             }
+            yield return null;
+        }
+
+        public IEnumerator EnterCoroutine()
+        {
+            _animal.MaxAcceleration = _accelMultiplier;
+            yield return null;
         }
 
         public bool CanExit() { return true; }
@@ -96,7 +99,6 @@ namespace StateMachine.AnimalStates
             
             _isSafe = true;
             
-            _animal.AnimalRigidbody.velocity = Vector3.zero;
             var wolf = _threatTransform.GetComponent<Wolf>();
             
             if (wolf)

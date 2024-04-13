@@ -1,8 +1,8 @@
 {
   "DeerLogData": {
-    "AverageLifespan": 60.18225,
-    "AverageLifespanDifference": 1154.83533,
-    "LastLifespan": 150.175262
+    "AverageLifespan": "NaN",
+    "AverageLifespanDifference": "NaN",
+    "LastLifespan": 0.0
   },
   "WolfLogData": {
     "AverageLifespan": "NaN",

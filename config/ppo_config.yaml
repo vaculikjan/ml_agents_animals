@@ -5,7 +5,7 @@ behaviors:
       batch_size: 64
       buffer_size: 100
       learning_rate: 3.0e-5
-      beta: 5.0e-3
+      beta: 1.0e-2
       epsilon: 0.1
       lambd: 0.95
       num_epoch: 4
@@ -20,7 +20,7 @@ behaviors:
       extrinsic:
         gamma: 0.9
         strength: 1.0
-    max_steps: 100000
+    max_steps: 1000
     time_horizon: 64
     summary_freq: 1000
     keep_checkpoints: 5
@@ -47,7 +47,7 @@ behaviors:
       extrinsic:
         gamma: 0.9
         strength: 1.0
-    max_steps: 100000
+    max_steps: 1000
     time_horizon: 64
     summary_freq: 1000
     keep_checkpoints: 5

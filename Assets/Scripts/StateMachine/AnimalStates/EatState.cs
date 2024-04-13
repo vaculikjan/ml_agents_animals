@@ -1,5 +1,6 @@
 // Author: Jan Vaculik
 
+using System.Collections;
 using Agents;
 using Environment;
 using Unity.MLAgents.Actuators;
@@ -22,12 +23,7 @@ namespace StateMachine.AnimalStates
             _animal = animal;
             _nearestFood = food;
         }
-
-        public void Enter()
-        {
-            _eatingTime = 0.0f;
-            _animal.Acceleration = 0;
-        }
+        
 
         public void Execute()
         {
@@ -43,9 +39,17 @@ namespace StateMachine.AnimalStates
             _eatingTime = 0.0f;
             _animal.SetState(new IdleState(_animal));
         }
-        
-        public void Exit()
+
+        public IEnumerator ExitCoroutine()
         {
+            yield return null;
+        }
+
+        public IEnumerator EnterCoroutine()
+        {
+            _eatingTime = 0.0f;
+            _animal.Acceleration = 0;
+            yield return null;
         }
 
         public bool CanExit()

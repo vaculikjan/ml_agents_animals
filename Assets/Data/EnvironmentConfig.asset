@@ -17,8 +17,8 @@ MonoBehaviour:
     _Count: 5
     _MinSpawnTime: 0
     _MaxSpawnTime: 10
-    _MoveSpeed: 60
-    _AccelerationRate: 0.5
+    _MoveSpeed: 45
+    _AccelerationRate: 3
     _HungerPerSecond: 0.005
     _HungerRewardCurve:
     - -1.25
@@ -39,31 +39,31 @@ MonoBehaviour:
     - -0.5
     - 0
     - 1
-    _TimeToSleep: 2
+    _TimeToSleep: 3
     _FoodDetectionRadius: 250
     _FoodConsumeRadius: 3
     _MaxLifeSpan: 1200
     _MinLifeSpan: 1200
-    _ThreatDetectionRadius: 50
+    _ThreatDetectionRadius: 75
     _ThreatRadiusOffset: 0
     _ThreatDetectionInterval: 12
-    _FleeAccelMultiplier: 1.9
-    _FleeEnergyMultiplier: 1.9
-    _DetectFoodReward: 10
-    _EatFoodReward: 5
-    _SleepReward: 5
+    _FleeAccelMultiplier: 3
+    _FleeEnergyMultiplier: 2
+    _DetectFoodReward: 0
+    _EatFoodReward: 3
+    _SleepReward: 3
     _StarvationReward: -100
     _NaturalDeathReward: 250
     _EatenReward: -100
     _ExhaustionThreshold: 0.1
     _ExhaustionSlowdown: 0.5
-    _SafeDistance: 120
     _StateMemorySize: 2
+    _TimeToEat: 5
   _WolfConfig:
     _Count: 1
     _MinSpawnTime: 0
     _MaxSpawnTime: 5
-    _MoveSpeed: 65
+    _MoveSpeed: 33
     _AccelerationRate: 0.7
     _HungerPerSecond: 0.005
     _HungerRewardCurve:
@@ -85,22 +85,22 @@ MonoBehaviour:
     - -0.5
     - 0
     - 1
-    _TimeToSleep: 2
-    _FoodDetectionRadius: 250
+    _TimeToSleep: 3
+    _FoodDetectionRadius: 80
     _FoodConsumeRadius: 3
     _MaxLifeSpan: 1000
     _MinLifeSpan: 1000
-    _AttackRange: 2
-    _PursuitAccelMultiplier: 1.7
-    _PursuitEnergyMultiplier: 1.7
-    _DetectFoodReward: 10
+    _AttackRange: 3
+    _PursuitAccelMultiplier: 1.5
+    _PursuitEnergyMultiplier: 2
+    _DetectFoodReward: 5
     _EatFoodReward: 5
     _SleepReward: 5
     _StarvationReward: -100
     _NaturalDeathReward: 250
     _ExhaustionThreshold: 0.1
     _ExhaustionSlowdown: 0.5
-    _ChaseCooldown: 3
     _StateMemorySize: 2
   _FleeStateReward: 25
   _AttackStateReward: 50
+  _PursuitRange: 80

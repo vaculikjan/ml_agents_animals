@@ -1,6 +1,7 @@
 // Author: Jan Vaculik
 
 using System;
+using System.Collections;
 using Agents;
 using UnityEngine;
 using Bounds = Environment.Bounds;
@@ -72,6 +73,13 @@ namespace StateMachine.AnimalStates
             _animal.AnimalRigidbody.velocity = Vector3.zero;
         }
 
+        public IEnumerator ExitCoroutine()
+        {
+            yield return null;
+        }
+        
+        public IEnumerator EnterCoroutine() { yield return null; }
+
         public bool CanExit()
         {
             return true;
@@ -79,7 +87,7 @@ namespace StateMachine.AnimalStates
 
         private void HandleBoundary()
         {
-            var nextPosition = _animalTransform.position + _targetDirection * (_animal.MovementSpeed * Time.deltaTime);
+            var nextPosition = _animalTransform.position + _targetDirection * (_animal.MovementSpeed * Time.fixedDeltaTime);
 
             if (nextPosition.x < _boundaryMin.x || nextPosition.x > _boundaryMax.x ||
                 nextPosition.z < _boundaryMin.z || nextPosition.z > _boundaryMax.z)

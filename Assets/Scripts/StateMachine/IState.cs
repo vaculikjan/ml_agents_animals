@@ -1,12 +1,14 @@
 // Author: Jan Vaculik
 
+using System.Collections;
+
 namespace StateMachine
 {
     public interface IState
     {
-        public void Enter();
         public void Execute();
-        public void Exit();
+        public IEnumerator ExitCoroutine();
+        public IEnumerator EnterCoroutine();
         public bool CanExit();
     }
 }

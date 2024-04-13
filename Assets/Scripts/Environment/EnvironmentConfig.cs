@@ -11,7 +11,6 @@ namespace Environment
     [JsonObject(MemberSerialization.OptIn)]
     public class EnvironmentConfig : ScriptableObject
     {
-        
         [JsonProperty("output_path")]
         [SerializeField]
         private string _OutputPath;
@@ -32,11 +31,16 @@ namespace Environment
         [SerializeField]
         private float _AttackStateReward;
         
+        [JsonProperty("pursuit_range")]
+        [SerializeField]
+        private float _PursuitRange;
+        
         public string OutputPath => _OutputPath;
         public DeerConfig DeerConfig => _DeerConfig;
         public WolfConfig WolfConfig => _WolfConfig;
         public float FleeStateReward => _FleeStateReward;
         public float AttackStateReward => _AttackStateReward;
+        public float PursuitRange => _PursuitRange;
         
         public ILogData LogData()
         {
@@ -106,7 +110,7 @@ namespace Environment
         [SerializeField]
         private float _CuriosityDecayPerSecond;
         
-        [JsonProperty("curiosity_reward_curve")]
+        [JsonProperty("deer_curiosity_reward_curve")]
         [SerializeField]
         private float[] _CuriosityRewardCurve;
         
@@ -174,21 +178,21 @@ namespace Environment
         [SerializeField]
         private float _EatenReward;
         
-        [JsonProperty("_ExhaustionThreshold")]
+        [JsonProperty("deer_exhaustion_threshold")]
         [SerializeField]
         private float _ExhaustionThreshold;
         
-        [JsonProperty("_ExhaustionSlowdown")]  
+        [JsonProperty("deer_exhaustion_slowdown")]  
         [SerializeField]
         private float _ExhaustionSlowdown;
-        
-        [JsonProperty("deer_safe_distance")]
-        [SerializeField]
-        private float _SafeDistance;
         
         [JsonProperty("deer_state_memory_size")]
         [SerializeField]
         private int _StateMemorySize;
+        
+        [JsonProperty("deer_time_to_eat")]
+        [SerializeField]
+        private float _TimeToEat;
         
         public int Count => _Count;
         public float MinSpawnTime => _MinSpawnTime;
@@ -231,9 +235,9 @@ namespace Environment
         public float ExhaustionThreshold => _ExhaustionThreshold;
         public float ExhaustionSlowdown => _ExhaustionSlowdown;
         
-        public float SafeDistance => _SafeDistance;
-        
         public int StateMemorySize => _StateMemorySize;
+        
+        public float TimeToEat => _TimeToEat;
         
         public ILogData LogData()
         {
@@ -307,7 +311,7 @@ namespace Environment
         [SerializeField]
         private float _CuriosityDecayPerSecond;
         
-        [JsonProperty("curiosity_reward_curve")]
+        [JsonProperty("wolf_curiosity_reward_curve")]
         [SerializeField]
         private float[] _CuriosityRewardCurve;
         
@@ -371,10 +375,6 @@ namespace Environment
         [SerializeField]
         private float _ExhaustionSlowdown;
         
-        [JsonProperty("wolf_chase_cooldown")]
-        [SerializeField]
-        private float _ChaseCooldown;
-        
         [JsonProperty("wolf_state_memory_size")]
         [SerializeField]
         private int _StateMemorySize;
@@ -416,8 +416,6 @@ namespace Environment
         
         public float ExhaustionThreshold => _ExhaustionThreshold;
         public float ExhaustionSlowdown => _ExhaustionSlowdown;
-        
-        public float ChaseCooldown => _ChaseCooldown;
         
         public int StateMemorySize => _StateMemorySize;
         

@@ -103,6 +103,5 @@ namespace Environment
                 Debug.LogError($"Failed to log data: {ex.Message}");
             }
         }
-
     }
 }

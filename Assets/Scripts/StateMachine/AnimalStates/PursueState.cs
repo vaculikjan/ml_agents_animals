@@ -1,5 +1,6 @@
 // Author: Jan Vaculik
 
+using System.Collections;
 using Agents;
 using Environment;
 using UnityEngine;
@@ -14,13 +15,12 @@ namespace StateMachine.AnimalStates
         private readonly float _rotationSpeed;
         private readonly IAttackableEdible _target;
         private readonly Transform _targetTransform;
-        private readonly float _pursuitDuration;
+        private readonly float _pursuitRange;
         private readonly float _attackRange;
         
-        private float _pursuitTimer;
         private bool _hasReachedTarget;
 
-        public PursueState(IAnimal animal, float pursueAccelMultiplier, float rotationSpeed, IAttackableEdible target, float pursuitDuration, float attackRange)
+        public PursueState(IAnimal animal, float pursueAccelMultiplier, float rotationSpeed, IAttackableEdible target, float pursuitRange, float attackRange)
         {
             _animal = animal;
             _animalTransform = animal.GetSelf().transform;
@@ -28,19 +28,11 @@ namespace StateMachine.AnimalStates
             _rotationSpeed = rotationSpeed;
             _target = target;
             _targetTransform = target.GetSelf().transform;
-            _pursuitDuration = pursuitDuration;
+            _pursuitRange = pursuitRange;
             _attackRange = attackRange;
         }
 
         public AnimalState StateID => AnimalState.Pursue;
-        
-        public void Enter()
-        {
-            _hasReachedTarget = false;
-            _pursuitTimer = 0f;
-            _animal.MaxAcceleration = _pursuitAccelMultiplier;
-        }
-
         public void Execute()
         {
             if (_target == null || _targetTransform == null)
@@ -54,24 +46,28 @@ namespace StateMachine.AnimalStates
                 _animal.SetState(new AttackState(_animal, _target));
                 return;
             }
-
-            if (_pursuitTimer >= _pursuitDuration)
-            {
-                _animal.SetState(new IdleState(_animal));
-                return;
-            }
             
             RotateTowardsTarget();
             MoveTowardsTarget();
             CheckIfReachedTarget();
-
-            _pursuitTimer += Time.deltaTime;
         }
 
         public void Exit()
         {
             _animal.AnimalRigidbody.velocity = Vector3.zero;
+        }
+
+        public IEnumerator ExitCoroutine()
+        {
+            if (_animal.Equals(null)) yield break;
             _animal.MaxAcceleration = 1.0f;
+            yield return null;
+        }
+
+        public IEnumerator EnterCoroutine()
+        {
+            _animal.MaxAcceleration = _pursuitAccelMultiplier;
+            yield return null;
         }
 
         public bool CanExit() { return true; }
@@ -91,6 +87,20 @@ namespace StateMachine.AnimalStates
         private void CheckIfReachedTarget()
         {
             var distanceToTarget = Vector3.Distance(_animalTransform.position, _targetTransform.position);
+            if (distanceToTarget > _pursuitRange)
+            {
+                var wolf = _animal as Wolf;
+                var deer = _target as Deer;
+
+                if (!wolf || !deer) return;
+                
+                if (deer.CurrentState.StateID != AnimalState.Flee) return;
+                
+                wolf.MarkEndChase(deer);
+                wolf.SetState(new IdleState(wolf));
+                return;
+            }
+            
             if (!(distanceToTarget <= _attackRange)) return;
             
             _hasReachedTarget = true;
