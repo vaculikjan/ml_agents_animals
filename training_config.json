@@ -5,13 +5,13 @@
     "log_directory_path": "D:\\Unity\\DiplomaThesis\\log_folder",
     "log_script_path": "D:\\Unity\\DiplomaThesis\\log_parser.py",
     "venv_path": "D:\\Unity\\DiplomaThesis\\m_env",
-    "number_of_trials": 8,
+    "number_of_trials": 256,
     "parallel_trials": 8,
     "evaluator_module" : "avg_lifetime_evaluator",
     "evaluator_class" : "WeightedAverageLifeTime",
     "evaluator_file_name" : "deathLogs.txt",
     "evaluator_kwargs" : {
-        "discount_factor" : 0.99
+        "discount_factor" : 0.97
     },
     
     "env_config": {

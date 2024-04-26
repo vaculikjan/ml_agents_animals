@@ -1,3 +1,5 @@
+import math
+import os
 from evaluator import Evaluator
 
 
@@ -46,5 +48,8 @@ class WeightedAverageLifeTime(Evaluator):
 
 
 def evaluate(log_file, **kwargs):
+    if not os.path.exists(log_file):
+            print("No data output file found.")
+            return -math.inf
     evaluator = WeightedAverageLifeTime(log_file, **kwargs)
     return evaluator.evaluate()

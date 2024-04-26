@@ -10,6 +10,7 @@ namespace Agents
     public interface IAnimal
     {
         public float MovementSpeed { get; }
+        public float RotationSpeed { get; }
         public IAnimalState CurrentState { get; }
         public float Acceleration { get; set; }
         public float MaxAcceleration { set; }

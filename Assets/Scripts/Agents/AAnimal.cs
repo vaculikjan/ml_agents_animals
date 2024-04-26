@@ -84,10 +84,10 @@ namespace Agents
         private float _lastFixedTime;
         private float _currentAcceleration;
         private float _maxAcceleration = 1f;
-        public bool IsAccelerating = true;
         
         protected int MaxDiscreteStates => _BehaviorParameters.BrainParameters.ActionSpec.BranchSizes[0];
         public float MovementSpeed => _Energy.Value > _ExhaustionThreshold ? _MovementSpeed : _MovementSpeed * _ExhaustionSlowdown;
+        public float RotationSpeed => _RotationSpeed;
         
         protected abstract Dictionary<AnimalState, AnimalStateInfo> StateParams { get; }
         public IAnimalState CurrentState { get; private set; }
